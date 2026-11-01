@@ -1,0 +1,49 @@
+{
+  "name": "Electron Medical Algérie · Plateforme Technico-Commercial & SAV",
+  "short_name": "Electron SAV",
+  "description": "Gestion centralisée du SAV, Visites de Contrôle, Inspections et Garanties 2 Ans Fujifilm Medical Systems Algérie",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#073b43",
+  "theme_color": "#0f766e",
+  "orientation": "any",
+  "scope": "./",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "assets/electron-medical-logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/electron-medical-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["medical", "business", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Planning SAV",
+      "url": "index.html#sectionCalendar",
+      "icons": [{ "src": "assets/electron-medical-logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Visite de Contrôle",
+      "url": "visite_controle.html",
+      "icons": [{ "src": "assets/electron-medical-logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Feuille d'Inspection",
+      "url": "feuille_inspection.html",
+      "icons": [{ "src": "assets/electron-medical-logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Étiquette QR",
+      "url": "index.html?action=qr",
+      "icons": [{ "src": "assets/electron-medical-logo.png", "sizes": "192x192" }]
+    }
+  ]
+}

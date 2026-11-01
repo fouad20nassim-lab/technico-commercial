@@ -6,7 +6,13 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f766e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Electron SAV">
+  <link rel="apple-touch-icon" href="assets/electron-medical-logo.png">
   <title>Plateforme Technico-Commercial — Electron Medical Algérie & Fujifilm</title>
   <script>
     // VÉRIFICATION DE SÉCURITÉ IMMÉDIATE : CONNEXION OBLIGATOIRE
@@ -180,6 +186,17 @@
         </button>
         <button type="button" class="btn btn-secondary" onclick="openQuickStickerModal()" title="Générer et imprimer une Étiquette SAV Fujifilm avec QR Code pour matériel hospitalier" style="font-weight:700;">
           <span>🏷️</span> <span>Étiquette QR</span>
+        </button>
+
+        <!-- Nouveautés V5 : Application Mobile PWA, Galerie Photos SAV & Fiabilité MTBF -->
+        <button type="button" class="btn btn-secondary" id="pwaInstallBtn" onclick="installPwaApp()" title="Installer l'application sur cet appareil (Accès direct sur écran d'accueil)" style="display:none; font-weight:700; color:#00b87c; border-color:rgba(0,184,124,0.5);">
+          <span>📲</span> <span>Installer l'App</span>
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="openPhotoGalleryModal()" title="Galerie Photos Avant/Après Réparation & Documentation Visuelle" style="font-weight:700;">
+          <span>📸</span> <span>Photos SAV</span>
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="openReliabilityModal()" title="Cockpit de Fiabilité, Taux de Disponibilité & MTBF/MTTR" style="font-weight:700;">
+          <span>📈</span> <span>Fiabilité MTBF</span>
         </button>
 
         <button class="btn btn-secondary admin-only-item" onclick="openWifiModal()" title="Accéder depuis un smartphone ou une tablette sur le réseau local Wi-Fi">
@@ -1585,8 +1602,202 @@
     </div>
   </div>
 
+  <!-- ======================================================== -->
+  <!-- MODAL V5 : GALERIE PHOTOS AVANT / APRÈS RÉPARATION SAV    -->
+  <!-- ======================================================== -->
+  <div class="modal-overlay" id="photoGalleryModal" onclick="if(event.target === this) closePhotoGalleryModal()">
+    <div class="modal-box" style="max-width: 820px; width: 100%;">
+      <div class="modal-header no-print">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:24px;">📸</span>
+          <div>
+            <h3 style="margin:0; font-size:18px; font-weight:800;">Galerie Photos SAV : Avant / Après Réparation</h3>
+            <p style="margin:0; font-size:12px; color:var(--text-muted);">Documentation visuelle des pannes et vérification de conformité après remise en état</p>
+          </div>
+        </div>
+        <button type="button" class="btn-close" onclick="closePhotoGalleryModal()">✕</button>
+      </div>
+
+      <div class="no-print" style="margin-bottom: 14px; background: rgba(0,0,0,0.08); padding: 12px 16px; border-radius: 12px;">
+        <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">Équipement associé :</div>
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px;">
+          <select id="photoEquipmentSelect" class="form-input" style="font-size: 12px;" onchange="onPhotoEquipmentSelect(this.value)">
+            <option value="">-- Sélectionner un équipement ou saisie libre --</option>
+          </select>
+          <input type="text" id="photoTargetModel" class="form-input" placeholder="Modèle (ex: EP-8000)" style="font-size: 12px;">
+          <input type="text" id="photoTargetSN" class="form-input" placeholder="N° Série (SN)" style="font-size: 12px; font-family:monospace;">
+        </div>
+        <input type="hidden" id="photoTargetClient">
+      </div>
+
+      <!-- Colonnes Avant vs Après -->
+      <div class="photo-upload-columns">
+        <!-- Colonne 1 : Avant Intervention -->
+        <div class="photo-upload-card card-avant">
+          <div class="photo-upload-head">
+            <h4>🔴 Constat & Pannes Avant (<span id="countPhotosAvant">0</span>)</h4>
+            <label class="photo-upload-btn-label btn-upload-red no-print">
+              📷 Ajouter Photo
+              <input type="file" accept="image/*" capture="environment" multiple onchange="handlePhotoUpload('avant', event)" style="display:none;">
+            </label>
+          </div>
+          <div class="photo-grid" id="gridPhotosAvant"></div>
+        </div>
+
+        <!-- Colonne 2 : Après Intervention -->
+        <div class="photo-upload-card card-apres">
+          <div class="photo-upload-head">
+            <h4>🟢 Matériel Réparé Après (<span id="countPhotosApres">0</span>)</h4>
+            <label class="photo-upload-btn-label btn-upload-green no-print">
+              📷 Ajouter Photo
+              <input type="file" accept="image/*" capture="environment" multiple onchange="handlePhotoUpload('apres', event)" style="display:none;">
+            </label>
+          </div>
+          <div class="photo-grid" id="gridPhotosApres"></div>
+        </div>
+      </div>
+
+      <div class="modal-footer no-print" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px;">
+        <span style="font-size: 11px; color: var(--text-muted);">Les photos sont automatiquement compressées et sauvegardées localement.</span>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn btn-secondary" onclick="closePhotoGalleryModal()">Fermer</button>
+          <button type="button" class="btn btn-primary" onclick="printPhotoInspectionReport()">🖨️ Imprimer Rapport Photo A4</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Agrandissement Photo Lightbox -->
+  <div class="modal-overlay" id="photoPreviewModal" onclick="closePhotoPreviewModal()">
+    <div style="position:relative; max-width:90vw; max-height:90vh;">
+      <button type="button" onclick="closePhotoPreviewModal()" style="position:absolute; top:-14px; right:-14px; background:#ef4444; color:#fff; border:none; width:32px; height:32px; border-radius:50%; font-size:18px; font-weight:800; cursor:pointer;">✕</button>
+      <img id="fullPreviewImg" src="" alt="Photo plein écran" style="max-width:100%; max-height:85vh; border-radius:12px; box-shadow:0 25px 60px rgba(0,0,0,0.6);">
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL V5 : COCKPIT FIABILITÉ PARC & MTBF / MTTR          -->
+  <!-- ======================================================== -->
+  <div class="modal-overlay" id="reliabilityModal" onclick="if(event.target === this) closeReliabilityModal()">
+    <div class="modal-box" style="max-width: 820px; width: 100%;">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:24px;">📈</span>
+          <div>
+            <h3 style="margin:0; font-size:18px; font-weight:800;">Cockpit Fiabilité & Taux de Disponibilité du Parc SAV</h3>
+            <p style="margin:0; font-size:12px; color:var(--text-muted);">Indicateurs industriels de maintenance biomédicale (MTBF, MTTR, Disponibilité)</p>
+          </div>
+        </div>
+        <button type="button" class="btn-close" onclick="closeReliabilityModal()">✕</button>
+      </div>
+
+      <!-- 4 Cartes KPI -->
+      <div class="reliability-kpi-grid">
+        <div class="rel-kpi-card">
+          <div class="rel-kpi-label">Disponibilité Globale</div>
+          <div class="rel-kpi-val" id="kpiTauxDispo">98.6%</div>
+          <div class="rel-kpi-sub">Parc opérationnel</div>
+        </div>
+        <div class="rel-kpi-card">
+          <div class="rel-kpi-label">MTBF (Temps Moyen / Panne)</div>
+          <div class="rel-kpi-val" id="kpiMTBF" style="color:#0284c7;">6.1 Mois</div>
+          <div class="rel-kpi-sub">182 jours sans incident</div>
+        </div>
+        <div class="rel-kpi-card">
+          <div class="rel-kpi-label">MTTR (Temps de Réparation)</div>
+          <div class="rel-kpi-val" id="kpiMTTR" style="color:#f59e0b;">36h</div>
+          <div class="rel-kpi-sub">Remise en service rapide</div>
+        </div>
+        <div class="rel-kpi-card">
+          <div class="rel-kpi-label">Total Équipements Suivis</div>
+          <div class="rel-kpi-val" id="kpiTotalParc" style="color:#8b5cf6;">12</div>
+          <div class="rel-kpi-sub">Garanties & Révisions 2 Ans</div>
+        </div>
+      </div>
+
+      <!-- Répartition des Causes de Pannes Fréquentes -->
+      <div style="background:rgba(0,0,0,0.06); padding:14px; border-radius:12px; margin-bottom:18px;">
+        <h4 style="margin:0 0 10px 0; font-size:13px; font-weight:800;">🔬 Top 5 des Composants & Causes de Pannes Récurrentes :</h4>
+        <div style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
+          <div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
+              <span>1. Gaine de béquillage perforée / dégradée</span>
+              <b>32%</b>
+            </div>
+            <div style="background:rgba(255,255,255,0.1); border-radius:6px; height:8px; overflow:hidden;">
+              <div style="background:#ef4444; width:32%; height:100%;"></div>
+            </div>
+          </div>
+
+          <div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
+              <span>2. Infiltration d'eau / Défaut d'étanchéité au testeur</span>
+              <b>24%</b>
+            </div>
+            <div style="background:rgba(255,255,255,0.1); border-radius:6px; height:8px; overflow:hidden;">
+              <div style="background:#f59e0b; width:24%; height:100%;"></div>
+            </div>
+          </div>
+
+          <div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
+              <span>3. Rayure lentille distale / Baisse luminosité fibres</span>
+              <b>18%</b>
+            </div>
+            <div style="background:rgba(255,255,255,0.1); border-radius:6px; height:8px; overflow:hidden;">
+              <div style="background:#0284c7; width:18%; height:100%;"></div>
+            </div>
+          </div>
+
+          <div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
+              <span>4. Canal opérateur déformé par passage d'accessoires</span>
+              <b>15%</b>
+            </div>
+            <div style="background:rgba(255,255,255,0.1); border-radius:6px; height:8px; overflow:hidden;">
+              <div style="background:#8b5cf6; width:15%; height:100%;"></div>
+            </div>
+          </div>
+
+          <div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
+              <span>5. Jeu mécanique ou câbles de béquillage détendus</span>
+              <b>11%</b>
+            </div>
+            <div style="background:rgba(255,255,255,0.1); border-radius:6px; height:8px; overflow:hidden;">
+              <div style="background:#10b981; width:11%; height:100%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tableau Santé Technique par Établissement -->
+      <h4 style="margin:0 0 8px 0; font-size:13px; font-weight:800;">🏥 Santé Technique & Disponibilité par Hôpital / Clinique :</h4>
+      <div class="table-responsive" style="max-height: 220px; overflow-y: auto;">
+        <table class="table" style="font-size:12px; margin:0;">
+          <thead>
+            <tr>
+              <th>Établissement</th>
+              <th>Wilaya</th>
+              <th style="text-align:center;">Équipements</th>
+              <th style="text-align:center;">Révisions Réalisées</th>
+              <th>Indice de Santé SAV</th>
+            </tr>
+          </thead>
+          <tbody id="reliabilityTableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px; margin-top:14px;">
+        <button type="button" class="btn btn-secondary" onclick="exportReliabilityCsv()">📥 Exporter Données Fiabilité (CSV)</button>
+        <button type="button" class="btn btn-primary" onclick="closeReliabilityModal()">Fermer</button>
+      </div>
+    </div>
+  </div>
+
   <script src="js/qrcode.min.js"></script>
   <script src="js/features_v4.js" charset="utf-8"></script>
+  <script src="js/features_v5.js" charset="utf-8"></script>
   <script src="js/algeria_wilayas.js" charset="utf-8"></script>
   <script src="js/auth.js" charset="utf-8"></script>
   <script src="js/api.js" charset="utf-8"></script>

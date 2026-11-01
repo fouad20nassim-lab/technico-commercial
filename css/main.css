@@ -3081,3 +3081,258 @@ body {
   padding: 8px 10px;
   border-bottom: 1px solid #f1f5f9;
 }
+
+/* ========================================================================= */
+/* FEATURES V5 : GALERIE PHOTOS AVANT/APRÈS & COCKPIT FIABILITÉ MTBF        */
+/* ========================================================================= */
+
+/* 1. Galerie Photos Avant / Après Réparation */
+.photo-upload-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .photo-upload-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.photo-upload-card {
+  background: rgba(0, 0, 0, 0.08);
+  border: 1.5px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.photo-upload-card.card-avant {
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.photo-upload-card.card-apres {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.04);
+}
+
+.photo-upload-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.photo-upload-head h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.photo-upload-btn-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: transform 0.15s ease;
+}
+
+.photo-upload-btn-label:hover {
+  transform: translateY(-1px);
+}
+
+.btn-upload-red {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.btn-upload-green {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+  min-height: 140px;
+}
+
+.photo-card {
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.photo-card-img-wrap {
+  position: relative;
+  height: 100px;
+  background: #000;
+  overflow: hidden;
+}
+
+.photo-card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.photo-card-img-wrap img:hover {
+  transform: scale(1.05);
+}
+
+.photo-badge {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.badge-defaut {
+  background: rgba(220, 38, 38, 0.85);
+}
+
+.badge-conforme {
+  background: rgba(16, 185, 129, 0.85);
+}
+
+.btn-del-photo {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.btn-del-photo:hover {
+  background: #ef4444;
+}
+
+.photo-card-body {
+  padding: 6px;
+}
+
+.photo-note-input {
+  font-size: 11px;
+  padding: 4px 6px;
+  height: auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.empty-photo-placeholder {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 24px 12px;
+}
+
+/* 2. Cockpit Fiabilité & MTBF */
+.reliability-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .reliability-kpi-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.rel-kpi-card {
+  background: rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+}
+
+.rel-kpi-val {
+  font-size: 24px;
+  font-weight: 900;
+  color: #00b87c;
+  margin: 6px 0 2px 0;
+  letter-spacing: -0.5px;
+}
+
+.rel-kpi-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.rel-kpi-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Print Styles pour Rapport Photo */
+@media print {
+  body.printing-photos > *:not(#photoGalleryModal) {
+    display: none !important;
+  }
+  body.printing-photos #photoGalleryModal {
+    position: static !important;
+    display: block !important;
+    background: #fff !important;
+    padding: 0 !important;
+  }
+  body.printing-photos #photoGalleryModal .modal-box {
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+  body.printing-photos .no-print {
+    display: none !important;
+  }
+  body.printing-photos .photo-upload-columns {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+  }
+  body.printing-photos .photo-card {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    page-break-inside: avoid !important;
+  }
+}
