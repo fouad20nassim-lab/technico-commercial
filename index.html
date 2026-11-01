@@ -103,18 +103,33 @@
           <span class="theme-label" id="themeToggleText">Mode</span>
         </button>
 
-        <!-- Badge Utilisateur Connecté & Déconnexion -->
-        <div id="userHeaderBar" style="display:none; align-items:center; gap:8px; background:#f1f5f9; padding:5px 12px; border-radius:24px; border:1px solid #cbd5e1;">
-          <div style="width:28px; height:28px; border-radius:50%; background:#0f766e; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px;" id="hdrUserAvatar">A</div>
+        <!-- Bouton + Nouvel Utilisateur (Toujours Visible) -->
+        <button type="button" class="btn" onclick="openNewUserModal()" title="Créer un nouvel utilisateur avec affectation régionale" style="background:#00b87c; color:#ffffff; border:1px solid #00a36d; font-weight:800; font-size:12px; padding:7px 14px; border-radius:20px; display:inline-flex; align-items:center; gap:6px; box-shadow:0 3px 10px rgba(0,184,124,0.35); cursor:pointer;">
+          <span style="font-size:14px; font-weight:900;">＋</span>
+          <span>Nouvel Utilisateur</span>
+        </button>
+
+        <!-- Badge Profil Utilisateur & Région (Toujours Visible) -->
+        <div id="userHeaderBar" style="display:inline-flex; align-items:center; gap:8px; background:#f1f5f9; padding:4px 12px; border-radius:24px; border:1px solid #cbd5e1;">
+          <div style="width:28px; height:28px; border-radius:50%; background:#0f766e; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px; flex-shrink:0;" id="hdrUserAvatar">A</div>
           <div style="line-height:1.15; text-align:left;">
-            <div style="font-weight:700; font-size:12px; color:#0f172a;" id="hdrUserName">Utilisateur</div>
-            <span style="font-size:10px; font-weight:700; color:#0f766e;" id="hdrUserRole">RÔLE</span>
+            <div style="font-weight:700; font-size:12px; color:#0f172a;" id="hdrUserName">Administrateur Principal</div>
+            <div style="display:flex; align-items:center; gap:4px; margin-top:1px;">
+              <span style="font-size:10px; font-weight:700; color:#0f766e;" id="hdrUserRole">Admin</span>
+              <span id="hdrUserRegionBadge" style="display:inline-flex; align-items:center;">
+                <span class="badge-region badge-region-national" style="background:rgba(15,118,110,0.12); color:#0f766e; border:1px solid #0f766e; padding:1px 6px; border-radius:8px; font-size:10px; font-weight:800; display:inline-flex; align-items:center; gap:3px;">
+                  <span>🇩🇿</span> National
+                </span>
+              </span>
+            </div>
           </div>
-          <button type="button" class="btn btn-logout-danger" onclick="handleUserLogout()" title="Se déconnecter de la plateforme" style="background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; font-size:11px; font-weight:800; padding:5px 12px; border-radius:14px; cursor:pointer; display:flex; align-items:center; gap:5px; margin-left:6px; transition:all 0.15s ease;">
-            <span>🚪</span>
-            <span>Déconnexion</span>
-          </button>
         </div>
+
+        <!-- Bouton Déconnexion (Rouge Très Visible) -->
+        <button type="button" class="btn btn-logout-danger" onclick="handleUserLogout()" title="Se déconnecter de la plateforme et changer d'utilisateur" style="background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; font-size:12px; font-weight:800; padding:7px 14px; border-radius:20px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.15s ease; box-shadow:0 2px 8px rgba(220,38,38,0.15);">
+          <span>🚪</span>
+          <span>Déconnexion</span>
+        </button>
 
         <div id="connectionBadge" class="status-pill offline" style="display:none;">
           <span class="dot"></span> <b>Connexion...</b>
@@ -563,6 +578,78 @@
   </main>
 
   <!-- MODAL : DÉCLARATION NOUVEL ÉQUIPEMENT SOUS GARANTIE 2 ANS -->
+    <!-- MODAL NOUVEL UTILISATEUR AVEC SÉLECTION DE RÉGION -->
+  <div class="modal-overlay" id="newUserModal" style="display:none; align-items:center; justify-content:center;">
+    <div class="modal-card" style="max-width:520px; width:100%; background:#ffffff; border-radius:18px; box-shadow:0 25px 60px rgba(0,0,0,0.3); overflow:hidden;">
+      <div class="modal-header" style="background:linear-gradient(135deg, #092c2a 0%, #0f766e 100%); color:#ffffff; padding:18px 24px; display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:24px;">👤</span>
+          <div>
+            <h3 style="margin:0; font-size:17px; font-weight:800; color:#ffffff;">＋ Nouvel Utilisateur</h3>
+            <p style="margin:0; font-size:11px; opacity:0.85;">Création de compte avec affectation régionale (Algérie)</p>
+          </div>
+        </div>
+        <button type="button" class="close-btn" onclick="closeNewUserModal()" style="background:rgba(255,255,255,0.2); border:none; color:#ffffff; width:30px; height:30px; border-radius:50%; font-size:16px; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="padding:22px;">
+        <div id="newUserAlert" style="display:none; background:#fee2e2; border:1px solid #f87171; color:#991b1b; padding:10px 14px; border-radius:8px; font-size:13px; font-weight:700; margin-bottom:14px;"></div>
+
+        <form id="newUserForm" onsubmit="submitNewUser(event)">
+          <div style="margin-bottom:12px;">
+            <label style="display:block; font-size:13px; font-weight:700; color:#0f172a; margin-bottom:5px;">Nom complet & Prénom *</label>
+            <input type="text" id="nuNomComplet" required placeholder="ex: Karim Benali" style="width:100%; height:42px; border:1.5px solid #cbd5e1; border-radius:8px; padding:0 12px; font-size:13px; box-sizing:border-box;">
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <label style="display:block; font-size:13px; font-weight:700; color:#0f172a; margin-bottom:5px;">Identifiant de connexion (Username) *</label>
+            <input type="text" id="nuUsername" required placeholder="ex: k.benali" style="width:100%; height:42px; border:1.5px solid #cbd5e1; border-radius:8px; padding:0 12px; font-size:13px; box-sizing:border-box;">
+          </div>
+
+          <!-- RÉGION D'AFFECTATION -->
+          <div style="margin-bottom:12px; background:#f0fdf4; border:1.5px solid #86efac; padding:12px; border-radius:10px;">
+            <label style="display:block; font-size:13px; font-weight:800; color:#166534; margin-bottom:6px;">📍 Région d'Affectation (Algérie) *</label>
+            <select id="nuRegion" required style="width:100%; height:42px; border:1.5px solid #16a34a; border-radius:8px; padding:0 12px; font-size:13px; font-weight:700; color:#14532d; background:#ffffff; box-sizing:border-box; cursor:pointer;">
+              <option value="Centre">🟢 Région Centre (Alger, Blida, Tipaza, Boumerdès, Tizi Ouzou, Médéa...)</option>
+              <option value="Est">🔵 Région Est (Constantine, Annaba, Sétif, Batna, Skikda, Béjaïa...)</option>
+              <option value="Ouest">🟠 Région Ouest (Oran, Tlemcen, Mostaganem, Sidi Bel Abbès...)</option>
+              <option value="Sud">🟣 Région Sud (Ouargla, Ghardaïa, Biskra, Béchar, Adrar...)</option>
+              <option value="National" selected>🇩🇿 National (Toute l'Algérie / Superviseur 58 Wilayas)</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <label style="display:block; font-size:13px; font-weight:700; color:#0f172a; margin-bottom:5px;">Rôle & Fonction *</label>
+            <select id="nuRole" required style="width:100%; height:42px; border:1.5px solid #cbd5e1; border-radius:8px; padding:0 12px; font-size:13px; font-weight:600; box-sizing:border-box; cursor:pointer;">
+              <option value="technicien">🛠️ Technicien SAV / Ingénieur Biomédical</option>
+              <option value="commercial">💼 Technico-Commercial / ADV</option>
+              <option value="qualite">🔬 Responsable Clinique & Qualité</option>
+              <option value="admin">🛡️ Administrateur Plateforme</option>
+            </select>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+            <div>
+              <label style="display:block; font-size:12px; font-weight:700; color:#0f172a; margin-bottom:5px;">Mot de passe PC *</label>
+              <input type="password" id="nuPassword" required placeholder="Mot de passe" style="width:100%; height:40px; border:1.5px solid #cbd5e1; border-radius:8px; padding:0 12px; font-size:13px; box-sizing:border-box;">
+            </div>
+            <div>
+              <label style="display:block; font-size:12px; font-weight:700; color:#0f172a; margin-bottom:5px;">Code PIN Tablette (4 chiffres) *</label>
+              <input type="text" id="nuPin" maxlength="6" pattern="[0-9]*" required placeholder="ex: 1234" style="width:100%; height:40px; border:1.5px solid #cbd5e1; border-radius:8px; padding:0 12px; font-size:13px; font-weight:800; letter-spacing:3px; text-align:center; box-sizing:border-box;">
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid #e2e8f0; padding-top:14px;">
+            <button type="button" class="btn btn-secondary" onclick="closeNewUserModal()">Annuler</button>
+            <button type="submit" class="btn btn-primary" style="background:#00b87c; border-color:#00a36d; font-weight:800;">
+              <span>✓ Créer l'Utilisateur</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="addWarrantyModal">
     <div class="modal-box" style="max-width: 620px;">
       <div class="modal-header">
@@ -1920,31 +2007,55 @@ Notre équipe technique reste à votre entière disposition pour toute intervent
     }
 
     function handleUserLogout() {
+      if (!confirm('Voulez-vous vraiment vous déconnecter de la plateforme ?')) {
+        return;
+      }
       try {
         sessionStorage.clear();
         localStorage.removeItem('technico_session_active');
         localStorage.removeItem('technico_auth_token');
         localStorage.removeItem('technico_auth_user');
+        localStorage.removeItem('technico_auth_token_v1');
+        localStorage.removeItem('technico_auth_user_v1');
       } catch (e) {}
       if (typeof Auth !== 'undefined' && Auth.logout) {
         Auth.logout(function() {
-          window.location.replace('login.html');
+          window.location.href = 'login.html';
         });
       } else {
-        window.location.replace('login.html');
+        window.location.href = 'login.html';
       }
     }
 
     function updateUserHeaderPill(user) {
-      if (!user) return;
+      if (!user) {
+        try {
+          user = JSON.parse(localStorage.getItem('technico_auth_user') || sessionStorage.getItem('technico_auth_user') || '{}');
+        } catch(e) {}
+      }
+      if (!user || !user.username) {
+        user = { username: 'admin', nom_complet: 'Administrateur Principal', role: 'admin', region: 'National' };
+      }
+
       const bar = document.getElementById('userHeaderBar');
-      if (!bar) return;
-      const initials = (user.nom_complet || user.username || 'U').split(' ').map(s => s[0]).join('').slice(0, 2).toUpperCase();
-      document.getElementById('hdrUserAvatar').textContent = initials;
-      document.getElementById('hdrUserName').textContent = user.nom_complet || user.username;
-      const roleBadge = document.getElementById('hdrUserRole');
-      roleBadge.textContent = Auth.getRoleLabel(user.role);
-      bar.style.display = 'flex';
+      if (bar) bar.style.display = 'inline-flex';
+
+      const avatar = document.getElementById('hdrUserAvatar');
+      const nameEl = document.getElementById('hdrUserName');
+      const roleEl = document.getElementById('hdrUserRole');
+      const regBadge = document.getElementById('hdrUserRegionBadge');
+
+      if (avatar) {
+        const initials = (user.nom_complet || user.username || 'A').split(' ').map(s => s[0]).join('').slice(0, 2).toUpperCase();
+        avatar.textContent = initials;
+      }
+      if (nameEl) nameEl.textContent = user.nom_complet || user.username;
+      if (roleEl && typeof Auth !== 'undefined' && Auth.getRoleLabel) {
+        roleEl.textContent = Auth.getRoleLabel(user.role);
+      }
+      if (regBadge && typeof getRegionPillHtml === 'function') {
+        regBadge.innerHTML = getRegionPillHtml(user.region || 'National');
+      }
 
       // Masquer les boutons et badges d'administration pour les autres utilisateurs (non-admin)
       const isAdmin = user && (user.role === 'admin' || (user.permissions && user.permissions.includes('all')));
@@ -1953,7 +2064,94 @@ Notre équipe technique reste à votre entière disposition pour toute intervent
       });
     }
 
+    function openNewUserModal() {
+      const modal = document.getElementById('newUserModal');
+      if (!modal) return;
+      modal.classList.add('active');
+      modal.style.setProperty('display', 'flex', 'important');
+      const alertBox = document.getElementById('newUserAlert');
+      if (alertBox) alertBox.style.display = 'none';
+      const form = document.getElementById('newUserForm');
+      if (form) form.reset();
+      setTimeout(() => {
+        const inp = document.getElementById('nuNomComplet');
+        if (inp) inp.focus();
+      }, 100);
+    }
+
+    function closeNewUserModal() {
+      const modal = document.getElementById('newUserModal');
+      if (!modal) return;
+      modal.classList.remove('active');
+      modal.style.setProperty('display', 'none', 'important');
+    }
+
+    function submitNewUser(e) {
+      e.preventDefault();
+      const alertBox = document.getElementById('newUserAlert');
+      if (alertBox) alertBox.style.display = 'none';
+
+      const nom = document.getElementById('nuNomComplet').value.trim();
+      const username = document.getElementById('nuUsername').value.trim().toLowerCase();
+      const region = document.getElementById('nuRegion').value;
+      const role = document.getElementById('nuRole').value;
+      const pwd = document.getElementById('nuPassword').value;
+      const pin = document.getElementById('nuPin').value.trim();
+
+      const payload = {
+        nom_complet: nom,
+        username: username,
+        region: region,
+        role: role,
+        password: pwd,
+        pin_code: pin,
+        statut: 'actif'
+      };
+
+      // 1. Sauvegarde locale immédiate (Offline-First)
+      if (typeof Auth !== 'undefined' && Auth.upsertStoredUser) {
+        Auth.upsertStoredUser(payload);
+      }
+
+      // 2. Synchronisation serveur SQLite
+      const API_BASE = (window.location && window.location.origin.startsWith('http')) ? '' : 'http://localhost:8085';
+      fetch(API_BASE + '/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          closeNewUserModal();
+          alert('✅ NOUVEL UTILISATEUR CRÉÉ AVEC SUCCÈS !\n\n' +
+                '• Nom : ' + nom + '\n' +
+                '• Identifiant : ' + username + '\n' +
+                '• Région : ' + region + '\n' +
+                '• Rôle : ' + role + '\n' +
+                '• PIN : ' + pin);
+        } else {
+          if (alertBox) {
+            alertBox.textContent = data.error || 'Erreur lors de la création.';
+            alertBox.style.display = 'block';
+          } else {
+            alert(data.error || 'Erreur lors de la création.');
+          }
+        }
+      })
+      .catch(err => {
+        closeNewUserModal();
+        alert('✅ NOUVEL UTILISATEUR CRÉÉ LOCALEMENT !\n\n' +
+              '• Nom : ' + nom + '\n' +
+              '• Région : ' + region + '\n' +
+              '• Identifiant : ' + username);
+      });
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
+      // Affichage immédiat du profil utilisateur depuis le stockage local
+      updateUserHeaderPill();
+
       // Contrôle de session - Rediriger vers login.html si non connecté
       Auth.checkSession((err, user) => {
         if (!user) {

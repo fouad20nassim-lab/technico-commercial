@@ -884,6 +884,16 @@
           </select>
         </div>
         <div class="form-group-modal">
+          <label>📍 Région d'Affectation (Algérie) *</label>
+          <select id="regRegion" class="form-input-modal" required style="border-color:#00b87c; font-weight:700;">
+            <option value="Centre">🟢 Région Centre (Alger, Blida, Tipaza, Tizi Ouzou, Médéa...)</option>
+            <option value="Est">🔵 Région Est (Constantine, Annaba, Sétif, Batna...)</option>
+            <option value="Ouest">🟠 Région Ouest (Oran, Tlemcen, Mostaganem...)</option>
+            <option value="Sud">🟣 Région Sud (Ouargla, Ghardaïa, Biskra, Béchar...)</option>
+            <option value="National" selected>🇩🇿 National (Toute l'Algérie)</option>
+          </select>
+        </div>
+        <div class="form-group-modal">
           <label>Code PIN Rapide Tablette (4 chiffres) *</label>
           <input type="text" id="regPin" class="form-input-modal" placeholder="ex: 5566" maxlength="6" inputmode="numeric" required>
         </div>
@@ -908,10 +918,10 @@
 
     // Liste des utilisateurs disponibles (chargée dynamiquement ou secours)
     var usersList = [
-      { id: 1, username: 'admin', nom_complet: 'Administrateur Principal', role: 'admin', pin: '1234', pin_code: '1234', password: 'admin' },
-      { id: 2, username: 'mustapha.b', nom_complet: 'Mustapha B. (SAV)', role: 'technicien', pin: '1111', pin_code: '1111', password: '1111' },
-      { id: 3, username: 'karim.t', nom_complet: 'Karim T. (Commercial)', role: 'commercial', pin: '2222', pin_code: '2222', password: '2222' },
-      { id: 4, username: 'dr.benali', nom_complet: 'Dr. Benali (Qualité)', role: 'qualite', pin: '3333', pin_code: '3333', password: '3333' }
+      { id: 1, username: 'admin', nom_complet: 'Administrateur Principal', role: 'admin', region: 'National', pin: '1234', pin_code: '1234', password: 'admin' },
+      { id: 2, username: 'mustapha.b', nom_complet: 'Mustapha B. (SAV)', role: 'technicien', region: 'Centre', pin: '1111', pin_code: '1111', password: '1111' },
+      { id: 3, username: 'karim.t', nom_complet: 'Karim T. (Commercial)', role: 'commercial', region: 'Ouest', pin: '2222', pin_code: '2222', password: '2222' },
+      { id: 4, username: 'dr.benali', nom_complet: 'Dr. Benali (Qualité)', role: 'qualite', region: 'Est', pin: '3333', pin_code: '3333', password: '3333' }
     ];
 
     function togglePasswordVisibility(inputId, btn) {
@@ -1118,7 +1128,19 @@
       users.forEach(function(u) {
         var chip = document.createElement('div');
         chip.className = 'quick-user-chip';
-        chip.innerHTML = '<span class="dot"></span>' + (u.nom_complet || u.username);
+
+        var regColor = '#00b87c';
+        var regText = 'National';
+        var r = (u.region || '').toLowerCase();
+        if (r.includes('centre')) { regColor = '#10b981'; regText = 'Centre'; }
+        else if (r.includes('est')) { regColor = '#2563eb'; regText = 'Est'; }
+        else if (r.includes('ouest')) { regColor = '#f97316'; regText = 'Ouest'; }
+        else if (r.includes('sud')) { regColor = '#8b5cf6'; regText = 'Sud'; }
+
+        chip.innerHTML = '<span class="dot" style="background:' + regColor + ';"></span>' +
+                         '<span>' + (u.nom_complet || u.username) + '</span>' +
+                         '<span style="font-size:10px;font-weight:800;opacity:0.75;background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:6px;margin-left:4px;">' + regText + '</span>';
+
         chip.onclick = function() {
           selectedUsername = u.username;
           document.querySelectorAll('.quick-user-chip').forEach(function(c) { c.classList.remove('selected'); });
@@ -1158,6 +1180,7 @@
       var nom = document.getElementById('regNom').value.trim();
       var username = document.getElementById('regUsername').value.trim().toLowerCase();
       var role = document.getElementById('regRole').value;
+      var region = (document.getElementById('regRegion') ? document.getElementById('regRegion').value : 'National');
       var pin = document.getElementById('regPin').value.trim();
       var pwd = document.getElementById('regPwd').value;
 
@@ -1165,6 +1188,7 @@
         nom_complet: nom,
         username: username,
         role: role,
+        region: region,
         pin_code: pin,
         password: pwd || pin,
         statut: 'actif',

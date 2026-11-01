@@ -171,7 +171,7 @@ def get_session_user(token):
         cursor = conn.cursor()
         now_iso = datetime.now().isoformat()
         cursor.execute("""
-        SELECT s.token, s.user_id, s.username, s.role, s.permissions, u.nom_complet, u.email, u.statut, s.expires_at, u.pin_code
+        SELECT s.token, s.user_id, s.username, s.role, s.permissions, u.nom_complet, u.email, u.statut, s.expires_at, u.pin_code, u.region
         FROM sessions s
         JOIN users u ON s.user_id = u.id
         WHERE s.token = ? AND u.statut = 'actif'
@@ -208,7 +208,8 @@ def get_session_user(token):
             "permissions": perms,
             "nom_complet": row[5],
             "email": row[6] or "",
-            "has_pin": bool(row[9])
+            "has_pin": bool(row[9]),
+            "region": row[10] or "National"
         }
     except Exception as e:
         print(f"[AUTH ERROR] {e}")
@@ -316,6 +317,7 @@ def init_db():
         salt TEXT NOT NULL,
         nom_complet TEXT NOT NULL,
         role TEXT NOT NULL DEFAULT 'technicien',
+        region TEXT NOT NULL DEFAULT 'National',
         email TEXT,
         telephone TEXT,
         pin_code TEXT,
@@ -368,6 +370,16 @@ def init_db():
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_users_pin ON users(pin_code);")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_sessions_expires ON sessions(expires_at);")
+
+    # S'assurer de la présence de la colonne region dans users (Migration)
+    try:
+        cursor.execute("SELECT region FROM users LIMIT 1")
+    except Exception:
+        cursor.execute("ALTER TABLE users ADD COLUMN region TEXT DEFAULT 'National'")
+        cursor.execute("UPDATE users SET region = 'National' WHERE username = 'admin'")
+        cursor.execute("UPDATE users SET region = 'Centre' WHERE username = 'mustapha.b'")
+        cursor.execute("UPDATE users SET region = 'Ouest' WHERE username = 'karim.t'")
+        cursor.execute("UPDATE users SET region = 'Est' WHERE username = 'dr.benali'")
 
     # Initialisation des comptes par défaut si la table est vide
     seed_default_users(cursor)
@@ -477,6 +489,12 @@ def generer_echeances_garantie(installation_id, client_nom, wilaya, date_inst_st
 class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=BASE_DIR, **kwargs)
+
+    def end_headers(self):
+        self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        self.send_header('Pragma', 'no-cache')
+        self.send_header('Expires', '0')
+        super().end_headers()
 
     def log_message(self, format, *args):
         # Format sûr sans risque d'IndexError
@@ -644,7 +662,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             return self.handle_auth_logout()
 
         # --- ROUTES GESTION DES COMPTES & PERMISSIONS ---
-        if path == '/api/users':
+        if path == '/api/users' or path == '/api/auth/register':
             return self.handle_save_user(payload)
 
         if path == '/api/users/delete':
@@ -1825,16 +1843,16 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             cursor = conn.cursor()
 
             if username:
-                cursor.execute("SELECT id, username, password_hash, salt, nom_complet, role, pin_code, statut, permissions FROM users WHERE LOWER(username) = ?", (username,))
+                cursor.execute("SELECT id, username, password_hash, salt, nom_complet, role, pin_code, statut, permissions, region FROM users WHERE LOWER(username) = ?", (username,))
             else:
-                cursor.execute("SELECT id, username, password_hash, salt, nom_complet, role, pin_code, statut, permissions FROM users WHERE pin_code = ?", (pin,))
+                cursor.execute("SELECT id, username, password_hash, salt, nom_complet, role, pin_code, statut, permissions, region FROM users WHERE pin_code = ?", (pin,))
 
             row = cursor.fetchone()
             if not row:
                 conn.close()
                 return self.send_json({"success": False, "error": "Identifiants incorrects"}, 401)
 
-            user_id, u_name, pwd_hash, salt, nom_complet, role, pin_code, statut, perms_str = row
+            user_id, u_name, pwd_hash, salt, nom_complet, role, pin_code, statut, perms_str, u_region = row
             if statut != 'actif':
                 conn.close()
                 return self.send_json({"success": False, "error": "Ce compte est désactivé. Veuillez contacter l'administrateur."}, 403)
@@ -1886,6 +1904,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
                     "username": u_name,
                     "nom_complet": nom_complet,
                     "role": role,
+                    "region": u_region or "National",
                     "permissions": perms
                 }
             })
@@ -1905,16 +1924,16 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             cursor = conn.cursor()
 
             if username:
-                cursor.execute("SELECT id, username, password_hash, salt, nom_complet, role, pin_code, statut, permissions FROM users WHERE LOWER(username) = ? AND statut = 'actif'", (username,))
+                cursor.execute("SELECT id, username, password_hash, salt, nom_complet, role, pin_code, statut, permissions, region FROM users WHERE LOWER(username) = ? AND statut = 'actif'", (username,))
             else:
-                cursor.execute("SELECT id, username, password_hash, salt, nom_complet, role, pin_code, statut, permissions FROM users WHERE pin_code = ? AND statut = 'actif'", (pin,))
+                cursor.execute("SELECT id, username, password_hash, salt, nom_complet, role, pin_code, statut, permissions, region FROM users WHERE pin_code = ? AND statut = 'actif'", (pin,))
 
             row = cursor.fetchone()
             if not row:
                 conn.close()
                 return self.send_json({"success": False, "error": "Code PIN incorrect ou compte introuvable"}, 401)
 
-            user_id, u_name, pwd_hash, salt, nom_complet, role, pin_code, statut, perms_str = row
+            user_id, u_name, pwd_hash, salt, nom_complet, role, pin_code, statut, perms_str, u_region = row
             if pin != pin_code:
                 conn.close()
                 return self.send_json({"success": False, "error": "Code PIN invalide"}, 401)
@@ -1977,7 +1996,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             conn = sqlite3.connect(DB_FILE)
             cursor = conn.cursor()
             cursor.execute("""
-            SELECT id, username, nom_complet, role, email, telephone, pin_code, statut, permissions, last_login, created_at
+            SELECT id, username, nom_complet, role, email, telephone, pin_code, statut, permissions, last_login, created_at, region
             FROM users
             ORDER BY id ASC
             """)
@@ -2002,7 +2021,8 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
                     "statut": r[7],
                     "permissions": perms,
                     "last_login": r[9],
-                    "created_at": r[10]
+                    "created_at": r[10],
+                    "region": r[11] or "National"
                 })
 
             return self.send_json({"success": True, "users": users})
@@ -2016,6 +2036,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             username = (payload.get('username') or '').strip().lower()
             nom_complet = (payload.get('nom_complet') or '').strip()
             role = payload.get('role') or 'technicien'
+            region = (payload.get('region') or 'National').strip()
             email = (payload.get('email') or '').strip()
             telephone = (payload.get('telephone') or '').strip()
             pin_code = (payload.get('pin_code') or '').strip()
@@ -2046,14 +2067,14 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
                 if password:
                     pwd_hash, salt = hash_password(password)
                     cursor.execute("""
-                    UPDATE users SET username=?, password_hash=?, salt=?, nom_complet=?, role=?, email=?, telephone=?, pin_code=?, statut=?, permissions=?, updated_at=?
+                    UPDATE users SET username=?, password_hash=?, salt=?, nom_complet=?, role=?, region=?, email=?, telephone=?, pin_code=?, statut=?, permissions=?, updated_at=?
                     WHERE id=?
-                    """, (username, pwd_hash, salt, nom_complet, role, email, telephone, pin_code, statut, perms_json, now_iso, user_id))
+                    """, (username, pwd_hash, salt, nom_complet, role, region, email, telephone, pin_code, statut, perms_json, now_iso, user_id))
                 else:
                     cursor.execute("""
-                    UPDATE users SET username=?, nom_complet=?, role=?, email=?, telephone=?, pin_code=?, statut=?, permissions=?, updated_at=?
+                    UPDATE users SET username=?, nom_complet=?, role=?, region=?, email=?, telephone=?, pin_code=?, statut=?, permissions=?, updated_at=?
                     WHERE id=?
-                    """, (username, nom_complet, role, email, telephone, pin_code, statut, perms_json, now_iso, user_id))
+                    """, (username, nom_complet, role, region, email, telephone, pin_code, statut, perms_json, now_iso, user_id))
 
                 action_msg = f"Modification du compte utilisateur {username} ({role})"
             else:
@@ -2061,9 +2082,9 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
                 default_pwd = password if password else (pin_code if pin_code else "123456")
                 pwd_hash, salt = hash_password(default_pwd)
                 cursor.execute("""
-                INSERT INTO users (username, password_hash, salt, nom_complet, role, email, telephone, pin_code, statut, permissions, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """, (username, pwd_hash, salt, nom_complet, role, email, telephone, pin_code, statut, perms_json, now_iso, now_iso))
+                INSERT INTO users (username, password_hash, salt, nom_complet, role, region, email, telephone, pin_code, statut, permissions, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (username, pwd_hash, salt, nom_complet, role, region, email, telephone, pin_code, statut, perms_json, now_iso, now_iso))
                 user_id = cursor.lastrowid
                 action_msg = f"Création du compte utilisateur {username} ({role})"
 

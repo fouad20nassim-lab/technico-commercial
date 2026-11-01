@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Paramètres & Administration — Plateforme Technico-Commercial</title>
   <script src="js/theme.js"></script>
+  <script src="js/algeria_wilayas.js"></script>
   <link rel="stylesheet" href="css/main.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -890,6 +891,10 @@
         <a href="index.html" class="btn btn-secondary">⌂ Tableau de Bord</a>
         <a href="feuille_inspection.html" class="btn btn-secondary" style="background:#0f766e; color:#fff; border-color:#0f766e;">📋 Feuille d'Inspection</a>
         <button class="btn btn-primary" onclick="saveAllSettings()">💾 Enregistrer Tous les Paramètres</button>
+        <button type="button" class="btn" onclick="handleAdminLogout()" title="Se déconnecter de la plateforme et revenir à l'écran de connexion" style="background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; font-weight:800; font-size:12px; padding:7px 14px; border-radius:18px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+          <span>🚪</span>
+          <span>Déconnexion</span>
+        </button>
         <button type="button" class="btn" style="background:#dc2626;color:#ffffff;border-color:#b91c1c;font-weight:800;display:inline-flex;align-items:center;gap:6px;" onclick="lockAdminPage()">
           🔒 Verrouiller la Page
         </button>
@@ -988,6 +993,7 @@
                 <th>Utilisateur / Nom Complet</th>
                 <th>Identifiant</th>
                 <th>Rôle Attribué</th>
+                <th>Région d'Affectation</th>
                 <th>Code PIN Tablette</th>
                 <th>Statut</th>
                 <th>Dernier Accès</th>
@@ -1515,6 +1521,16 @@
               <option value="commercial">💼 Commercial / ADV</option>
               <option value="qualite">🛡️ Responsable Qualité</option>
               <option value="admin">👑 Administrateur (Contrôle total)</option>
+            </select>
+          </div>
+          <div class="form-group span-2" style="background:#f0fdf4;border:1.5px solid #86efac;padding:12px;border-radius:10px;">
+            <label style="font-size:13px;font-weight:800;color:#166534;margin-bottom:6px;display:block;">📍 Région d'Affectation (Algérie) *</label>
+            <select id="usrRegion" class="form-control" required style="font-weight:700;border-color:#16a34a;color:#14532d;">
+              <option value="Centre">🟢 Région Centre (Alger, Blida, Tipaza, Tizi Ouzou, Médéa...)</option>
+              <option value="Est">🔵 Région Est (Constantine, Annaba, Sétif, Batna, Skikda, Béjaïa...)</option>
+              <option value="Ouest">🟠 Région Ouest (Oran, Tlemcen, Mostaganem, Sidi Bel Abbès...)</option>
+              <option value="Sud">🟣 Région Sud (Ouargla, Ghardaïa, Biskra, Béchar, Adrar...)</option>
+              <option value="National" selected>🇩🇿 National (Toute l'Algérie)</option>
             </select>
           </div>
           <div class="form-group">
@@ -2356,6 +2372,26 @@
         }
       }
     }
+        function handleAdminLogout() {
+      if (confirm('Voulez-vous vraiment vous déconnecter de la plateforme ?')) {
+        try {
+          sessionStorage.clear();
+          localStorage.removeItem('technico_session_active');
+          localStorage.removeItem('technico_auth_token');
+          localStorage.removeItem('technico_auth_user');
+          localStorage.removeItem('technico_auth_token_v1');
+          localStorage.removeItem('technico_auth_user_v1');
+        } catch (e) {}
+        if (typeof Auth !== 'undefined' && Auth.logout) {
+          Auth.logout(function() {
+            window.location.href = 'login.html';
+          });
+        } else {
+          window.location.href = 'login.html';
+        }
+      }
+    }
+
     function lockAdminPage() {
       try {
         sessionStorage.removeItem('technico_admin_unlocked');
@@ -2615,6 +2651,7 @@
           '</td>' +
           '<td><code style="font-size:12px;font-weight:700;color:#0f766e;background:#f0fdf4;padding:3px 8px;border-radius:6px;border:1px solid #bbf7d0;">' + uUsername + '</code></td>' +
           '<td><span class="badge-role ' + roleBadgeClass + '">' + roleLabel + '</span></td>' +
+          '<td>' + (typeof getRegionPillHtml === 'function' ? getRegionPillHtml(u.region) : ('<span style="font-weight:700;color:#0f766e;">' + (u.region || 'National') + '</span>')) + '</td>' +
           '<td>' + pinDisplayHtml + '</td>' +
           '<td>' + statusBadgeHtml + '</td>' +
           '<td style="font-size:11px;color:#64748b;white-space:nowrap;">' + lastLoginStr + '</td>' +
@@ -2648,6 +2685,7 @@
             document.getElementById('usrNom').value = user.nom_complet || '';
             document.getElementById('usrUsername').value = user.username || '';
             document.getElementById('usrRole').value = user.role || 'technicien';
+          if (document.getElementById('usrRegion')) document.getElementById('usrRegion').value = user.region || 'National';
             document.getElementById('usrPin').value = user.pin_code || '';
             document.getElementById('usrEmail').value = user.email || '';
             document.getElementById('usrPhone').value = user.telephone || '';
@@ -2713,6 +2751,7 @@
       var nom = document.getElementById('usrNom').value.trim();
       var username = document.getElementById('usrUsername').value.trim().toLowerCase();
       var role = document.getElementById('usrRole').value;
+      var region = (document.getElementById('usrRegion') ? document.getElementById('usrRegion').value : 'National');
       var pwd = document.getElementById('usrPassword').value;
       var pin = document.getElementById('usrPin').value.trim();
       var email = document.getElementById('usrEmail').value.trim();
@@ -2736,6 +2775,7 @@
         nom_complet: nom,
         username: username,
         role: role,
+        region: region,
         pin_code: pin || (role === 'admin' ? '1234' : '1111'),
         password: pwd || (pin || '123456'),
         email: email,

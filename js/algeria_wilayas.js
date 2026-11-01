@@ -102,3 +102,11 @@ function getRegionBadgeHtml(wilayaStr) {
   if (!reg) return '';
   return `<span class="badge-region badge-region-${reg.class}" title="${reg.nom}"><span class="region-orb ${reg.class}" style="width:10px;height:10px;"></span> ${reg.nom}</span>`;
 }
+
+function getRegionPillHtml(regionKey) {
+  if (!regionKey || regionKey === 'National' || regionKey === 'national') {
+    return `<span class="badge-region badge-region-national" style="background:rgba(15,118,110,0.12); color:#0f766e; border:1px solid #0f766e; padding:3px 8px; border-radius:12px; font-size:11px; font-weight:800; display:inline-flex; align-items:center; gap:5px;" title="Toute l'Algérie (National)"><span style="font-size:12px;">🇩🇿</span> National</span>`;
+  }
+  const reg = REGIONS_ALGERIE[regionKey] || (Object.values(REGIONS_ALGERIE).find(r => r.nom.toLowerCase().includes(String(regionKey).toLowerCase()))) || REGIONS_ALGERIE.Centre;
+  return `<span class="badge-region badge-region-${reg.class}" style="display:inline-flex; align-items:center; gap:5px;" title="${reg.nom}"><span class="region-orb ${reg.class}" style="width:10px;height:10px;"></span> ${reg.nom}</span>`;
+}

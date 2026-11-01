@@ -21,6 +21,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Electron Medical Algérie — Rapport de Formation</title>
 <script src="js/theme.js"></script>
+  <script src="js/auth.js"></script>
 <link rel="stylesheet" href="css/main.css">
 <style>
 :root{--navy:#073b43;--teal:#078d78;--mint:#eaf5ef;--pale:#f4f8f6;--line:#d4e3dc;--text:#183d43;--muted:#607b7d}
@@ -78,6 +79,11 @@ td input{width:100%;min-width:0;padding:7px 8px;border:1px solid #d7e3dc;border-
       </div>
     </div>
     <div class="header-actions">
+      <button type="button" class="btn btn-logout-danger" onclick="if(confirm('Voulez-vous vraiment vous déconnecter de la plateforme ?')){if(typeof Auth!=='undefined'&&Auth.logout){Auth.logout(function(){window.location.href='login.html';});}else{sessionStorage.clear();localStorage.clear();window.location.href='login.html';}}" title="Se déconnecter de la plateforme" style="background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; font-size:12px; font-weight:800; padding:6px 12px; border-radius:18px; cursor:pointer; display:inline-flex; align-items:center; gap:5px;">
+        <span>🚪</span>
+        <span>Déconnexion</span>
+      </button>
+
       <!-- Bouton Pill Mode Sombre / Clair [☀️ Mode] -->
       <button type="button" class="theme-toggle-pill" id="themeToggleBtn" onclick="toggleAppTheme()" title="Basculer entre Mode Sombre et Mode Clair">
         <span class="theme-icon" id="themeToggleIcon">☀️</span>
