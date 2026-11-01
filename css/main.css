@@ -3474,3 +3474,111 @@ body {
     background: #fafafa !important;
   }
 }
+
+
+/* ========================================================================= */
+/* EN-TÊTE OFFICIEL S.A.R.L ELECTRON MEDICAL ALGERIE                         */
+/* ========================================================================= */
+.official-company-header {
+  background: #ffffff;
+  color: #000000;
+  border-bottom: 2px solid #063740;
+  padding: 14px 18px 12px 18px;
+  margin-bottom: 18px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  text-align: left;
+}
+
+.company-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.company-header-titles {
+  flex: 1;
+}
+
+.company-legal-name {
+  font-family: "Times New Roman", Times, Georgia, serif;
+  font-size: 24px;
+  font-weight: 900;
+  color: #000000;
+  margin: 0 0 4px 0;
+  letter-spacing: 0.5px;
+  line-height: 1.15;
+}
+
+.company-activity-desc {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: #111827;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.company-header-logo img {
+  max-height: 58px;
+  max-width: 160px;
+  object-fit: contain;
+}
+
+.company-header-divider {
+  height: 1px;
+  background: #cbd5e1;
+  margin: 8px 0;
+}
+
+.company-header-details {
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: #1e293b;
+}
+
+.company-header-details p {
+  margin: 1px 0;
+}
+
+.company-header-details b {
+  color: #000000;
+  font-weight: 700;
+}
+
+/* En mode impression (A4 PDF ou Papier) */
+@media print {
+  .official-company-header {
+    display: block !important;
+    visibility: visible !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 0 0 8px 0 !important;
+    margin-bottom: 12px !important;
+    border-bottom: 1.5px solid #000000 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    page-break-inside: avoid !important;
+  }
+  .company-legal-name {
+    font-size: 19px !important;
+    color: #000000 !important;
+  }
+  .company-activity-desc {
+    font-size: 11.5px !important;
+    color: #000000 !important;
+  }
+  .company-header-details {
+    font-size: 9px !important;
+    line-height: 1.35 !important;
+    color: #000000 !important;
+  }
+  .company-header-details b {
+    color: #000000 !important;
+  }
+  .company-header-logo img {
+    max-height: 48px !important;
+  }
+}
