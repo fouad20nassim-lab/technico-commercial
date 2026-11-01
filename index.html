@@ -171,6 +171,17 @@
         <div id="connectionBadge" class="status-pill offline" style="display:none;">
           <span class="dot"></span> <b>Connexion...</b>
         </div>
+        <!-- Nouveautés V4 : Planning SAV, Bilan Exécutif & Étiquette QR -->
+        <button type="button" class="btn btn-secondary" onclick="scrollToCalendar()" title="Consulter le Planning interactif des Tournées & Calendrier SAV" style="font-weight:700;">
+          <span>📅</span> <span>Planning SAV</span>
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="openBilanModal()" title="Générer le Bilan Exécutif et Rapport d'Activité Officiel (PDF / Direction)" style="font-weight:700;">
+          <span>📊</span> <span>Bilan Exécutif</span>
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="openQuickStickerModal()" title="Générer et imprimer une Étiquette SAV Fujifilm avec QR Code pour matériel hospitalier" style="font-weight:700;">
+          <span>🏷️</span> <span>Étiquette QR</span>
+        </button>
+
         <button class="btn btn-secondary admin-only-item" onclick="openWifiModal()" title="Accéder depuis un smartphone ou une tablette sur le réseau local Wi-Fi">
           📱 Accès Wi-Fi
         </button>
@@ -468,6 +479,77 @@
         </div>
       </div>
     </div>
+
+    <!-- ======================================================== -->
+    <!-- SECTION PLANNING : CALENDRIER VISUEL DES TOURNÉES SAV    -->
+    <!-- ======================================================== -->
+    <section class="sav-calendar-card" id="sectionCalendar" style="scroll-margin-top: 85px;">
+      <div class="calendar-top-controls">
+        <div>
+          <h3 style="margin: 0 0 6px 0; font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+            <span>📅</span> <span>Planning des Tournées Techniques & Calendrier SAV</span>
+          </h3>
+          <p style="margin: 0; font-size: 13px; color: var(--text-muted);">
+            Visualisez les révisions semestrielles, visites de contrôle et interventions par technicien et région.
+          </p>
+        </div>
+
+        <div class="cal-nav-group">
+          <button type="button" class="btn btn-secondary" onclick="changeCalMonth(-1)" style="padding:6px 12px; font-weight:800;">◀</button>
+          <span class="cal-month-title" id="calCurrentMonthLabel">Novembre 2026</span>
+          <button type="button" class="btn btn-secondary" onclick="changeCalMonth(1)" style="padding:6px 12px; font-weight:800;">▶</button>
+          <button type="button" class="btn btn-secondary" onclick="goToCalToday()" style="padding:6px 12px; font-size:12px; font-weight:700;">Aujourd'hui</button>
+        </div>
+      </div>
+
+      <!-- Filtres du Calendrier -->
+      <div class="cal-filters-row" style="margin-bottom: 16px; padding: 10px 14px; background: rgba(0,0,0,0.1); border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <label style="font-size:12px; font-weight:700; color:var(--text-muted);">👤 Technicien :</label>
+          <select id="calFilterTech" class="form-input" style="padding:5px 10px; font-size:12px; height:auto; width:auto;" onchange="renderCalendar()">
+            <option value="">Tous les Techniciens SAV</option>
+            <option value="Mustapha B.">Mustapha B. (Technicien SAV)</option>
+            <option value="Karim T.">Karim T. (Commercial)</option>
+            <option value="Dr. Benali">Dr. Benali (Qualité)</option>
+            <option value="Administrateur">Administrateur Principal</option>
+          </select>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:8px;">
+          <label style="font-size:12px; font-weight:700; color:var(--text-muted);">📍 Territoire :</label>
+          <select id="calFilterRegion" class="form-input" style="padding:5px 10px; font-size:12px; height:auto; width:auto;" onchange="renderCalendar()">
+            <option value="">Tous les Territoires (58 Wilayas)</option>
+            <option value="Centre">🟢 Région Centre</option>
+            <option value="Est">🔵 Région Est</option>
+            <option value="Ouest">🟠 Région Ouest</option>
+            <option value="Sud">🟣 Région Sud</option>
+          </select>
+        </div>
+
+        <!-- Légende -->
+        <div style="margin-left:auto; display:flex; gap:12px; align-items:center; font-size:11px; font-weight:700; flex-wrap:wrap;">
+          <span style="display:inline-flex; align-items:center; gap:4px; color:#ef4444;"><span style="width:8px; height:8px; border-radius:50%; background:#ef4444;"></span> Alerte J-10 / Retard</span>
+          <span style="display:inline-flex; align-items:center; gap:4px; color:#00b87c;"><span style="width:8px; height:8px; border-radius:50%; background:#00b87c;"></span> Révision Prévue</span>
+          <span style="display:inline-flex; align-items:center; gap:4px; color:#2563eb;"><span style="width:8px; height:8px; border-radius:50%; background:#2563eb;"></span> Intervention Client</span>
+        </div>
+      </div>
+
+      <!-- En-têtes Jours de la semaine -->
+      <div class="calendar-weekdays-row">
+        <div class="cal-weekday-label">Lun</div>
+        <div class="cal-weekday-label">Mar</div>
+        <div class="cal-weekday-label">Mer</div>
+        <div class="cal-weekday-label">Jeu</div>
+        <div class="cal-weekday-label">Ven</div>
+        <div class="cal-weekday-label">Sam</div>
+        <div class="cal-weekday-label">Dim</div>
+      </div>
+
+      <!-- Grille Dynamique des Jours -->
+      <div class="calendar-days-grid" id="calendarDaysGrid">
+        <!-- Rempli par JavaScript -->
+      </div>
+    </section>
 
     <!-- NOUVELLE SECTION : SUIVI DES GARANTIES 2 ANS & RÉVISIONS 6 MOIS (RAPPEL J-10) -->
     <section id="sectionRevisions" style="margin-bottom: 36px; scroll-margin-top: 85px;">
@@ -881,7 +963,10 @@
       <div class="qr-modal-body">
         <p>Vous pouvez utiliser cette plateforme Technico-Commerciale directement sur votre <b>tablette, iPad ou smartphone</b> connecté au même réseau Wi-Fi.</p>
         <div class="qr-ip-box" id="networkUrlDisplay">Chargement de l'adresse...</div>
-        <p style="font-size: 12px; color: var(--text-muted);">Ouvrez simplement le navigateur de votre tablette/téléphone et saisissez cette adresse pour créer ou signer les rapports sur le terrain !</p>
+        <div style="display:flex; justify-content:center; align-items:center; margin:16px 0; padding:12px; background:#ffffff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.06); width:fit-content; margin-left:auto; margin-right:auto;">
+          <div id="wifiModalQrContainer"></div>
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); text-align:center;">Scannez ce QR Code avec l'appareil photo de votre smartphone ou tablette pour y accéder instantanément !</p>
       </div>
       <div style="text-align: right; margin-top: 15px;">
         <button class="btn btn-primary" onclick="closeWifiModal()">Compris</button>
@@ -1151,6 +1236,17 @@
           </div>
           <div style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px; height: 110px;">
             <strong style="color: #063740;">Visa & Cachet Représentant Hôpital / Client :</strong>
+            <div style="margin-top: 4px; font-weight: 700; color: #0f766e;" id="pvDoctorSignerDisplay">Ingénieur Biomédical / Chef de Service</div>
+            <div id="pvDoctorSignatureImgWrap" style="text-align: center; margin: 4px 0; min-height: 38px; display: flex; align-items: center; justify-content: center;">
+              <span style="font-size: 10px; color: #94a3b8; font-style: italic;">(Signature tactile en attente)</span>
+            </div>
+            <div style="border-top: 1px dashed #cbd5e1; padding-top: 3px; color: #64748b; display: flex; justify-content: space-between; align-items: center;">
+              <span>Cachet & Signature</span>
+              <button type="button" class="btn btn-secondary no-print" onclick="openSignatureModal('pv')" style="font-size: 10px; padding: 3px 8px; background: #0f766e; color: #fff; border: none; border-radius: 4px; cursor: pointer;">✍️ Signer sur Écran</button>
+            </div>
+          </div>
+          <!-- Old placeholder hidden -->
+          <div style="display:none">
             <div style="margin-top: 4px;">Ingénieur Biomédical / Chef de Service</div>
             <div style="margin-top: 35px; border-top: 1px dashed #cbd5e1; padding-top: 3px; color: #64748b;">Cachet & Signature</div>
           </div>
@@ -1164,7 +1260,258 @@
     </div>
   </div>
 
+  <!-- ======================================================== -->
+  <!-- MODAL 1 : SIGNATURE TACTILE ÉLECTRONIQUE (CANVAS TABLETTE)-->
+  <!-- ======================================================== -->
+  <div class="modal-overlay" id="signatureModal" onclick="if(event.target === this) closeSignatureModal()">
+    <div class="modal-box" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3>✍️ Signature Tactile Électronique</h3>
+        <button type="button" class="btn-close" onclick="closeSignatureModal()">✕</button>
+      </div>
+      <div style="padding: 10px 0;">
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
+          Faites signer le médecin chef, l'ingénieur biomédical ou le technicien avec le doigt ou un stylet sur l'écran tactile.
+        </p>
+
+        <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+          <div style="flex: 1;">
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Nom du Signataire *</label>
+            <input type="text" id="sigSignerName" class="form-input" placeholder="ex: Dr. Benali ou Ing. Biomédical" style="width: 100%; font-size: 13px; font-weight: 700;">
+          </div>
+          <div style="flex: 1;">
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Qualité / Fonction</label>
+            <input type="text" id="sigSignerRole" class="form-input" placeholder="ex: Chef de Service Gastro" style="width: 100%; font-size: 13px;">
+          </div>
+        </div>
+
+        <!-- Boîte Canvas Tactile -->
+        <div class="sig-pad-box" id="sigPadBox">
+          <canvas id="sigCanvas" class="sig-canvas" width="440" height="150"></canvas>
+          <div class="sig-pad-overlay-text" id="sigPromptText">✍️ Signez ici avec le doigt ou un stylet</div>
+        </div>
+
+        <div class="sig-pad-tools">
+          <button type="button" class="btn btn-secondary" onclick="clearSignatureCanvas()" style="font-size: 12px; font-weight: 700;">
+            🗑️ Effacer / Recommencer
+          </button>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn-secondary" onclick="closeSignatureModal()">Annuler</button>
+            <button type="button" class="btn btn-primary" onclick="confirmSignature()" style="font-weight: 800;">
+              ✓ Valider la Signature
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL 2 : BILAN EXÉCUTIF & RAPPORT D'ACTIVITÉ DIRECTION  -->
+  <!-- ======================================================== -->
+  <div class="modal-overlay" id="bilanExecutifModal" onclick="if(event.target === this) closeBilanModal()">
+    <div class="modal-box" style="max-width: 900px; max-height: 92vh; overflow-y: auto;">
+      <div class="modal-header no-print">
+        <h3>📊 Bilan Exécutif & Rapport d'Activité Officiel</h3>
+        <button type="button" class="btn-close" onclick="closeBilanModal()">✕</button>
+      </div>
+
+      <div style="margin-bottom: 16px;" class="no-print">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; background: rgba(0,0,0,0.1); padding: 10px 14px; border-radius: 10px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <label style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Période du Rapport :</label>
+            <select id="bilanPeriodSelect" class="form-input" style="width: auto; font-size: 12px; font-weight: 700;" onchange="updateBilanContent()">
+              <option value="year2026">Année 2026 (En cours)</option>
+              <option value="q4">4ème Trimestre 2026</option>
+              <option value="month">Mois en cours (Novembre 2026)</option>
+              <option value="all">Historique Intégral National</option>
+            </select>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn-secondary" onclick="exportBilanCsv()">📊 Exporter CSV</button>
+            <button type="button" class="btn btn-primary" onclick="printOfficialBilan()">🖨️ Imprimer Rapport PDF (A4)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feuille A4 Officielle Imprimable -->
+      <div class="bilan-sheet" id="printableBilanSheet">
+        <div class="bilan-head-band">
+          <div>
+            <img src="assets/electron-medical-logo.png" alt="Electron Medical Algérie" style="height: 44px; object-fit: contain;">
+            <div style="font-size: 11px; font-weight: 800; color: #0f766e; margin-top: 4px;">
+              DISTRIBUTEUR OFFICIEL FUJIFILM MEDICAL SYSTEMS EN ALGÉRIE
+            </div>
+            <div style="font-size: 10px; color: #64748b;">
+              Direction SAV & Technique • Agrément MSP • Couverture 58 Wilayas
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 18px; font-weight: 900; color: #0f172a;" id="bilanPeriodTitle">RAPPORT D'ACTIVITÉ 2026</div>
+            <div style="font-size: 11px; font-weight: 700; color: #00b87c;" id="bilanGenDate">Édité le 01/11/2026</div>
+            <div style="font-size: 10px; color: #64748b;">Réf : BILAN-SAV-DZ-2026</div>
+          </div>
+        </div>
+
+        <!-- Section 1 : KPIs Clés -->
+        <div class="bilan-kpi-grid">
+          <div class="bilan-kpi-box">
+            <div class="val" id="bilanKpiTotal">0</div>
+            <div class="lbl">Interventions Total</div>
+          </div>
+          <div class="bilan-kpi-box">
+            <div class="val" id="bilanKpiGaranties" style="color:#00b87c;">0</div>
+            <div class="lbl">Équipements 2 Ans</div>
+          </div>
+          <div class="bilan-kpi-box">
+            <div class="val" id="bilanKpiRevisionsRespect">98%</div>
+            <div class="lbl">SLA Qualité Délais</div>
+          </div>
+          <div class="bilan-kpi-box">
+            <div class="val" id="bilanKpiWilayas" style="color:#2563eb;">58</div>
+            <div class="lbl">Wilayas Déployées</div>
+          </div>
+        </div>
+
+        <!-- Section 2 : Répartition par Territoire -->
+        <div class="bilan-section-title">1. Répartition par Territoire Régional (Algérie)</div>
+        <table class="bilan-table">
+          <thead>
+            <tr>
+              <th>Territoire Régional</th>
+              <th>Wilayas Clés</th>
+              <th>Interventions</th>
+              <th>Part Nationale</th>
+            </tr>
+          </thead>
+          <tbody id="bilanTerritoryTableBody">
+            <!-- Rempli par JavaScript -->
+          </tbody>
+        </table>
+
+        <!-- Section 3 : Activité par Technicien SAV -->
+        <div class="bilan-section-title">2. Charge de Travail & Performance par Technicien SAV</div>
+        <table class="bilan-table">
+          <thead>
+            <tr>
+              <th>Technicien Référent</th>
+              <th>Rôle / Spécialité</th>
+              <th>Région d'Affectation</th>
+              <th>Interventions Effectuées</th>
+              <th>Statut</th>
+            </tr>
+          </thead>
+          <tbody id="bilanTechTableBody">
+            <!-- Rempli par JavaScript -->
+          </tbody>
+        </table>
+
+        <!-- Section 4 : Top Établissements Hospitaliers -->
+        <div class="bilan-section-title">3. Top Établissements Hospitaliers & Cliniques Équipés</div>
+        <table class="bilan-table">
+          <thead>
+            <tr>
+              <th>Établissement / CHU</th>
+              <th>Wilaya</th>
+              <th>Parc Fujifilm Installé</th>
+              <th>Interventions Enregistrées</th>
+            </tr>
+          </thead>
+          <tbody id="bilanClientsTableBody">
+            <!-- Rempli par JavaScript -->
+          </tbody>
+        </table>
+
+        <!-- Signatures Officielles -->
+        <div style="display: flex; justify-content: space-between; margin-top: 30px; padding-top: 14px; border-top: 1px solid #e2e8f0; font-size: 11px;">
+          <div>
+            <strong>Le Responsable SAV & Qualité</strong><br>
+            <span style="color: #64748b;">Electron Medical Algérie</span>
+            <div style="margin-top: 35px; border-top: 1px dashed #cbd5e1; padding-top: 3px;">Visa & Date</div>
+          </div>
+          <div style="text-align: right;">
+            <strong>La Direction Générale</strong><br>
+            <span style="color: #64748b;">Distribution Officielle Fujifilm</span>
+            <div style="margin-top: 35px; border-top: 1px dashed #cbd5e1; padding-top: 3px;">Cachet Officiel</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer no-print" style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px;">
+        <button type="button" class="btn btn-secondary" onclick="closeBilanModal()">Fermer</button>
+        <button type="button" class="btn btn-primary" onclick="printOfficialBilan()">🖨️ Imprimer Bilan Exécutif</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL 3 : ÉTIQUETTE SAV FUJIFILM (STICKER HOSPITALIER)   -->
+  <!-- ======================================================== -->
+  <div class="modal-overlay" id="quickStickerModal" onclick="if(event.target === this) closeQuickStickerModal()">
+    <div class="modal-box" style="max-width: 520px;">
+      <div class="modal-header no-print">
+        <h3>🏷️ Étiquette SAV Fujifilm & QR Code Hospitalier</h3>
+        <button type="button" class="btn-close" onclick="closeQuickStickerModal()">✕</button>
+      </div>
+
+      <div style="padding: 10px 0;" class="no-print">
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px; text-align: center;">
+          Étiquette officielle à imprimer et coller directement sur le processeur ou l'endoscope à l'hôpital.
+        </p>
+
+        <!-- Sélecteur rapide d'équipement ou saisie libre -->
+        <div style="background: rgba(0,0,0,0.1); padding: 10px 14px; border-radius: 10px; margin-bottom: 16px;">
+          <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">Sélectionner un équipement enregistré :</div>
+          <select id="stickerEquipmentSelect" class="form-input" style="width: 100%; font-size: 12px;" onchange="populateStickerFromSelect(this.value)">
+            <option value="">-- Choisir un matériel de la base SQLite --</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ÉTIQUETTE IMPRIMABLE AUTOCOLLANTE -->
+      <div class="fuji-sticker-card" id="fujiStickerContainer">
+        <div class="fuji-sticker-header">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <img src="assets/electron-medical-logo.png" alt="Electron Medical">
+            <span style="font-size:9px; font-weight:800; color:#0f766e; text-transform:uppercase;">Distributeur Fujifilm DZ</span>
+          </div>
+          <span class="fuji-sticker-badge">GARANTIE 2 ANS</span>
+        </div>
+
+        <div class="fuji-sticker-body">
+          <div class="fuji-sticker-qr-box">
+            <div id="stickerQrTarget"></div>
+            <span class="fuji-sticker-qr-label">Scan SAV Mobile</span>
+          </div>
+
+          <div class="fuji-sticker-info">
+            <div class="fuji-sticker-field"><b>Modèle :</b> <span id="stkMateriel">FUJIFILM ELUXEO EP-8000</span></div>
+            <div class="fuji-sticker-field"><b>N° Série (SN) :</b> <span id="stkSN" style="font-family:monospace; font-weight:800; color:#0f766e;">SN-FUJI-260810</span></div>
+            <div class="fuji-sticker-field"><b>Établissement :</b> <span id="stkClient">CHU Mustapha Pacha</span></div>
+            <div class="fuji-sticker-field"><b>Wilaya :</b> <span id="stkWilaya">16 - Alger (Région Centre)</span></div>
+            <div class="fuji-sticker-field"><b>Installation :</b> <span id="stkDateInst">26/10/2026</span></div>
+            <div class="fuji-sticker-field"><b>Prochaine Révision :</b> <span id="stkProchaineRev" style="color:#e11d48; font-weight:800;">26/04/2027</span></div>
+          </div>
+        </div>
+
+        <div class="fuji-sticker-footer">
+          <span>Hotline SAV Urgence : +213 (0) 23 45 67 89</span>
+          <span>electron-medical.dz</span>
+        </div>
+      </div>
+
+      <div class="modal-footer no-print" style="margin-top: 18px; display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+        <button type="button" class="btn btn-secondary" onclick="downloadStickerQrImage()">📥 Télécharger Image QR</button>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn btn-secondary" onclick="closeQuickStickerModal()">Fermer</button>
+          <button type="button" class="btn btn-primary" onclick="printFujiSticker()">🖨️ Imprimer Étiquette Autocollante</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="js/qrcode.min.js"></script>
+  <script src="js/features_v4.js" charset="utf-8"></script>
   <script src="js/algeria_wilayas.js" charset="utf-8"></script>
   <script src="js/auth.js" charset="utf-8"></script>
   <script src="js/api.js" charset="utf-8"></script>
@@ -1445,6 +1792,11 @@
       } catch (errRep) {
         console.warn('Erreur chargement rapports:', errRep);
       }
+
+      // 6. Mettre à jour le Calendrier & Planning SAV (V4)
+      if (typeof renderCalendar === 'function') {
+        renderCalendar();
+      }
     }
 
     async function loadRevisionsData() {
@@ -1477,6 +1829,9 @@
       // Charger la table complète des révisions avec filtre
       const revisions = await API.getRevisions({ statut: currentRevisionFilter });
       renderRevisionsTable(revisions);
+      if (typeof renderCalendar === 'function') {
+        renderCalendar();
+      }
     }
 
     function setRevisionFilter(filter) {
@@ -1702,24 +2057,35 @@
       await API.deleteRapport(id);
       loadDashboardData();
       if (typeof resetTerritorySelection === 'function') resetTerritorySelection();
+      if (typeof initSignaturePad === 'function') initSignaturePad();
+      if (typeof renderCalendar === 'function') renderCalendar();
     }
 
     async function openWifiModal() {
       const modal = document.getElementById('wifiModal');
       const box = document.getElementById('networkUrlDisplay');
+      const qrContainer = document.getElementById('wifiModalQrContainer');
       if (modal) modal.classList.add('active');
       const host = window.location.hostname || 'localhost';
       const apiBase = (typeof window !== 'undefined' && window.location && window.location.origin.startsWith('http')) ? '' : 'http://localhost:8085';
+      let wifiUrl = `http://${host}:8085`;
       try {
         const res = await fetch(`${apiBase}/api/network-ip`);
         if (res.ok) {
           const d = await res.json();
-          if (box) box.textContent = d.url;
-        } else {
-          if (box) box.textContent = `http://${host}:8085`;
+          if (d.url) wifiUrl = d.url;
         }
-      } catch (e) {
-        if (box) box.textContent = `http://${host}:8085`;
+      } catch (e) {}
+      if (box) box.textContent = wifiUrl;
+      if (qrContainer && typeof QRCode !== 'undefined') {
+        qrContainer.innerHTML = '';
+        new QRCode(qrContainer, {
+          text: wifiUrl,
+          width: 140,
+          height: 140,
+          colorDark: "#063740",
+          colorLight: "#ffffff"
+        });
       }
     }
 
