@@ -538,3 +538,37 @@ function downloadStickerQrImage() {
     alert('Image QR non disponible.');
   }
 }
+
+
+function toggleStickerCustomForm() {
+  const box = document.getElementById('stickerCustomFields');
+  if (!box) return;
+  const isHidden = (box.style.display === 'none' || !box.style.display);
+  box.style.display = isHidden ? 'block' : 'none';
+  if (isHidden) {
+    const m = document.getElementById('stkMateriel')?.textContent || '';
+    const s = document.getElementById('stkSN')?.textContent || '';
+    const c = document.getElementById('stkClient')?.textContent || '';
+    const w = document.getElementById('stkWilaya')?.textContent || '';
+    if (document.getElementById('custStkModel')) document.getElementById('custStkModel').value = m;
+    if (document.getElementById('custStkSN')) document.getElementById('custStkSN').value = s;
+    if (document.getElementById('custStkClient')) document.getElementById('custStkClient').value = c;
+    if (document.getElementById('custStkWilaya')) document.getElementById('custStkWilaya').value = w;
+  }
+}
+
+function onCustomStickerInput() {
+  const m = document.getElementById('custStkModel')?.value.trim() || 'FUJIFILM ELUXEO EP-8000';
+  const s = document.getElementById('custStkSN')?.value.trim() || 'SN-FUJIFILM';
+  const c = document.getElementById('custStkClient')?.value.trim() || 'Établissement Hospitalier';
+  const w = document.getElementById('custStkWilaya')?.value.trim() || 'Algérie';
+
+  updateStickerDisplay({
+    materiel: m,
+    numero_serie: s,
+    client_nom: c,
+    wilaya: w,
+    date_installation: document.getElementById('stkDateInst')?.textContent || '-',
+    date_echeance: document.getElementById('stkProchaineRev')?.textContent || 'Garantie 2 Ans Active'
+  });
+}

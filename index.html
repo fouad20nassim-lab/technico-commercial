@@ -1460,11 +1460,40 @@
         </p>
 
         <!-- Sélecteur rapide d'équipement ou saisie libre -->
-        <div style="background: rgba(0,0,0,0.1); padding: 10px 14px; border-radius: 10px; margin-bottom: 16px;">
-          <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">Sélectionner un équipement enregistré :</div>
+        <div style="background: rgba(0,0,0,0.1); padding: 12px 14px; border-radius: 12px; margin-bottom: 14px; border: 1px solid rgba(255,255,255,0.06);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-muted);">Sélectionner un équipement enregistré :</label>
+            <button type="button" onclick="toggleStickerCustomForm()" style="background:none; border:none; color:#00b87c; font-size:11px; font-weight:700; cursor:pointer; text-decoration:underline;">
+              ✏️ Saisie personnalisée
+            </button>
+          </div>
           <select id="stickerEquipmentSelect" class="form-input" style="width: 100%; font-size: 12px;" onchange="populateStickerFromSelect(this.value)">
             <option value="">-- Choisir un matériel de la base SQLite --</option>
           </select>
+
+          <!-- Formulaire de saisie libre / édition instantanée -->
+          <div id="stickerCustomFields" style="display:none; margin-top:12px; padding-top:10px; border-top:1px dashed rgba(255,255,255,0.15);">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:8px;">
+              <div>
+                <label style="font-size:10px; font-weight:700; color:var(--text-muted);">Modèle Matériel :</label>
+                <input type="text" id="custStkModel" class="form-input" value="FUJIFILM ELUXEO EP-8000" style="padding:4px 8px; font-size:11px;" oninput="onCustomStickerInput()">
+              </div>
+              <div>
+                <label style="font-size:10px; font-weight:700; color:var(--text-muted);">N° de Série (SN) :</label>
+                <input type="text" id="custStkSN" class="form-input" value="SN-FUJI-260810" style="padding:4px 8px; font-size:11px; font-family:monospace;" oninput="onCustomStickerInput()">
+              </div>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+              <div>
+                <label style="font-size:10px; font-weight:700; color:var(--text-muted);">Hôpital / Établissement :</label>
+                <input type="text" id="custStkClient" class="form-input" value="CHU Mustapha Pacha" style="padding:4px 8px; font-size:11px;" oninput="onCustomStickerInput()">
+              </div>
+              <div>
+                <label style="font-size:10px; font-weight:700; color:var(--text-muted);">Wilaya :</label>
+                <input type="text" id="custStkWilaya" class="form-input" value="16 - Alger" style="padding:4px 8px; font-size:11px;" oninput="onCustomStickerInput()">
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2420,6 +2449,17 @@ Notre équipe technique reste à votre entière disposition pour toute intervent
     let currentQrCodeInstance = null;
 
     function openQrLabelModal(materiel, sn, client, wilaya, dateInst, dateEch, titreRev) {
+      if (typeof openQuickStickerModal === 'function') {
+        openQuickStickerModal({
+          materiel: materiel || 'FUJIFILM ELUXEO EP-8000',
+          numero_serie: sn || 'SN-FUJIFILM',
+          client_nom: client || 'Établissement Hospitalier',
+          wilaya: wilaya || 'Algérie',
+          date_installation: dateInst || '-',
+          date_echeance: dateEch ? `${dateEch} (${titreRev || 'Révision'})` : 'Garantie 2 Ans Active'
+        });
+        return;
+      }
       const modal = document.getElementById('qrModal');
       document.getElementById('labelMateriel').textContent = materiel || 'FUJIFILM ELUXEO';
       document.getElementById('labelSN').textContent = sn || 'SN-FUJIFILM';
