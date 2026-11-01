@@ -224,7 +224,7 @@
             self.resetActivityTimer();
             if (callback) callback(null, foundLocal);
           } else {
-            if (callback) callback(data.error || 'Code PIN incorrect (PIN Admin : 1234)');
+            if (callback) callback(data.error || 'Code PIN incorrect.');
           }
         }
       })
@@ -237,7 +237,7 @@
           self.resetActivityTimer();
           if (callback) callback(null, foundLocal);
         } else {
-          if (callback) callback('Code PIN incorrect (PIN Admin par défaut = 1234).');
+          if (callback) callback('Code PIN incorrect.');
         }
       });
     },
