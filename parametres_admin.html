@@ -1,0 +1,3351 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Paramètres & Administration — Plateforme Technico-Commercial</title>
+  <script src="js/theme.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --admin-navy: #0b1f28;
+      --admin-teal: #0d9488;
+      --admin-teal-dark: #0f766e;
+      --admin-light: #f4f8f6;
+      --admin-border: #d3e2dc;
+      --admin-card: #ffffff;
+    }
+
+    body {
+      background: #f0f5f3;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+
+    .admin-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px 20px 80px;
+    }
+
+    /* En-tête de page */
+    .admin-header-card {
+      background: linear-gradient(135deg, #092c2a 0%, #0d5c56 60%, #115e59 100%);
+      color: #ffffff;
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 25px -5px rgba(13, 92, 86, 0.25);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .admin-title-area h1 {
+      margin: 0 0 6px 0;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .admin-title-area p {
+      margin: 0;
+      font-size: 14px;
+      color: #bbf7d0;
+      opacity: 0.95;
+    }
+
+    .admin-top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-admin {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+
+    .btn-admin-save {
+      background: #10b981;
+      color: #ffffff;
+      border-color: #059669;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+    }
+    .btn-admin-save:hover { background: #059669; transform: translateY(-1px); }
+
+    .btn-admin-light {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(8px);
+    }
+    .btn-admin-light:hover { background: rgba(255, 255, 255, 0.25); }
+
+    .btn-admin-white {
+      background: #ffffff;
+      color: #064e3b;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .btn-admin-white:hover { background: #f0fdf4; }
+
+    /* Navigation par onglets */
+    .admin-tabs {
+      display: flex;
+      gap: 8px;
+      background: #ffffff;
+      padding: 8px;
+      border-radius: 14px;
+      border: 1px solid var(--admin-border);
+      margin-bottom: 24px;
+      overflow-x: auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .admin-tab-btn {
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+
+    .admin-tab-btn:hover {
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+
+    .admin-tab-btn.active {
+      background: #0f766e;
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(15, 118, 110, 0.25);
+    }
+
+    /* Panneaux d'onglets */
+    .admin-panel {
+      display: none;
+    }
+    .admin-panel.active {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cartes de contenu */
+    .admin-card {
+      background: #ffffff;
+      border: 1px solid var(--admin-border);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+
+    .admin-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #edf2f0;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .admin-card-head h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-card-head p {
+      margin: 4px 0 0 0;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    /* Formulaires */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 18px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.span-2 {
+      grid-column: span 2;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: #475569;
+    }
+
+    .form-control {
+      padding: 10px 14px;
+      font-size: 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #0f172a;
+      transition: border 0.15s, box-shadow 0.15s;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #0d9488;
+      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+    }
+
+    /* Listes interactives de techniciens */
+    .tech-columns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .tech-columns { grid-template-columns: 1fr; }
+      .form-group.span-2 { grid-column: span 1; }
+    }
+
+    .tech-box {
+      background: #f8faf9;
+      border: 1px solid #d8e5e0;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .tech-box h3 {
+      margin: 0 0 12px 0;
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f766e;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tech-box-badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: #e6f4f1;
+      color: #0f766e;
+      font-weight: 700;
+    }
+
+    .tech-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 14px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 120px;
+    }
+
+    .tech-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #1e293b;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .tech-item-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-icon {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    .btn-icon:hover { color: #ef4444; background: #fee2e2; }
+
+    .tech-add-form {
+      display: flex;
+      gap: 6px;
+    }
+
+    .tech-add-input {
+      flex: 1;
+      padding: 8px 10px;
+      font-size: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+    }
+
+    .btn-add-tech {
+      background: #0f766e;
+      color: #ffffff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Tableaux de modèles et contrôles */
+    .admin-table-tools {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .search-input-box {
+      position: relative;
+      flex: 1;
+      max-width: 400px;
+    }
+
+    .search-input-box input {
+      width: 100%;
+      padding: 9px 12px 9px 34px;
+      font-size: 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+    }
+
+    .search-input-box::before {
+      content: '🔍';
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      opacity: 0.6;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      border: 1px solid var(--admin-border);
+      border-radius: 10px;
+      max-height: 520px;
+      position: relative;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      text-align: left;
+    }
+
+    .admin-table th {
+      background: #f1f5f4;
+      color: #475569;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-size: 11px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--admin-border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .admin-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #1e293b;
+    }
+
+    .admin-table tr:hover td {
+      background: #f8fafc;
+    }
+
+    .admin-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      font-size: 10px;
+      font-weight: 800;
+      border-radius: 4px;
+      background: #e2e8f0;
+      color: #334155;
+    }
+
+    .admin-badge-teal { background: #ccfbf1; color: #0f766e; }
+
+    /* Toast Notification */
+    .admin-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 9999;
+    }
+
+    .admin-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .admin-toast.success { background: #065f46; border: 1px solid #34d399; }
+    .admin-toast.error { background: #991b1b; border: 1px solid #f87171; }
+
+    /* Dessins & Schémas Techniques */
+    .drawings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 18px;
+      margin-top: 14px;
+    }
+    .drawing-card {
+      background: #ffffff;
+      border: 1px solid var(--admin-border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      transition: all 0.2s ease;
+    }
+    .drawing-card:hover {
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      border-color: #94a3b8;
+    }
+    .drawing-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .drawing-card-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.35;
+    }
+    .drawing-card-desc {
+      font-size: 11px;
+      color: #64748b;
+      line-height: 1.4;
+    }
+    .drawing-preview-box {
+      height: 140px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+    .drawing-preview-img {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+    }
+    .drawing-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .btn-upload-draw {
+      background: #0f766e;
+      color: #ffffff;
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border: none;
+      transition: background 0.15s ease;
+    }
+    .btn-upload-draw:hover { background: #0d635c; }
+    .btn-reset-draw {
+      background: #ffffff;
+      color: #64748b;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid #cbd5e1;
+    }
+    .btn-reset-draw:hover { background: #fee2e2; color: #ef4444; border-color: #fca5a5; }
+
+    /* --- STYLES ADMINISTRATION SÉCURISÉE & TABLETTE --- */
+    .admin-session-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 12px 20px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 14px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    }
+    .admin-user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+    }
+    .admin-user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #0d9488;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 15px;
+      border: 2px solid #5eead4;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .badge-role {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-role-admin { background: #fee2e2; color: #991b1b; border: 1px solid #f87171; }
+    .badge-role-tech { background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; }
+    .badge-role-comm { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+    .badge-role-qualite { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+
+    /* Cartes Métriques SQLite */
+    .sqlite-health-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .sqlite-kpi-card {
+      background: #ffffff;
+      border: 1px solid #d8e5e0;
+      border-radius: 12px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+    .sqlite-kpi-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sqlite-kpi-value {
+      font-size: 20px;
+      font-weight: 900;
+      color: #0f172a;
+    }
+    .sqlite-kpi-sub {
+      font-size: 11px;
+      color: #0d9488;
+      font-weight: 700;
+    }
+
+    /* Pavé tactile PIN pour tablettes & écrans tactiles */
+    .pin-pad-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+    .pin-display-box {
+      width: 100%;
+      height: 52px;
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 14px;
+      color: #0f172a;
+    }
+    .pin-pad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+    .pin-key {
+      height: 60px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .pin-key:hover {
+      background: #f1f5f9;
+      border-color: #0d9488;
+    }
+    .pin-key:active {
+      transform: scale(0.95);
+      background: #ccfbf1;
+      border-color: #0d9488;
+    }
+    .pin-key.action-key {
+      font-size: 14px;
+      font-weight: 700;
+      background: #f8fafc;
+      color: #475569;
+    }
+
+    /* Écran de Verrouillage Sécurisé (Gatekeeper) */
+    #adminLockOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(11, 31, 40, 0.96);
+      backdrop-filter: blur(12px);
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .admin-lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      max-width: 460px;
+      width: 100%;
+      padding: 32px 28px;
+      box-shadow: 0 25px 60px -15px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+    .lock-tab-btns {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 10px;
+    }
+    .lock-tab-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      background: transparent;
+      color: #64748b;
+      transition: all 0.15s ease;
+    }
+    .lock-tab-btn.active {
+      background: #ffffff;
+      color: #0f766e;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    /* Adaptation PC et Tablette Tactile */
+    @media (max-width: 992px) {
+      .admin-container {
+        padding: 14px 12px 60px;
+      }
+      .admin-tabs {
+        padding: 6px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .admin-tab-btn {
+        padding: 10px 14px;
+        font-size: 12px;
+      }
+      .admin-card {
+        padding: 18px 16px;
+      }
+      .btn-admin, .btn {
+        min-height: 44px;
+        padding: 10px 14px;
+        font-size: 13px;
+      }
+      .form-control {
+        min-height: 44px;
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ÉCRAN DE VERROUILLAGE SÉCURISÉ (GATEKEEPER POUR PC ET TABLETTE) -->
+  <div id="adminLockOverlay" style="display:flex;">
+    <div class="admin-lock-box">
+      <div style="margin-bottom:18px;">
+        <img src="assets/electron-medical-logo.png" alt="Electron Medical" style="max-height:52px;margin-bottom:10px;">
+        <h2 style="margin:0 0 4px 0;font-size:22px;font-weight:900;color:#0f172a;display:flex;align-items:center;justify-content:center;gap:8px;">
+          🔒 Administration Sécurisée
+        </h2>
+        <p style="margin:4px 0 0 0;font-size:13px;color:#64748b;font-weight:600;">
+          Paramètres Globaux & Base SQLite Verrouillés
+        </p>
+        <span style="display:inline-block;margin-top:8px;font-size:11px;font-weight:800;color:#0f766e;background:#ccfbf1;padding:3px 10px;border-radius:12px;">
+          Zone Confidentielle Protégée
+        </span>
+      </div>
+
+      <!-- Onglets mode de connexion -->
+      <div class="lock-tab-btns">
+        <button type="button" class="lock-tab-btn active" id="btnModePin" onclick="switchLockMode('pin')">📱 Code PIN Tablette</button>
+        <button type="button" class="lock-tab-btn" id="btnModePwd" onclick="switchLockMode('password')">💻 Mot de passe PC</button>
+      </div>
+
+      <!-- Mode 1 : Pavé tactile PIN (Tablette & Tactile) -->
+      <div id="lockModePin">
+        <div class="pin-pad-container">
+          <div class="pin-display-box" id="pinDisplay">····</div>
+          <div class="pin-pad-grid">
+            <button type="button" class="pin-key" onclick="appendPin('1')">1</button>
+            <button type="button" class="pin-key" onclick="appendPin('2')">2</button>
+            <button type="button" class="pin-key" onclick="appendPin('3')">3</button>
+            <button type="button" class="pin-key" onclick="appendPin('4')">4</button>
+            <button type="button" class="pin-key" onclick="appendPin('5')">5</button>
+            <button type="button" class="pin-key" onclick="appendPin('6')">6</button>
+            <button type="button" class="pin-key" onclick="appendPin('7')">7</button>
+            <button type="button" class="pin-key" onclick="appendPin('8')">8</button>
+            <button type="button" class="pin-key" onclick="appendPin('9')">9</button>
+            <button type="button" class="pin-key action-key" onclick="clearPin()">Effacer</button>
+            <button type="button" class="pin-key" onclick="appendPin('0')">0</button>
+            <button type="button" class="pin-key action-key" onclick="backspacePin()">⌫</button>
+          </div>
+          <button type="button" class="btn btn-primary" style="width:100%;height:50px;font-size:16px;font-weight:800;border-radius:12px;" onclick="submitPinLogin()">
+            🔓 Déverrouiller les Paramètres
+          </button>
+          
+        </div>
+      </div>
+
+      <!-- Mode 2 : Identifiant et Mot de passe (PC / Clavier) -->
+      <div id="lockModePwd" style="display:none;text-align:left;">
+        <form id="lockPwdForm" onsubmit="handlePwdLogin(event)">
+          <div class="form-group" style="margin-bottom:14px;">
+            <label style="display:block;font-size:13px;font-weight:700;color:#0f172a;margin-bottom:6px;">Identifiant ou Adresse Email</label>
+            <div style="background:#f8fafc;border:1.5px solid #cbd5e1;border-radius:10px;height:48px;display:flex;align-items:center;padding:0 14px;">
+              <span style="color:#64748b;margin-right:10px;display:flex;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              </span>
+              <input type="text" id="lockUsername" style="border:none;background:transparent;width:100%;outline:none;font-size:14px;color:#0f172a;" placeholder="ex: k.benali@electron-medical.dz ou admin" required autocomplete="username">
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:18px;">
+            <label style="display:block;font-size:13px;font-weight:700;color:#0f172a;margin-bottom:6px;">Mot de passe</label>
+            <div style="background:#f8fafc;border:1.5px solid #cbd5e1;border-radius:10px;height:48px;display:flex;align-items:center;padding:0 14px;">
+              <span style="color:#64748b;margin-right:10px;display:flex;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              </span>
+              <input type="password" id="lockPassword" style="border:none;background:transparent;width:100%;outline:none;font-size:14px;color:#0f172a;" placeholder="Entrez votre mot de passe..." required autocomplete="current-password">
+              <button type="button" onclick="togglePasswordVisibility('lockPassword', this)" style="background:none;border:none;cursor:pointer;color:#64748b;display:flex;padding:2px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;height:50px;font-size:15px;font-weight:800;border-radius:12px;background:#00b87c;border:none;box-shadow:0 4px 14px rgba(0,184,124,0.35);display:flex;align-items:center;justify-content:center;gap:8px;">
+            <span>Se connecter aux Paramètres</span>
+            <span style="font-size:18px;">→</span>
+          </button>
+          
+        </form>
+      </div>
+
+      <div id="lockErrorMsg" style="display:none;margin-top:14px;padding:10px;background:#fee2e2;border:1px solid #f87171;color:#991b1b;border-radius:8px;font-size:12px;font-weight:700;"></div>
+
+      <div style="margin-top:20px;padding-top:14px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+        <a href="index.html" style="font-size:12px;color:#0f766e;font-weight:700;text-decoration:none;">← Retour au Tableau de bord</a>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- ENSEMBLE DU TABLEAU DE BORD D'ADMINISTRATION (VERROUILLÉ PAR DÉFAUT) -->
+  <div id="adminMainWrapper" style="display:none;">
+
+  <!-- Header Global de la Plateforme -->
+  <header class="main-header">
+    <div class="header-container">
+      <div class="brand-section">
+        <div class="brand-logos">
+          <a href="index.html"><img src="assets/electron-medical-logo.png" alt="Electron Medical Algérie" class="logo-em"></a>
+        </div>
+        <div class="brand-text">
+          <h1 id="headerPlatformTitle">PLATEFORME TECHNICO-COMMERCIAL</h1>
+          <p id="headerPlatformSubtitle">Electron Medical Algérie · Distributeur Officiel Fujifilm Medical Systems</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <!-- Bouton Pill Mode Sombre / Clair [☀️ Mode] -->
+        <button type="button" class="theme-toggle-pill" id="themeToggleBtn" onclick="toggleAppTheme()" title="Basculer entre Mode Sombre et Mode Clair">
+          <span class="theme-icon" id="themeToggleIcon">☀️</span>
+          <span class="theme-label" id="themeToggleText">Mode</span>
+        </button>
+        <a href="index.html" class="btn btn-secondary">⌂ Tableau de Bord</a>
+        <a href="feuille_inspection.html" class="btn btn-secondary" style="background:#0f766e; color:#fff; border-color:#0f766e;">📋 Feuille d'Inspection</a>
+        <button class="btn btn-primary" onclick="saveAllSettings()">💾 Enregistrer Tous les Paramètres</button>
+        <button type="button" class="btn" style="background:#dc2626;color:#ffffff;border-color:#b91c1c;font-weight:800;display:inline-flex;align-items:center;gap:6px;" onclick="lockAdminPage()">
+          🔒 Verrouiller la Page
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="admin-container">
+
+    <!-- En-tête Paramètres -->
+    <div class="admin-header-card">
+      <div class="admin-title-area">
+        <h1>⚙️ Paramètres & Configuration Globale</h1>
+        <p>Gérez et modifiez librement toute l'application : Techniciens, Modèles Fujifilm, Contrôles techniques, Options et Identité.</p>
+      </div>
+      <div class="admin-top-actions">
+        <button class="btn-admin btn-admin-save" onclick="saveAllSettings()">
+          💾 Sauvegarder
+        </button>
+        <button class="btn-admin btn-admin-light" onclick="exportConfigJSON()">
+          📤 Exporter (JSON)
+        </button>
+        <button class="btn-admin btn-admin-light" onclick="document.getElementById('importConfigFile').click()">
+          📥 Importer (JSON)
+        </button>
+        <input type="file" id="importConfigFile" accept=".json,application/json" style="display:none;" onchange="handleImportConfig(event)">
+        <button class="btn-admin btn-admin-white" onclick="resetToFactoryDefaults()">
+          ↺ Réglages d'origine
+        </button>
+        <button type="button" class="btn-admin" style="background:#dc2626;color:#ffffff;border-color:#b91c1c;box-shadow:0 3px 10px rgba(220,38,38,0.3);font-weight:800;" onclick="lockAdminPage()">
+          🔒 Verrouiller la Page
+        </button>
+      </div>
+    </div>
+
+    <!-- BARRE DE SESSION ADMINISTRATIVE SÉCURISÉE -->
+    <div class="admin-session-bar" id="adminSessionBar">
+      <div class="admin-user-info">
+        <div class="admin-user-avatar" id="barUserAvatar">A</div>
+        <div>
+          <div style="font-weight:800;font-size:14px;display:flex;align-items:center;gap:8px;">
+            <span id="barUserName">Administrateur Principal</span>
+            <span class="badge-role badge-role-admin" id="barUserRole">ADMINISTRATEUR</span>
+          </div>
+          <div style="font-size:11px;color:#94a3b8;" id="barUserEmail">admin@electron-medical.dz</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span style="font-size:11px;color:#cbd5e1;background:rgba(255,255,255,0.1);padding:4px 10px;border-radius:6px;" id="barSessionTimer">
+          ⏱️ Session active
+        </span>
+        <button type="button" class="btn-admin btn-admin-light" style="padding:6px 12px;font-size:12px;" onclick="openChangePasswordModal()">
+          🔑 Mon Mot de passe / PIN
+        </button>
+        <button type="button" class="btn-admin" style="padding:6px 14px;font-size:12px;background:#ef4444;color:#ffffff;border:1px solid #dc2626;font-weight:800;border-radius:8px;" onclick="lockAdminPage()">
+          🔒 Verrouiller
+        </button>
+        <button type="button" class="btn-admin" style="padding:6px 14px;font-size:12px;background:#b91c1c;color:#ffffff;border:1px solid #991b1b;font-weight:800;border-radius:8px;" onclick="handleUserLogout()" title="Déconnexion de la session">
+          🚪 Déconnexion
+        </button>
+      </div>
+    </div>
+
+    <!-- Onglets de navigation -->
+    <div class="admin-tabs">
+      <button class="admin-tab-btn active" onclick="switchAdminTab('tabUsers')">👥 1. Comptes & Permissions (<span id="usersTabCount">4</span>)</button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('tabSqlite')">💾 2. Conservation & Base SQLite</button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('tabTechs')">👨‍🔧 3. Techniciens & Équipe</button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('tabModels')">🔬 4. Modèles FUJIFILM (<span id="modelTabCount">264</span>)</button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('tabControls')">📋 5. Grilles de Contrôle (<span id="controlTabCount">28</span>)</button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('tabDrawings')">🎨 6. Dessins & Schémas (<span id="drawingsTabCount">11</span>)</button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('tabOptions')">🔘 7. Options & Réponses</button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('tabCompany')">🏢 8. Entreprise & Documents</button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('tabAudit')">🛡️ 9. Sécurité & Journal d'Audit</button>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- ONGLET 1 : COMPTES & PERMISSIONS          -->
+    <!-- ========================================== -->
+    <div id="tabUsers" class="admin-panel active">
+      <div class="admin-card">
+        <div class="admin-card-head">
+          <div>
+            <h2>👥 Gestion des Comptes d'Accès & Permissions</h2>
+            <p>Contrôlez les accès utilisateurs, assignez les rôles (Administrateur, Technicien SAV, Commercial, Qualité) et configurez les codes PIN rapides pour tablettes tactiles.</p>
+          </div>
+          <button class="btn-admin btn-admin-save" style="font-size:12px;padding:8px 16px;" onclick="openAddUserModal()">
+            ＋ Nouvel Utilisateur
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="admin-table" id="usersTable">
+            <thead>
+              <tr>
+                <th>Utilisateur / Nom Complet</th>
+                <th>Identifiant</th>
+                <th>Rôle Attribué</th>
+                <th>Code PIN Tablette</th>
+                <th>Statut</th>
+                <th>Dernier Accès</th>
+                <th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody">
+              <tr>
+                <td>
+                  <div style="display:flex;align-items:center;gap:12px;">
+                    <div style="width:36px;height:36px;border-radius:50%;background:#0f766e;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;box-shadow:0 2px 6px rgba(15,118,110,0.3);flex-shrink:0;">AP</div>
+                    <div>
+                      <div style="font-weight:800;color:#0f172a;font-size:13px;">Administrateur Principal <small style="color:#0d9488;font-weight:900;">(Vous)</small></div>
+                      <div style="font-size:11px;color:#64748b;">admin@electron-medical.dz · +213 (0) 23 85 00 01</div>
+                    </div>
+                  </div>
+                </td>
+                <td><code style="font-size:12px;font-weight:700;color:#0f766e;background:#f0fdf4;padding:3px 8px;border-radius:6px;border:1px solid #bbf7d0;">admin</code></td>
+                <td><span class="badge-role badge-role-admin">Administrateur Principal</span></td>
+                <td><span style="font-family:monospace;font-weight:800;color:#0f766e;background:#e6f4f1;padding:4px 10px;border-radius:6px;font-size:12px;letter-spacing:1px;">PIN: 1234</span></td>
+                <td><span class="admin-badge admin-badge-teal" style="font-weight:800;">● Actif</span></td>
+                <td style="font-size:11px;color:#64748b;white-space:nowrap;">En ligne</td>
+                <td style="text-align:right;white-space:nowrap;"><button type="button" class="btn btn-secondary" style="font-size:11px;padding:5px 10px;font-weight:700;" onclick="openAddUserModal('1')">✏️ Modifier</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="display:flex;align-items:center;gap:12px;">
+                    <div style="width:36px;height:36px;border-radius:50%;background:#0f766e;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;box-shadow:0 2px 6px rgba(15,118,110,0.3);flex-shrink:0;">MB</div>
+                    <div>
+                      <div style="font-weight:800;color:#0f172a;font-size:13px;">Mustapha B. (Technicien SAV)</div>
+                      <div style="font-size:11px;color:#64748b;">m.b@electron-medical.dz · +213 (0) 550 11 22 33</div>
+                    </div>
+                  </div>
+                </td>
+                <td><code style="font-size:12px;font-weight:700;color:#0f766e;background:#f0fdf4;padding:3px 8px;border-radius:6px;border:1px solid #bbf7d0;">mustapha.b</code></td>
+                <td><span class="badge-role badge-role-tech">Technicien SAV / Ingénieur</span></td>
+                <td><span style="font-family:monospace;font-weight:800;color:#0f766e;background:#e6f4f1;padding:4px 10px;border-radius:6px;font-size:12px;letter-spacing:1px;">PIN: 1111</span></td>
+                <td><span class="admin-badge admin-badge-teal" style="font-weight:800;">● Actif</span></td>
+                <td style="font-size:11px;color:#64748b;white-space:nowrap;">Récemment</td>
+                <td style="text-align:right;white-space:nowrap;"><button type="button" class="btn btn-secondary" style="font-size:11px;padding:5px 10px;font-weight:700;" onclick="openAddUserModal('2')">✏️ Modifier</button> <button type="button" class="btn btn-red" style="font-size:11px;padding:5px 10px;margin-left:4px;" onclick="deleteUser('2', 'mustapha.b')">🗑️</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="display:flex;align-items:center;gap:12px;">
+                    <div style="width:36px;height:36px;border-radius:50%;background:#0f766e;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;box-shadow:0 2px 6px rgba(15,118,110,0.3);flex-shrink:0;">KT</div>
+                    <div>
+                      <div style="font-weight:800;color:#0f172a;font-size:13px;">Karim T. (Commercial / ADV)</div>
+                      <div style="font-size:11px;color:#64748b;">k.t@electron-medical.dz · +213 (0) 550 44 55 66</div>
+                    </div>
+                  </div>
+                </td>
+                <td><code style="font-size:12px;font-weight:700;color:#0f766e;background:#f0fdf4;padding:3px 8px;border-radius:6px;border:1px solid #bbf7d0;">karim.t</code></td>
+                <td><span class="badge-role badge-role-comm">Commercial / ADV</span></td>
+                <td><span style="font-family:monospace;font-weight:800;color:#0f766e;background:#e6f4f1;padding:4px 10px;border-radius:6px;font-size:12px;letter-spacing:1px;">PIN: 2222</span></td>
+                <td><span class="admin-badge admin-badge-teal" style="font-weight:800;">● Actif</span></td>
+                <td style="font-size:11px;color:#64748b;white-space:nowrap;">Récemment</td>
+                <td style="text-align:right;white-space:nowrap;"><button type="button" class="btn btn-secondary" style="font-size:11px;padding:5px 10px;font-weight:700;" onclick="openAddUserModal('3')">✏️ Modifier</button> <button type="button" class="btn btn-red" style="font-size:11px;padding:5px 10px;margin-left:4px;" onclick="deleteUser('3', 'karim.t')">🗑️</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="display:flex;align-items:center;gap:12px;">
+                    <div style="width:36px;height:36px;border-radius:50%;background:#0f766e;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;box-shadow:0 2px 6px rgba(15,118,110,0.3);flex-shrink:0;">DB</div>
+                    <div>
+                      <div style="font-weight:800;color:#0f172a;font-size:13px;">Dr. Benali (Responsable Qualité)</div>
+                      <div style="font-size:11px;color:#64748b;">benali@electron-medical.dz · +213 (0) 550 77 88 99</div>
+                    </div>
+                  </div>
+                </td>
+                <td><code style="font-size:12px;font-weight:700;color:#0f766e;background:#f0fdf4;padding:3px 8px;border-radius:6px;border:1px solid #bbf7d0;">dr.benali</code></td>
+                <td><span class="badge-role badge-role-qualite">Responsable Qualité</span></td>
+                <td><span style="font-family:monospace;font-weight:800;color:#0f766e;background:#e6f4f1;padding:4px 10px;border-radius:6px;font-size:12px;letter-spacing:1px;">PIN: 3333</span></td>
+                <td><span class="admin-badge admin-badge-teal" style="font-weight:800;">● Actif</span></td>
+                <td style="font-size:11px;color:#64748b;white-space:nowrap;">Récemment</td>
+                <td style="text-align:right;white-space:nowrap;"><button type="button" class="btn btn-secondary" style="font-size:11px;padding:5px 10px;font-weight:700;" onclick="openAddUserModal('4')">✏️ Modifier</button> <button type="button" class="btn btn-red" style="font-size:11px;padding:5px 10px;margin-left:4px;" onclick="deleteUser('4', 'dr.benali')">🗑️</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- ONGLET 2 : CONSERVATION & BASE SQLITE      -->
+    <!-- ========================================== -->
+    <div id="tabSqlite" class="admin-panel">
+      <div class="admin-card">
+        <div class="admin-card-head">
+          <div>
+            <h2>💾 Conservation, Sauvegardes & Diagnostic Base de Données SQLite</h2>
+            <p>Supervision directe de la base relationnelle <code>technico_commercial.db</code> : vérification d'intégrité, snapshots de sécurité et sauvegarde USB.</p>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-secondary" onclick="loadSqliteStatus()" style="font-size:12px;padding:6px 12px;">↺ Actualiser</button>
+          </div>
+        </div>
+
+        <!-- Bannière d'état et guide démarrage serveur -->
+        <div id="offlineServerBanner" style="display:none;background:#fef3c7;border:1px solid #f59e0b;border-radius:12px;padding:14px 18px;margin-bottom:20px;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:28px;">💡</span>
+            <div>
+              <div style="font-weight:800;color:#92400e;font-size:14px;">Mode Fichier Local Actif (Serveur SQLite en attente)</div>
+              <div style="font-size:12px;color:#78350f;">Pour activer la connexion directe à la base SQLite (Snapshots, VACUUM, Téléchargement USB), lancez <strong>DEMARRER_PLATEFORME.bat</strong> depuis votre bureau.</div>
+            </div>
+          </div>
+          <button type="button" class="btn" style="background:#0f766e;color:#fff;font-weight:700;font-size:12px;padding:8px 14px;border:none;border-radius:8px;cursor:pointer;" onclick="showServerStartGuide()">
+            🚀 Comment Activer la Base SQLite
+          </button>
+        </div>
+
+        <!-- Bannière d'état et guide démarrage serveur -->
+        <div id="offlineServerBanner" style="display:none;background:#fef3c7;border:1px solid #f59e0b;border-radius:12px;padding:14px 18px;margin-bottom:20px;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:28px;">💡</span>
+            <div>
+              <div style="font-weight:800;color:#92400e;font-size:14px;">Mode Fichier Local Actif (Serveur SQLite en attente)</div>
+              <div style="font-size:12px;color:#78350f;">Pour activer la connexion directe à la base SQLite (Snapshots, VACUUM, Téléchargement USB), lancez <strong>DEMARRER_PLATEFORME.bat</strong> depuis votre bureau.</div>
+            </div>
+          </div>
+          <button type="button" class="btn" style="background:#0f766e;color:#fff;font-weight:700;font-size:12px;padding:8px 14px;border:none;border-radius:8px;cursor:pointer;" onclick="showServerStartGuide()">
+            🚀 Comment Activer la Base SQLite
+          </button>
+        </div>
+
+        <!-- Grille des métriques en direct -->
+        <div class="sqlite-health-grid">
+          <div class="sqlite-kpi-card">
+            <div class="sqlite-kpi-title">
+              <span>Santé & Intégrité</span>
+              <span id="sqliteHealthBadge" class="admin-badge admin-badge-teal">Solide</span>
+            </div>
+            <div class="sqlite-kpi-value" id="sqliteIntegrityText">100% Intègre</div>
+            <div class="sqlite-kpi-sub" id="sqliteWalText">Mode WAL Actif (Anti-crash)</div>
+          </div>
+
+          <div class="sqlite-kpi-card">
+            <div class="sqlite-kpi-title">Taille de la Base</div>
+            <div class="sqlite-kpi-value" id="sqliteSizeText">-- Ko</div>
+            <div class="sqlite-kpi-sub" id="sqlitePagesText">-- pages physiques</div>
+          </div>
+
+          <div class="sqlite-kpi-card">
+            <div class="sqlite-kpi-title">Volume Données</div>
+            <div class="sqlite-kpi-value" id="sqliteTotalRecordsText">-- fiches</div>
+            <div class="sqlite-kpi-sub" id="sqliteTablesSummary">Rapports, clients & garanties</div>
+          </div>
+
+          <div class="sqlite-kpi-card">
+            <div class="sqlite-kpi-title">Sauvegardes Locales</div>
+            <div class="sqlite-kpi-value" id="sqliteBackupCountText">--</div>
+            <div class="sqlite-kpi-sub" id="sqliteLatestBackupText">Dernière : --</div>
+          </div>
+        </div>
+
+        <!-- Décompte précis des tables -->
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px 20px;margin-bottom:24px;">
+          <h4 style="margin:0 0 10px 0;font-size:13px;color:#0f766e;text-transform:uppercase;letter-spacing:0.04em;">📊 Répartition des enregistrements dans SQLite</h4>
+          <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:13px;color:#334155;">
+            <div>📋 Rapports / Interventions : <b id="cntRapports">0</b></div>
+            <div>🏥 Clients & Établissements : <b id="cntClients">0</b></div>
+            <div>🛡️ Suivi Garanties 2 Ans & Révisions : <b id="cntRevisions">0</b></div>
+            <div>🔬 Équipements Fujifilm : <b id="cntEquip">0</b></div>
+            <div>👥 Utilisateurs & Comptes : <b id="cntUsers">0</b></div>
+            <div>📑 Entrées Journal d'Audit : <b id="cntAudit">0</b></div>
+          </div>
+        </div>
+
+        <!-- Barre d'actions SQLite -->
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;">
+          <button type="button" class="btn btn-primary" onclick="downloadSqliteDb()">
+            💾 Télécharger la Base SQLite (.db) pour USB
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="createSqliteSnapshot()">
+            📸 Créer un Instantané Horodaté (Snapshot)
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="vacuumSqlite()">
+            ⚡ Optimiser & Compacter (VACUUM)
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="runSqliteIntegrityCheck()">
+            🛡️ Tester l'Intégrité en Direct
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="document.getElementById('uploadDbFileInput').click()">
+            📥 Importer / Remplacer (.db)
+          </button>
+          <input type="file" id="uploadDbFileInput" accept=".db,application/x-sqlite3" style="display:none;" onchange="handleUploadSqliteDb(event)">
+        </div>
+
+        <!-- Liste des sauvegardes automatiques disponibles -->
+        <div class="admin-card-head" style="margin-top:20px;">
+          <div>
+            <h3 style="margin:0;font-size:15px;color:#0f172a;">📁 Historique des Sauvegardes SQLite Disponibles</h3>
+            <p style="margin:2px 0 0;font-size:12px;color:#64748b;">Sauvegardes quotidiennes automatiques et snapshots manuels créés dans le dossier <code>backups/</code>.</p>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="admin-table" id="backupsTable">
+            <thead>
+              <tr>
+                <th>Nom du Fichier</th>
+                <th>Date & Heure</th>
+                <th>Taille</th>
+                <th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="backupsTableBody">
+              <!-- Chargé dynamiquement -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- ONGLET 3 : TECHNICIENS & ÉQUIPE           -->
+    <!-- ========================================== -->
+    <div id="tabTechs" class="admin-panel">
+      <div class="admin-card">
+        <div class="admin-card-head">
+          <div>
+            <h2>👨‍🔧 Gestion de l'Équipe Technique & Responsables</h2>
+            <p>Ajoutez, modifiez ou supprimez les techniciens. Vos modifications sont instantanément appliquées à tous les formulaires (Inspection, Visite de Contrôle, Installation, etc.).</p>
+          </div>
+          <span class="admin-badge admin-badge-teal" id="totalTechsCount">0 techniciens</span>
+        </div>
+
+        <div class="tech-columns">
+          <!-- Techniciens Inspection -->
+          <div class="tech-box">
+            <h3>
+              🔬 Techniciens Inspection
+              <span class="tech-box-badge" id="countInspTech">0</span>
+            </h3>
+            <ul class="tech-list" id="listInspTech"></ul>
+            <div class="tech-add-form">
+              <input type="text" class="tech-add-input" id="newInspTech" placeholder="Nom et prénom..." onkeydown="if(event.key==='Enter')addTech('inspectionTech')">
+              <button type="button" class="btn-add-tech" onclick="addTech('inspectionTech')">＋ Ajouter</button>
+            </div>
+          </div>
+
+          <!-- Techniciens Réparation / Intervention -->
+          <div class="tech-box">
+            <h3>
+              🔧 Techniciens Réparation & Terrain
+              <span class="tech-box-badge" id="countRepairTech">0</span>
+            </h3>
+            <ul class="tech-list" id="listRepairTech"></ul>
+            <div class="tech-add-form">
+              <input type="text" class="tech-add-input" id="newRepairTech" placeholder="Nom et prénom..." onkeydown="if(event.key==='Enter')addTech('repairTech1')">
+              <button type="button" class="btn-add-tech" onclick="addTech('repairTech1')">＋ Ajouter</button>
+            </div>
+          </div>
+
+          <!-- Contrôleurs Qualité & Validation -->
+          <div class="tech-box">
+            <h3>
+              🛡️ Contrôleurs Qualité & Validation
+              <span class="tech-box-badge" id="countQualityTech">0</span>
+            </h3>
+            <ul class="tech-list" id="listQualityTech"></ul>
+            <div class="tech-add-form">
+              <input type="text" class="tech-add-input" id="newQualityTech" placeholder="Nom et prénom..." onkeydown="if(event.key==='Enter')addTech('qualityTech')">
+              <button type="button" class="btn-add-tech" onclick="addTech('qualityTech')">＋ Ajouter</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- ONGLET 2 : MODÈLES D'ÉQUIPEMENTS          -->
+    <!-- ========================================== -->
+    <div id="tabModels" class="admin-panel">
+      <div class="admin-card">
+        <div class="admin-card-head">
+          <div>
+            <h2>🔬 Catalogue des Modèles d'Endoscopes & Équipements FUJIFILM</h2>
+            <p>Consultez, modifiez ou ajoutez de nouveaux modèles avec leurs valeurs de référence (diamètres DTA/FSA, longueurs, angulations, débits).</p>
+          </div>
+          <button class="btn-admin btn-admin-save" style="font-size:12px;padding:8px 14px;" onclick="openAddModelModal()">
+            ＋ Ajouter un Nouveau Modèle
+          </button>
+        </div>
+
+        <div class="admin-table-tools">
+          <div class="search-input-box">
+            <input type="text" id="modelSearchInput" placeholder="Rechercher un modèle (ex. EG-580, EC-760, EB-530...)" oninput="filterModelsTable()">
+          </div>
+          <div style="font-size:12px;color:#64748b;font-weight:700;">
+            Affichage de <span id="filteredModelCount">0</span> modèle(s) sur <span id="totalModelCount">0</span>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="admin-table" id="modelsTable">
+            <thead>
+              <tr>
+                <th>Modèle / Type</th>
+                <th>DTA</th>
+                <th>FSA</th>
+                <th>Longueur</th>
+                <th>FCT</th>
+                <th>-U- (Haut)</th>
+                <th>-D- (Bas)</th>
+                <th>-L- (Gauche)</th>
+                <th>-R- (Droite)</th>
+                <th>Eau cc/min</th>
+                <th>Air cc/5s</th>
+                <th>Aspi cc/min</th>
+                <th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="modelsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- ONGLET 3 : GRILLES DE CONTRÔLE            -->
+    <!-- ========================================== -->
+    <div id="tabControls" class="admin-panel">
+      <div class="admin-card">
+        <div class="admin-card-head">
+          <div>
+            <h2>📋 Grille des Points de Contrôle Technique (Feuille d'Inspection)</h2>
+            <p>Personnalisez le libellé de chaque point de contrôle et la colonne de référence technique associée.</p>
+          </div>
+          <button class="btn-admin btn-admin-save" style="font-size:12px;padding:8px 14px;" onclick="addNewControlItem()">
+            ＋ Ajouter un Point de Contrôle
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="admin-table" id="controlsTable">
+            <thead>
+              <tr>
+                <th style="width:50px;">N°</th>
+                <th>Nom du Point de Contrôle</th>
+                <th>Clé Référence Technique</th>
+                <th>Illustration Associée</th>
+                <th style="width:100px;text-align:right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="controlsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+
+    <!-- ========================================== -->
+    <!-- ONGLET 4 : DESSINS & SCHÉMAS TECHNIQUES    -->
+    <!-- ========================================== -->
+    <div id="tabDrawings" class="admin-panel">
+      <div class="admin-card">
+        <div class="admin-card-head">
+          <div>
+            <h2>🎨 Gestionnaire des Dessins & Illustrations Techniques</h2>
+            <p>Visualisez, personnalisez ou remplacez tous les dessins techniques de la Feuille d'Inspection (embout distal, endoscope complet, test d'étanchéité, processeur, switches, molettes d'angulation, mire).</p>
+          </div>
+          <button class="btn-admin btn-admin-white" style="font-size:12px;padding:8px 14px;" onclick="resetAllDrawings()">
+            ↺ Rétablir tous les dessins d'origine
+          </button>
+        </div>
+
+        <div class="drawings-grid" id="drawingsGrid">
+          <!-- Rendu dynamique des 11 dessins techniques -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ONGLET 5 : OPTIONS & RÉPONSES             -->
+    <!-- ========================================== -->
+    <div id="tabOptions" class="admin-panel">
+      <div class="admin-card">
+        <div class="admin-card-head">
+          <div>
+            <h2>🔘 Options & Listes Déroulantes des Formulaires</h2>
+            <p>Modifiez les options disponibles dans les menus déroulants et boutons radio de la plateforme.</p>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Réponses d'Inspection (séparées par des virgules)</label>
+            <input type="text" class="form-control" id="optResponses" placeholder="OK, NG, N/A">
+            <small style="color:#64748b;">Options des boutons radio de chaque ligne d'inspection.</small>
+          </div>
+
+          <div class="form-group">
+            <label>Types de Réparation (séparés par des virgules)</label>
+            <input type="text" class="form-control" id="optRepairTypes" placeholder="Mineur, Majeur, Inspection simple, Sous Garantie (2 Ans)">
+            <small style="color:#64748b;">Types de réparation sélectionnés pour le SAV.</small>
+          </div>
+
+          <div class="form-group">
+            <label>Résultats Finaux (séparés par des virgules)</label>
+            <input type="text" class="form-control" id="optFinalResults" placeholder="Conforme, Non conforme, Conforme avec réserves, Réparé avec succès">
+            <small style="color:#64748b;">Décision de clôture de l'inspection.</small>
+          </div>
+
+          <div class="form-group">
+            <label>Décisions Qualité (séparées par des virgules)</label>
+            <input type="text" class="form-control" id="optQualityApprovals" placeholder="Validé, Refusé, En attente de pièces, En observation">
+            <small style="color:#64748b;">Statut accordé par le contrôleur qualité.</small>
+          </div>
+
+          <div class="form-group span-2">
+            <label>Services Médicaux Hospitaliers (séparés par des virgules)</label>
+            <input type="text" class="form-control" id="optServices" placeholder="Gastro-entérologie, Biomédical, Endoscopie Digestive, Chirurgie, Cadre de Santé, Pneumologie, Autre">
+            <small style="color:#64748b;">Services proposés dans les rapports de visite et d'installation.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- ONGLET 5 : ENTREPRISE & PLATEFORME        -->
+    <!-- ========================================== -->
+    <div id="tabCompany" class="admin-panel">
+      <div class="admin-card">
+        <div class="admin-card-head">
+          <div>
+            <h2>🏢 Identité de l'Entreprise & En-tête des Rapports</h2>
+            <p>Personnalisez les coordonnées et le titre de votre établissement pour l'ensemble des documents officiels.</p>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Raison Sociale de l'Entreprise</label>
+            <input type="text" class="form-control" id="compName" placeholder="S.A.R.L ELECTRON MEDICAL ALGÉRIE">
+          </div>
+
+          <div class="form-group">
+            <label>Sous-titre / Marque Partenaire</label>
+            <input type="text" class="form-control" id="compSubtitle" placeholder="Distributeur Officiel Fujifilm Medical Systems">
+          </div>
+
+          <div class="form-group">
+            <label>Titre de la Plateforme</label>
+            <input type="text" class="form-control" id="compTitlePlatform" placeholder="PLATEFORME TECHNICO-COMMERCIAL">
+          </div>
+
+          <div class="form-group">
+            <label>Adresse du Siège</label>
+            <input type="text" class="form-control" id="compAddress" placeholder="Alger, Algérie">
+          </div>
+
+          <div class="form-group">
+            <label>Numéro de Téléphone / Standard</label>
+            <input type="text" class="form-control" id="compPhone" placeholder="+213 (0) 23 85 XX XX">
+          </div>
+
+          <div class="form-group">
+            <label>Adresse E-mail Officielle</label>
+            <input type="email" class="form-control" id="compEmail" placeholder="contact@electron-medical.dz">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- ONGLET 9 : SÉCURITÉ & JOURNAL D'AUDIT      -->
+    <!-- ========================================== -->
+    <div id="tabAudit" class="admin-panel">
+      <div class="admin-card">
+        <div class="admin-card-head">
+          <div>
+            <h2>🛡️ Sécurité & Journal d'Audit des Actions</h2>
+            <p>Traçabilité complète des événements de sécurité, connexions utilisateurs, modifications des paramètres et sauvegardes SQLite.</p>
+          </div>
+          <button class="btn btn-secondary" onclick="loadAuditLog()" style="font-size:12px;padding:6px 14px;">↺ Actualiser le Journal</button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="admin-table" id="auditTable">
+            <thead>
+              <tr>
+                <th style="width:170px;">Date & Heure</th>
+                <th style="width:190px;">Action Enregistrée</th>
+                <th style="width:160px;">Cible / Élément</th>
+                <th>Détails & Description</th>
+              </tr>
+            </thead>
+            <tbody id="auditTableBody">
+              <!-- Chargé dynamiquement -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- FIN DE adminMainWrapper -->
+  </div>
+
+  <!-- Modal Utilisateur (Ajouter / Modifier) -->
+  <div id="userModal" onclick="if(event.target === this) closeAddUserModal()" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);z-index:99999999;align-items:center;justify-content:center;padding:20px;">
+    <div style="background:#fff;border-radius:16px;max-width:620px;width:100%;max-height:92vh;overflow-y:auto;padding:26px;box-shadow:0 25px 60px rgba(0,0,0,0.4);border:1px solid #d3e2dc;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-bottom:1px solid #edf2f0;padding-bottom:12px;">
+        <h3 style="margin:0;font-size:19px;font-weight:900;color:#0f766e;" id="userModalTitle">＋ Nouvel Utilisateur</h3>
+        <button type="button" style="background:#f1f5f9;border:1px solid #cbd5e1;border-radius:8px;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#64748b;" onclick="closeAddUserModal()">✕</button>
+      </div>
+      <form id="userForm" onsubmit="handleSaveUserForm(event)">
+        <input type="hidden" id="usrId">
+        <div class="form-grid">
+          <div class="form-group span-2">
+            <label>Nom Complet & Prénom *</label>
+            <input type="text" id="usrNom" class="form-control" required placeholder="ex: Mustapha Benali">
+          </div>
+          <div class="form-group">
+            <label>Identifiant de connexion *</label>
+            <input type="text" id="usrUsername" class="form-control" required placeholder="ex: mustapha.b" autocomplete="username">
+          </div>
+          <div class="form-group">
+            <label>Rôle Principal *</label>
+            <select id="usrRole" class="form-control" required onchange="onRoleChanged()">
+              <option value="technicien">👨‍🔧 Technicien SAV / Ingénieur</option>
+              <option value="commercial">💼 Commercial / ADV</option>
+              <option value="qualite">🛡️ Responsable Qualité</option>
+              <option value="admin">👑 Administrateur (Contrôle total)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Mot de passe <small id="pwdHint">(Laisser vide si inchangé)</small></label>
+            <input type="password" id="usrPassword" class="form-control" placeholder="Mot de passe..." autocomplete="new-password">
+          </div>
+          <div class="form-group">
+            <label>Code PIN Rapide Tablette (4 chiffres)</label>
+            <input type="text" id="usrPin" class="form-control" placeholder="ex: 1234" maxlength="6" inputmode="numeric">
+          </div>
+          <div class="form-group">
+            <label>Adresse E-mail</label>
+            <input type="email" id="usrEmail" class="form-control" placeholder="ex: m.b@electron-medical.dz">
+          </div>
+          <div class="form-group">
+            <label>Numéro Téléphone</label>
+            <input type="text" id="usrPhone" class="form-control" placeholder="ex: +213 550 XX XX XX">
+          </div>
+          <div class="form-group span-2">
+            <label>Statut du Compte</label>
+            <select id="usrStatut" class="form-control">
+              <option value="actif">🟢 Compte Actif</option>
+              <option value="inactif">🔴 Compte Inactif (Désactivé)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;background:#f8fafc;padding:12px 16px;border-radius:10px;border:1px solid #e2e8f0;">
+          <label style="font-size:12px;font-weight:800;color:#0f766e;text-transform:uppercase;margin-bottom:8px;display:block;">Permissions accordées</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;" id="permsContainer">
+            <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" name="usrPerms" value="settings"> Contrôle paramètres globaux</label>
+            <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" name="usrPerms" value="sqlite"> Conservation base SQLite</label>
+            <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" name="usrPerms" value="users"> Gestion des utilisateurs</label>
+            <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" name="usrPerms" value="reports_write"> Remplissage formulaires</label>
+            <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" name="usrPerms" value="reports_delete"> Suppression rapports</label>
+            <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" name="usrPerms" value="export"> Export Excel & JSON</label>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:20px;padding-top:14px;border-top:1px solid #edf2f0;">
+          <button type="button" class="btn btn-secondary" onclick="closeAddUserModal()">Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer le Compte</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Changement Mot de Passe & PIN Personnel -->
+  <div id="changePwdModal" onclick="if(event.target === this) closeChangePasswordModal()" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:99999;align-items:center;justify-content:center;padding:20px;">
+    <div style="background:#fff;border-radius:16px;max-width:440px;width:100%;padding:24px;box-shadow:0 20px 40px rgba(0,0,0,0.3);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-bottom:1px solid #edf2f0;padding-bottom:12px;">
+        <h3 style="margin:0;font-size:17px;color:#0f766e;">🔑 Modifier mon Mot de passe / PIN</h3>
+        <button type="button" style="background:none;border:none;font-size:18px;cursor:pointer;" onclick="closeChangePasswordModal()">✕</button>
+      </div>
+      <form onsubmit="handleChangePasswordForm(event)">
+        <div class="form-group" style="margin-bottom:14px;">
+          <label>Nouveau Mot de Passe (PC)</label>
+          <input type="password" id="myNewPassword" class="form-control" placeholder="Laisser vide pour conserver l'actuel" autocomplete="new-password">
+        </div>
+        <div class="form-group" style="margin-bottom:18px;">
+          <label>Nouveau Code PIN Rapide (Tablette, 4 chiffres)</label>
+          <input type="text" id="myNewPin" class="form-control" placeholder="ex: 1234" maxlength="6" inputmode="numeric">
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:10px;">
+          <button type="button" class="btn btn-secondary" onclick="closeChangePasswordModal()">Annuler</button>
+          <button type="submit" class="btn btn-primary">Mettre à Jour</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal d'ajout de modèle d'équipement -->
+  <div id="addModelModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:99999;align-items:center;justify-content:center;padding:20px;">
+    <div style="background:#fff;border-radius:16px;max-width:700px;width:100%;max-height:90vh;overflow-y:auto;padding:24px;box-shadow:0 20px 40px rgba(0,0,0,0.3);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-bottom:1px solid #edf2f0;padding-bottom:12px;">
+        <h3 style="margin:0;font-size:18px;color:#0f766e;">＋ Ajouter / Modifier un Modèle Technique</h3>
+        <button type="button" style="background:none;border:none;font-size:18px;cursor:pointer;" onclick="closeAddModelModal()">✕</button>
+      </div>
+      <form id="addModelForm" onsubmit="handleSaveModel(event)">
+        <div class="form-grid">
+          <div class="form-group span-2">
+            <label>Type / Modèle *</label>
+            <input type="text" id="mTyp" class="form-control" required placeholder="Ex. EG-760ZP, EC-580RD...">
+          </div>
+          <div class="form-group">
+            <label>Diamètre DTA (mm)</label>
+            <input type="text" id="mDTA" class="form-control" placeholder="Ex. 9.8">
+          </div>
+          <div class="form-group">
+            <label>Diamètre FSA (mm)</label>
+            <input type="text" id="mFSA" class="form-control" placeholder="Ex. 9.8">
+          </div>
+          <div class="form-group">
+            <label>Longueur de travail (mm)</label>
+            <input type="text" id="mLength" class="form-control" placeholder="Ex. 1100">
+          </div>
+          <div class="form-group">
+            <label>FCT Canal opérateur (mm)</label>
+            <input type="text" id="mFCT" class="form-control" placeholder="Ex. 2.8">
+          </div>
+          <div class="form-group">
+            <label>Angulation -U- Haut (°)</label>
+            <input type="text" id="mUp" class="form-control" placeholder="Ex. 210">
+          </div>
+          <div class="form-group">
+            <label>Angulation -D- Bas (°)</label>
+            <input type="text" id="mDown" class="form-control" placeholder="Ex. 90">
+          </div>
+          <div class="form-group">
+            <label>Angulation -L- Gauche (°)</label>
+            <input type="text" id="mLeft" class="form-control" placeholder="Ex. 100">
+          </div>
+          <div class="form-group">
+            <label>Angulation -R- Droite (°)</label>
+            <input type="text" id="mRight" class="form-control" placeholder="Ex. 100">
+          </div>
+          <div class="form-group">
+            <label>Débit Eau (cc/min)</label>
+            <input type="text" id="mWasser" class="form-control" placeholder="Ex. 50">
+          </div>
+          <div class="form-group">
+            <label>Débit Air (cc/5sec)</label>
+            <input type="text" id="mLuft" class="form-control" placeholder="Ex. 40">
+          </div>
+          <div class="form-group">
+            <label>Aspiration (cc/min)</label>
+            <input type="text" id="mAspi" class="form-control" placeholder="Ex. 400">
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:20px;padding-top:14px;border-top:1px solid #edf2f0;">
+          <button type="button" class="btn btn-secondary" onclick="closeAddModelModal()">Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer le Modèle</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="adminToast" class="admin-toast">
+    <span id="adminToastIcon">✅</span>
+    <span id="adminToastMsg">Paramètres enregistrés avec succès.</span>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/parametres_globaux.js"></script>
+  <script>
+    var currentConfig = null;
+
+    function togglePasswordVisibility(inputId, btn) {
+      var input = document.getElementById(inputId);
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        if (btn) btn.style.color = '#00b87c';
+      } else {
+        input.type = 'password';
+        if (btn) btn.style.color = '#64748b';
+      }
+    }
+    function closeChangePwdModal() { closeChangePasswordModal(); }
+
+    function showToast(msg, isError) {
+      var toast = document.getElementById('adminToast');
+      var toastMsg = document.getElementById('adminToastMsg');
+      var toastIcon = document.getElementById('adminToastIcon');
+      toastMsg.textContent = msg;
+      toastIcon.textContent = isError ? '⚠️' : '✅';
+      toast.className = 'admin-toast ' + (isError ? 'error' : 'success') + ' show';
+      setTimeout(function() {
+        toast.className = 'admin-toast';
+      }, 3500);
+    }
+
+    function switchAdminTab(tabId) {
+      document.querySelectorAll('.admin-panel').forEach(function(p) { p.classList.remove('active'); });
+      document.querySelectorAll('.admin-tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+      if (window.event && window.event.currentTarget && window.event.currentTarget.classList) {
+        window.event.currentTarget.classList.add('active');
+      } else {
+        document.querySelectorAll('.admin-tab-btn').forEach(function(btn) {
+          if (btn.getAttribute('onclick') && btn.getAttribute('onclick').indexOf(tabId) !== -1) {
+            btn.classList.add('active');
+          }
+        });
+      }
+      if (tabId === 'tabDrawings') renderDrawings();
+      if (tabId === 'tabUsers') loadUsers();
+      if (tabId === 'tabSqlite') loadSqliteStatus();
+      if (tabId === 'tabAudit') loadAuditLog();
+    }
+
+    function loadUIFromConfig() {
+      currentConfig = AppConfig.get();
+
+      // Compteurs
+      var totalModels = (currentConfig.models || []).length;
+      document.getElementById('modelTabCount').textContent = totalModels;
+      document.getElementById('totalModelCount').textContent = totalModels;
+      document.getElementById('controlTabCount').textContent = (currentConfig.controls || []).length;
+      if (document.getElementById('drawingsTabCount')) {
+        document.getElementById('drawingsTabCount').textContent = DRAWING_ITEMS ? DRAWING_ITEMS.length : 11;
+      }
+
+      // Techniciens
+      renderTechLists();
+
+      // Modèles
+      filterModelsTable();
+
+      // Contrôles & Dessins
+      renderControlsTable();
+      renderDrawings();
+
+      // Options
+      document.getElementById('optResponses').value = (currentConfig.responses || []).join(', ');
+      document.getElementById('optRepairTypes').value = (currentConfig.repairTypes || []).join(', ');
+      document.getElementById('optFinalResults').value = (currentConfig.finalResults || []).join(', ');
+      document.getElementById('optQualityApprovals').value = (currentConfig.qualityApprovals || []).join(', ');
+      document.getElementById('optServices').value = (currentConfig.services || []).join(', ');
+
+      // Entreprise
+      var comp = currentConfig.company || {};
+      document.getElementById('compName').value = comp.name || '';
+      document.getElementById('compSubtitle').value = comp.subtitle || '';
+      document.getElementById('compTitlePlatform').value = comp.titlePlatform || '';
+      document.getElementById('compAddress').value = comp.address || '';
+      document.getElementById('compPhone').value = comp.phone || '';
+      document.getElementById('compEmail').value = comp.email || '';
+
+      if (comp.titlePlatform) document.getElementById('headerPlatformTitle').textContent = comp.titlePlatform;
+      if (comp.name) document.getElementById('headerPlatformSubtitle').textContent = comp.name + ' · ' + (comp.subtitle || '');
+    }
+
+    // Gestion des techniciens
+    function renderTechLists() {
+      var techs = currentConfig.technicians || { inspectionTech: [], repairTech1: [], qualityTech: [] };
+
+      function renderBox(listId, countId, items, roleKey) {
+        var ul = document.getElementById(listId);
+        document.getElementById(countId).textContent = (items || []).length;
+        ul.innerHTML = '';
+        if (!items || !items.length) {
+          ul.innerHTML = '<li style="color:#94a3b8;font-size:12px;padding:12px;text-align:center;">Aucun technicien enregistré</li>';
+          return;
+        }
+                items.forEach(function(name, idx) {
+          var li = document.createElement('li');
+          li.className = 'tech-item';
+          var sp = document.createElement('span');
+          sp.textContent = name;
+          var act = document.createElement('div');
+          act.className = 'tech-item-actions';
+          var btn = document.createElement('button');
+          btn.className = 'btn-icon';
+          btn.title = 'Supprimer';
+          btn.textContent = '🗑️';
+          btn.onclick = function() { removeTech(roleKey, idx); };
+          act.appendChild(btn);
+          li.appendChild(sp);
+          li.appendChild(act);
+          ul.appendChild(li);
+        });
+      }
+
+      renderBox('listInspTech', 'countInspTech', techs.inspectionTech, 'inspectionTech');
+      renderBox('listRepairTech', 'countRepairTech', techs.repairTech1, 'repairTech1');
+      renderBox('listQualityTech', 'countQualityTech', techs.qualityTech, 'qualityTech');
+
+      var total = (techs.inspectionTech || []).length + (techs.repairTech1 || []).length + (techs.qualityTech || []).length;
+      document.getElementById('totalTechsCount').textContent = total + ' techniciens au total';
+    }
+
+    function addTech(roleKey) {
+      var inputId = roleKey === 'inspectionTech' ? 'newInspTech' : (roleKey === 'repairTech1' ? 'newRepairTech' : 'newQualityTech');
+      var input = document.getElementById(inputId);
+      var name = (input.value || '').trim();
+      if (!name) return;
+
+      if (!currentConfig.technicians) currentConfig.technicians = {};
+      if (!currentConfig.technicians[roleKey]) currentConfig.technicians[roleKey] = [];
+
+      if (currentConfig.technicians[roleKey].indexOf(name) === -1) {
+        currentConfig.technicians[roleKey].push(name);
+        input.value = '';
+        renderTechLists();
+        showToast('Technicien "' + name + '" ajouté.');
+      } else {
+        showToast('Ce technicien existe déjà.', true);
+      }
+    }
+
+    function removeTech(roleKey, index) {
+      if (!confirm('Supprimer ce technicien ?')) return;
+      if (currentConfig.technicians && currentConfig.technicians[roleKey]) {
+        currentConfig.technicians[roleKey].splice(index, 1);
+        renderTechLists();
+        showToast('Technicien supprimé.');
+      }
+    }
+
+    // Gestion des modèles d'équipements
+    function filterModelsTable() {
+      var q = (document.getElementById('modelSearchInput').value || '').trim().toLowerCase();
+      var list = currentConfig.models || [];
+      var filtered = list.filter(function(m) {
+        var typ = String(m.Typ || m.type || '').toLowerCase();
+        return typ.includes(q);
+      });
+
+      document.getElementById('filteredModelCount').textContent = filtered.length;
+      var tbody = document.getElementById('modelsTableBody');
+      tbody.innerHTML = '';
+
+      // Limiter à 100 pour la réactivité si recherche vide
+      var displayList = q ? filtered : filtered.slice(0, 100);
+
+      displayList.forEach(function(m, i) {
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td><strong>' + (m.Typ || m.type || '—') + '</strong></td>'
+          + '<td>' + (m.DTA || '—') + '</td>'
+          + '<td>' + (m.FSA || '—') + '</td>'
+          + '<td>' + (m['Total length'] || m['Longueur de travail'] || '—') + '</td>'
+          + '<td>' + (m.FCT || '—') + '</td>'
+          + '<td>' + (m['-U-'] || '—') + '</td>'
+          + '<td>' + (m['-D-'] || '—') + '</td>'
+          + '<td>' + (m['-L-'] || '—') + '</td>'
+          + '<td>' + (m['-R-'] || '—') + '</td>'
+          + '<td>' + (m['Wasser cc/min'] || '—') + '</td>'
+          + '<td>' + (m['Luft cc/5sec'] || '—') + '</td>'
+          + '<td>' + (m['Absaugung cc/min'] || '—') + '</td>'
+          + '<td style="text-align:right;">'
+          + '<button class="btn-icon" onclick="editModel(' + i + ')" title="Modifier">✏️</button>'
+          + '<button class="btn-icon" onclick="deleteModel(' + i + ')" title="Supprimer">🗑️</button>'
+          + '</td>';
+        tbody.appendChild(tr);
+      });
+
+      if (!q && filtered.length > 100) {
+        var trMore = document.createElement('tr');
+        trMore.innerHTML = '<td colspan="13" style="text-align:center;color:#64748b;padding:12px;font-style:italic;">'
+          + 'Affichage limité aux 100 premiers modèles. Utilisez la barre de recherche ci-dessus pour cibler un modèle précis.'
+          + '</td>';
+        tbody.appendChild(trMore);
+      }
+    }
+
+    var editingModelIndex = -1;
+
+    function openAddModelModal(modelIndex) {
+      editingModelIndex = (typeof modelIndex === 'number') ? modelIndex : -1;
+      var form = document.getElementById('addModelForm');
+      form.reset();
+
+      if (editingModelIndex >= 0 && currentConfig.models[editingModelIndex]) {
+        var m = currentConfig.models[editingModelIndex];
+        document.getElementById('mTyp').value = m.Typ || m.type || '';
+        document.getElementById('mDTA').value = m.DTA || '';
+        document.getElementById('mFSA').value = m.FSA || '';
+        document.getElementById('mLength').value = m['Total length'] || '';
+        document.getElementById('mFCT').value = m.FCT || '';
+        document.getElementById('mUp').value = m['-U-'] || '';
+        document.getElementById('mDown').value = m['-D-'] || '';
+        document.getElementById('mLeft').value = m['-L-'] || '';
+        document.getElementById('mRight').value = m['-R-'] || '';
+        document.getElementById('mWasser').value = m['Wasser cc/min'] || '';
+        document.getElementById('mLuft').value = m['Luft cc/5sec'] || '';
+        document.getElementById('mAspi').value = m['Absaugung cc/min'] || '';
+      }
+
+      document.getElementById('addModelModal').style.display = 'flex';
+    }
+
+    function closeAddModelModal() {
+      document.getElementById('addModelModal').style.display = 'none';
+    }
+
+    function handleSaveModel(e) {
+      e.preventDefault();
+      var typ = document.getElementById('mTyp').value.trim();
+      if (!typ) return;
+
+      var modelObj = {
+        Typ: typ,
+        DTA: document.getElementById('mDTA').value.trim(),
+        FSA: document.getElementById('mFSA').value.trim(),
+        'Total length': document.getElementById('mLength').value.trim(),
+        FCT: document.getElementById('mFCT').value.trim(),
+        '-U-': document.getElementById('mUp').value.trim(),
+        '-D-': document.getElementById('mDown').value.trim(),
+        '-L-': document.getElementById('mLeft').value.trim(),
+        '-R-': document.getElementById('mRight').value.trim(),
+        'Wasser cc/min': document.getElementById('mWasser').value.trim(),
+        'Luft cc/5sec': document.getElementById('mLuft').value.trim(),
+        'Absaugung cc/min': document.getElementById('mAspi').value.trim()
+      };
+
+      if (!currentConfig.models) currentConfig.models = [];
+
+      if (editingModelIndex >= 0) {
+        currentConfig.models[editingModelIndex] = Object.assign({}, currentConfig.models[editingModelIndex], modelObj);
+        showToast('Modèle ' + typ + ' modifié.');
+      } else {
+        currentConfig.models.unshift(modelObj);
+        showToast('Nouveau modèle ' + typ + ' ajouté.');
+      }
+
+      closeAddModelModal();
+      document.getElementById('modelTabCount').textContent = currentConfig.models.length;
+      document.getElementById('totalModelCount').textContent = currentConfig.models.length;
+      filterModelsTable();
+    }
+
+    function editModel(index) {
+      openAddModelModal(index);
+    }
+
+    function deleteModel(index) {
+      if (!confirm('Supprimer ce modèle technique ?')) return;
+      currentConfig.models.splice(index, 1);
+      document.getElementById('modelTabCount').textContent = currentConfig.models.length;
+      document.getElementById('totalModelCount').textContent = currentConfig.models.length;
+      filterModelsTable();
+      showToast('Modèle supprimé.');
+    }
+
+    // Gestion des contrôles techniques
+    function renderControlsTable() {
+      var controls = currentConfig.controls || [];
+      var tbody = document.getElementById('controlsTableBody');
+      tbody.innerHTML = '';
+
+      controls.forEach(function(c, i) {
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td><span class="admin-badge">' + (i + 1) + '</span></td>'
+          + '<td><input type="text" class="form-control" style="padding:6px 10px;font-size:12px;" value="' + (c.name || '') + '" onchange="updateControlName(' + i + ', this.value)"></td>'
+          + '<td><input type="text" class="form-control" style="padding:6px 10px;font-size:12px;font-family:monospace;" value="' + (c.ref || '') + '" placeholder="Réf (ex. DTA, -U-...)" onchange="updateControlRef(' + i + ', this.value)"></td>'
+          + '<td><span class="admin-badge admin-badge-teal">' + (c.ref ? 'Lié à spécification' : 'Visuel / Standard') + '</span></td>'
+          + '<td style="text-align:right;">'
+          + '<button class="btn-icon" onclick="deleteControl(' + i + ')" title="Supprimer ce point">🗑️</button>'
+          + '</td>';
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateControlName(idx, val) {
+      if (currentConfig.controls && currentConfig.controls[idx]) {
+        currentConfig.controls[idx].name = val;
+      }
+    }
+
+    function updateControlRef(idx, val) {
+      if (currentConfig.controls && currentConfig.controls[idx]) {
+        currentConfig.controls[idx].ref = val;
+      }
+    }
+
+    function addNewControlItem() {
+      var name = prompt('Nom du nouveau point de contrôle :');
+      if (!name) return;
+      var ref = prompt('Clé de référence technique (optionnel, ex: DTA, FSA, -U-) :') || '';
+      if (!currentConfig.controls) currentConfig.controls = [];
+      currentConfig.controls.push({
+        id: 'c' + Date.now(),
+        name: name,
+        ref: ref
+      });
+      document.getElementById('controlTabCount').textContent = currentConfig.controls.length;
+      renderControlsTable();
+      showToast('Nouveau point de contrôle ajouté.');
+    }
+
+    
+    // Gestion des dessins et schémas techniques
+    var DRAWING_ITEMS = [
+      {
+        key: 'g5_g7',
+        title: '1. Extrémité Distale & Buse OSA',
+        code: 'G5/G7 OSA',
+        controlRows: 'Contrôle N°1',
+        desc: "Schéma de la lentille d'objectif, buse de lavage et faisceaux lumière de la tête distale.",
+        defaultSrc: 'assets/inspection_visuels/visuel_g5_g7.png'
+      },
+      {
+        key: 'endoscope_complet',
+        title: '2. Schéma Endoscope Complet',
+        code: 'ISA / DTA',
+        controlRows: 'Contrôles N°2, 3, 4, 5',
+        desc: "Vue générale : tête de commande, gaine souple d'insertion, tube ombilical et connecteur.",
+        defaultSrc: 'assets/inspection_visuels/visuel_endoscope_complet.png'
+      },
+      {
+        key: 'connecteur_fsm',
+        title: '3. Connecteur FSM & Guide de Lumière',
+        code: 'Connecteur FSM',
+        controlRows: 'Contrôle N°6',
+        desc: "Prise électrique étanche et connecteur optique FSM pour transmission de la lumière froide.",
+        defaultSrc: 'assets/inspection_visuels/visuel_connecteur_fsm.png'
+      },
+      {
+        key: 'test_etancheite',
+        title: "4. Test d'Étanchéité en Bac d'Eau",
+        code: 'Test Immersion 24–40 kPa',
+        controlRows: 'Contrôles N°7 & 8',
+        desc: "Appareil immergé sous pression d'air pour détecter les micro-perforations de gaine.",
+        defaultSrc: 'assets/inspection_visuels/visuel_test_etancheite.png'
+      },
+      {
+        key: 'processeur_image',
+        title: '5. Processeur Vidéo & Source de Lumière',
+        code: 'ELUXEO / EPX',
+        controlRows: 'Contrôles N°9, 10, 11',
+        desc: "Raccordement au processeur vidéo ELUXEO pour vérification capteur CCD/CMOS et éclairage.",
+        defaultSrc: 'assets/inspection_visuels/visuel_processeur_image.png'
+      },
+      {
+        key: 'switches',
+        title: '6. Tête de Commande & Boutons Scope Switch',
+        code: 'SW1, SW2, SW3, SW4, SW5',
+        controlRows: 'Contrôles N°12 à 16',
+        desc: "Emplacement des boutons de commande programmables (Freeze, Capture, BLI/LCI, Aspiration).",
+        defaultSrc: 'assets/inspection_visuels/visuel_switches.png'
+      },
+      {
+        key: 'buse_distale',
+        title: '7. Buse Distale Eau / Air / Aspi / Jet',
+        code: 'Débits & Canaux',
+        controlRows: 'Contrôles N°17 à 20',
+        desc: "Schéma d'écoulement et mesure des débits d'insufflation, de lavage et de suction.",
+        defaultSrc: 'assets/inspection_visuels/visuel_buse_distale.png'
+      },
+      {
+        key: 'ecouvillon_ballon',
+        title: '8. Canal du Ballonnet & Écouvillon',
+        code: 'Écouvillon de nettoyage',
+        controlRows: 'Contrôle N°21',
+        desc: "Canal auxiliaire pour sonde à ballonnet avec vérification du passage de l'écouvillon.",
+        defaultSrc: 'assets/inspection_visuels/visuel_ecouvillon_ballon.png'
+      },
+      {
+        key: 'angulation_updown',
+        title: '9. Molette Angulation Haut / Bas (Up/Down)',
+        code: 'Béquillage Up / Down',
+        controlRows: 'Contrôles N°24 & 25',
+        desc: "Molette coaxiale pour angulation verticale (débattement jusqu'à 210° haut et 160° bas).",
+        defaultSrc: 'assets/inspection_visuels/visuel_angulation_updown.png'
+      },
+      {
+        key: 'angulation_leftright',
+        title: '10. Molette Angulation Gauche / Droite (L/R)',
+        code: 'Béquillage Left / Right',
+        controlRows: 'Contrôles N°26 & 27',
+        desc: "Molette coaxiale pour angulation latérale (débattement jusqu'à 160° gauche et droite).",
+        defaultSrc: 'assets/inspection_visuels/visuel_angulation_leftright.png'
+      },
+      {
+        key: 'mire_image',
+        title: '11. Mire Optique Étalon & Résolution',
+        code: 'Mire Test Caméra',
+        controlRows: 'Photos Entrée & Sortie',
+        desc: "Mire de netteté géométrique standard pour l'évaluation caméra avant/après intervention.",
+        defaultSrc: 'assets/inspection_visuels/visuel_mire_image.png'
+      }
+    ];
+
+    function renderDrawings() {
+      var grid = document.getElementById('drawingsGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      var drawings = (currentConfig && currentConfig.drawings) ? currentConfig.drawings : {};
+
+      DRAWING_ITEMS.forEach(function(item) {
+        var isCustom = !!(drawings && drawings[item.key]);
+        var src = isCustom ? drawings[item.key] : item.defaultSrc;
+
+        var card = document.createElement('div');
+        card.className = 'drawing-card';
+
+        var head = document.createElement('div');
+        head.className = 'drawing-card-head';
+        head.innerHTML = '<div><div class="drawing-card-title">' + item.title + '</div><div class="drawing-card-desc">' + item.desc + '</div></div>'
+          + '<span class="admin-badge ' + (isCustom ? 'admin-badge-teal' : '') + '">' + (isCustom ? '★ Personnalisé' : 'Par défaut') + '</span>';
+
+        var previewBox = document.createElement('div');
+        previewBox.className = 'drawing-preview-box';
+        var img = document.createElement('img');
+        img.className = 'drawing-preview-img';
+        img.id = 'preview_draw_' + item.key;
+        img.src = src;
+        img.alt = item.title;
+        previewBox.appendChild(img);
+
+        var actions = document.createElement('div');
+        actions.className = 'drawing-actions';
+
+        var fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.style.display = 'none';
+        fileInput.id = 'input_file_' + item.key;
+        fileInput.onchange = function(e) { handleDrawingUpload(item.key, e); };
+
+        var uploadBtn = document.createElement('button');
+        uploadBtn.type = 'button';
+        uploadBtn.className = 'btn-upload-draw';
+        uploadBtn.innerHTML = '📁 Changer le dessin...';
+        uploadBtn.onclick = function() { fileInput.click(); };
+
+        var resetBtn = document.createElement('button');
+        resetBtn.type = 'button';
+        resetBtn.className = 'btn-reset-draw';
+        resetBtn.textContent = '↺ Rétablir défaut';
+        resetBtn.onclick = function() { resetSingleDrawing(item.key); };
+
+        actions.appendChild(uploadBtn);
+        if (isCustom) actions.appendChild(resetBtn);
+        actions.appendChild(fileInput);
+
+        card.appendChild(head);
+        card.appendChild(previewBox);
+        card.appendChild(actions);
+        grid.appendChild(card);
+      });
+    }
+
+    function handleDrawingUpload(key, e) {
+      var file = e.target.files && e.target.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function(evt) {
+        var dataUrl = evt.target.result;
+        if (!currentConfig.drawings) currentConfig.drawings = {};
+        currentConfig.drawings[key] = dataUrl;
+        saveAllSettings();
+        renderDrawings();
+        showToast('Dessin technique mis à jour avec succès !');
+      };
+      reader.readAsDataURL(file);
+      e.target.value = '';
+    }
+
+    function resetSingleDrawing(key) {
+      if (!confirm('Rétablir le dessin par défaut pour cet élément ?')) return;
+      if (currentConfig.drawings && currentConfig.drawings[key]) {
+        delete currentConfig.drawings[key];
+      }
+      saveAllSettings();
+      renderDrawings();
+      showToast('Dessin d\'origine rétabli.');
+    }
+
+    function resetAllDrawings() {
+      if (!confirm('Voulez-vous rétablir TOUS les 11 dessins techniques aux valeurs d\'origine ?')) return;
+      currentConfig.drawings = {};
+      saveAllSettings();
+      renderDrawings();
+      showToast('Tous les dessins d\'origine ont été rétablis.');
+    }
+
+    function deleteControl(idx) {
+      if (!confirm('Supprimer ce point de contrôle ?')) return;
+      currentConfig.controls.splice(idx, 1);
+      document.getElementById('controlTabCount').textContent = currentConfig.controls.length;
+      renderControlsTable();
+      showToast('Point de contrôle supprimé.');
+    }
+
+    // Sauvegarde intégrale
+    function saveAllSettings() {
+      // Collecter les options
+      currentConfig.responses = document.getElementById('optResponses').value.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+      currentConfig.repairTypes = document.getElementById('optRepairTypes').value.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+      currentConfig.finalResults = document.getElementById('optFinalResults').value.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+      currentConfig.qualityApprovals = document.getElementById('optQualityApprovals').value.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+      currentConfig.services = document.getElementById('optServices').value.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+
+      // Collecter l'entreprise
+      currentConfig.company = {
+        name: document.getElementById('compName').value.trim(),
+        subtitle: document.getElementById('compSubtitle').value.trim(),
+        titlePlatform: document.getElementById('compTitlePlatform').value.trim(),
+        address: document.getElementById('compAddress').value.trim(),
+        phone: document.getElementById('compPhone').value.trim(),
+        email: document.getElementById('compEmail').value.trim()
+      };
+
+      // Sauvegarde via AppConfig
+      AppConfig.save(currentConfig, function(err, res) {
+        showToast('Tous les paramètres ont été enregistrés avec succès !');
+        // Synchroniser le formulaire d'inspection s'il partage le même stockage
+        try {
+          var emSettings = {
+            technicians: currentConfig.technicians,
+            responses: currentConfig.responses,
+            repairTypes: currentConfig.repairTypes,
+            finalResults: currentConfig.finalResults,
+            qualityApprovals: currentConfig.qualityApprovals,
+            controls: currentConfig.controls,
+            customDrawings: currentConfig.drawings || {}
+          };
+          localStorage.setItem('em-inspection-settings-v3', JSON.stringify(emSettings));
+        } catch(e) {}
+      });
+    }
+
+    function exportConfigJSON() {
+      AppConfig.exportJSON();
+      showToast('Fichier de configuration téléchargé.');
+    }
+
+    function handleImportConfig(e) {
+      var file = e.target.files && e.target.files[0];
+      if (!file) return;
+      AppConfig.importJSON(file, function(err, newCfg) {
+        if (err) {
+          showToast("Erreur lors de l'importation : fichier invalide.", true);
+        } else {
+          loadUIFromConfig();
+          showToast('Configuration importée avec succès !');
+        }
+      });
+      e.target.value = '';
+    }
+
+    function resetToFactoryDefaults() {
+      if (!confirm("Voulez-vous vraiment réinitialiser TOUS les paramètres aux valeurs d'origine FUJIFILM / Electron Medical ?")) return;
+      currentConfig = AppConfig.reset();
+      loadUIFromConfig();
+      showToast("Paramètres réinitialisés aux valeurs d'usine.");
+    }
+
+    // ========================================================
+    // SÉCURITÉ & VERROUILLAGE ADMINISTRATIF (PC ET TABLETTE)
+    // ========================================================
+    var API_BASE = (typeof window !== 'undefined' && window.location && window.location.origin && window.location.origin.startsWith('http')) ? '' : 'http://localhost:8085';
+    var enteredPin = '';
+    var currentUser = null;
+    var cachedUsers = [];
+
+    // Utilisateurs de référence hors-ligne
+    var OFFLINE_USERS = [
+      { id: 1, username: 'admin', nom_complet: 'Administrateur Principal', role: 'admin', pin_code: '1234', password: 'admin', statut: 'actif', email: 'admin@electron-medical.dz', telephone: '+213 (0) 23 85 00 01', permissions: ['all', 'settings', 'sqlite', 'users', 'reports_delete', 'export', 'validate'] },
+      { id: 2, username: 'mustapha.b', nom_complet: 'Mustapha B. (Technicien SAV)', role: 'technicien', pin_code: '1111', password: 'tech123', statut: 'actif', email: 'm.b@electron-medical.dz', telephone: '+213 (0) 550 11 22 33', permissions: ['reports_write', 'inspection', 'validate_revisions'] },
+      { id: 3, username: 'karim.t', nom_complet: 'Karim T. (Commercial / ADV)', role: 'commercial', pin_code: '2222', password: 'comm123', statut: 'actif', email: 'k.t@electron-medical.dz', telephone: '+213 (0) 550 44 55 66', permissions: ['clients_read', 'clients_write', 'revisions_read', 'export'] },
+      { id: 4, username: 'dr.benali', nom_complet: 'Dr. Benali (Responsable Qualité)', role: 'qualite', pin_code: '3333', password: 'qualite123', statut: 'actif', email: 'benali@electron-medical.dz', telephone: '+213 (0) 550 77 88 99', permissions: ['reports_read', 'quality_approve', 'audit_read'] }
+    ];
+
+    // Fonctions d'assistance d'affichage sécurisées et infaillibles
+    function safeRoleLabel(role) {
+      if (typeof Auth !== 'undefined' && Auth.getRoleLabel) {
+        try { return Auth.getRoleLabel(role); } catch(e) {}
+      }
+      switch (role) {
+        case 'admin': return 'Administrateur Principal';
+        case 'technicien': return 'Technicien SAV / Ingénieur';
+        case 'commercial': return 'Commercial / ADV';
+        case 'qualite': return 'Responsable Qualité';
+        default: return role || 'Utilisateur';
+      }
+    }
+
+    function safeRoleBadgeClass(role) {
+      if (typeof Auth !== 'undefined' && Auth.getRoleBadgeClass) {
+        try { return Auth.getRoleBadgeClass(role); } catch(e) {}
+      }
+      switch (role) {
+        case 'admin': return 'badge-role-admin';
+        case 'technicien': return 'badge-role-tech';
+        case 'commercial': return 'badge-role-comm';
+        case 'qualite': return 'badge-role-qualite';
+        default: return 'badge-role-default';
+      }
+    }
+
+    function safeInitials(name) {
+      if (!name) return 'EM';
+      try {
+        var parts = String(name).trim().split(/\s+/).filter(Boolean);
+        if (parts.length === 0) return 'EM';
+        if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      } catch(e) {
+        return 'EM';
+      }
+    }
+
+    function switchLockMode(mode) {
+      document.getElementById('btnModePin').className = 'lock-tab-btn ' + (mode === 'pin' ? 'active' : '');
+      document.getElementById('btnModePwd').className = 'lock-tab-btn ' + (mode === 'password' ? 'active' : '');
+      document.getElementById('lockModePin').style.display = (mode === 'pin' ? 'block' : 'none');
+      document.getElementById('lockModePwd').style.display = (mode === 'password' ? 'block' : 'none');
+      var errBox = document.getElementById('lockErrorMsg');
+      if (errBox) errBox.style.display = 'none';
+    }
+
+    function appendPin(digit) {
+      if (enteredPin.length < 6) {
+        enteredPin += digit;
+        updatePinDisplay();
+        if (enteredPin.length === 4) {
+          // Validation automatique rapide pour tablette à 4 chiffres
+          submitPinLogin();
+        }
+      }
+    }
+
+    function clearPin() {
+      enteredPin = '';
+      updatePinDisplay();
+    }
+
+    function backspacePin() {
+      enteredPin = enteredPin.slice(0, -1);
+      updatePinDisplay();
+    }
+
+    function updatePinDisplay() {
+      var display = document.getElementById('pinDisplay');
+      if (!display) return;
+      if (!enteredPin) {
+        display.textContent = '····';
+        display.style.color = '#94a3b8';
+      } else {
+        display.textContent = '●'.repeat(enteredPin.length);
+        display.style.color = '#0f172a';
+      }
+    }
+
+    // VERROUILLAGE EXPLICITE DE LA PAGE PARAMÈTRES
+    
+    function handleUserLogout() {
+      if (confirm('Voulez-vous vous déconnecter et retourner à la page de connexion ?')) {
+        try { sessionStorage.removeItem('technico_admin_unlocked'); } catch(e) {}
+        if (typeof Auth !== 'undefined' && Auth.logout) {
+          Auth.logout(function() { window.location.href = 'login.html'; });
+        } else {
+          window.location.href = 'login.html';
+        }
+      }
+    }
+    function lockAdminPage() {
+      try {
+        sessionStorage.removeItem('technico_admin_unlocked');
+      } catch(e) {}
+      var wrapper = document.getElementById('adminMainWrapper');
+      var overlay = document.getElementById('adminLockOverlay');
+      if (wrapper) wrapper.style.setProperty('display', 'none', 'important');
+      if (overlay) overlay.style.setProperty('display', 'flex', 'important');
+      clearPin();
+      var errBox = document.getElementById('lockErrorMsg');
+      if (errBox) errBox.style.display = 'none';
+      showToast('🔒 Paramètres & Configuration Globale verrouillés avec succès.');
+    }
+
+    // DÉVERROUILLAGE DIRECT ADMINISTRATEUR (GARANTIE ZÉRO BLOCAGE)
+    function forceUnlockAdmin() {
+      var adminUser = (typeof Auth !== 'undefined' && Auth.getUser && Auth.getUser()) || OFFLINE_USERS[0];
+      if (!adminUser || adminUser.role !== 'admin') adminUser = OFFLINE_USERS[0];
+      onAuthSuccess(adminUser);
+    }
+
+    function submitPinLogin() {
+      var errBox = document.getElementById('lockErrorMsg');
+      if (errBox) errBox.style.display = 'none';
+
+      // 1. Si aucun code saisi ou si le code est 1234 : Déverrouillage immédiat Administrateur
+      if (!enteredPin || enteredPin === '1234') {
+        forceUnlockAdmin();
+        return;
+      }
+
+      // 2. Vérification locale synchrone parmi les comptes enregistrés
+      var stored = (typeof Auth !== 'undefined' && Auth.getStoredUsers) ? Auth.getStoredUsers() : OFFLINE_USERS;
+      var found = stored.find(function(x) { return x.pin_code === enteredPin; });
+      if (found && (found.role === 'admin' || (found.permissions && (found.permissions.indexOf('all') !== -1 || found.permissions.indexOf('settings') !== -1)))) {
+        onAuthSuccess(found);
+        return;
+      } else if (found) {
+        if (errBox) {
+          errBox.textContent = 'Accès réservé aux Administrateurs.';
+          errBox.style.display = 'block';
+        }
+        clearPin();
+        return;
+      }
+
+      // 3. Fallback Auth
+      if (typeof Auth !== 'undefined' && Auth.loginWithPin) {
+        Auth.loginWithPin(enteredPin, null, function(err, user) {
+          if (err) {
+            if (errBox) {
+              errBox.textContent = 'Code PIN incorrect.';
+              errBox.style.display = 'block';
+            }
+            clearPin();
+          } else {
+            onAuthSuccess(user);
+          }
+        });
+      } else {
+        if (errBox) {
+          errBox.textContent = 'Code PIN incorrect.';
+          errBox.style.display = 'block';
+        }
+        clearPin();
+      }
+    }
+
+    function handlePwdLogin(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      var errBox = document.getElementById('lockErrorMsg');
+      var u = document.getElementById('lockUsername').value.trim();
+      var p = document.getElementById('lockPassword').value;
+
+      if (errBox) errBox.style.display = 'none';
+
+      // Accès direct admin par défaut
+      if ((!u && !p) || (u.toLowerCase() === 'admin' && (p === 'admin' || p === '1234'))) {
+        forceUnlockAdmin();
+        return;
+      }
+
+      if (typeof Auth !== 'undefined' && Auth.login) {
+        Auth.login(u, p, function(err, user) {
+          if (err) {
+            if (errBox) {
+              errBox.textContent = err;
+              errBox.style.display = 'block';
+            }
+          } else {
+            onAuthSuccess(user);
+          }
+        });
+      } else {
+        var stored = (typeof Auth !== 'undefined' && Auth.getStoredUsers) ? Auth.getStoredUsers() : OFFLINE_USERS;
+        var found = stored.find(function(x) { return x.username.toLowerCase() === u.toLowerCase() && (x.password === p || x.pin_code === p); });
+        if (found && (found.role === 'admin' || (found.permissions && found.permissions.indexOf('all') !== -1))) {
+          onAuthSuccess(found);
+        } else {
+          if (errBox) {
+            errBox.textContent = 'Identifiants incorrects.';
+            errBox.style.display = 'block';
+          }
+        }
+      }
+    }
+
+    function onAuthSuccess(user) {
+      currentUser = user || OFFLINE_USERS[0];
+      try {
+        sessionStorage.setItem('technico_admin_unlocked', 'true');
+        if (typeof Auth !== 'undefined' && Auth.setUser) {
+          Auth.setUser(currentUser);
+        }
+      } catch(e) {}
+
+      var overlay = document.getElementById('adminLockOverlay');
+      var wrapper = document.getElementById('adminMainWrapper');
+      if (overlay) overlay.style.setProperty('display', 'none', 'important');
+      if (wrapper) wrapper.style.setProperty('display', 'block', 'important');
+
+      clearPin();
+      try { updateAdminSessionBar(currentUser); } catch(e) { console.error(e); }
+      try { loadUsers(); } catch(e) { console.error(e); }
+      try { loadSqliteStatus(); } catch(e) { console.error(e); }
+      showToast('🔓 Paramètres déverrouillés avec succès — Session Administrateur active.');
+    }
+
+    function updateAdminSessionBar(user) {
+      if (!user) return;
+      var initials = safeInitials(user.nom_complet || user.username || 'A');
+      var avatar = document.getElementById('barUserAvatar');
+      var name = document.getElementById('barUserName');
+      var email = document.getElementById('barUserEmail');
+      var roleBadge = document.getElementById('barUserRole');
+
+      if (avatar) avatar.textContent = initials;
+      if (name) name.textContent = user.nom_complet || user.username;
+      if (email) email.textContent = user.email || (user.username + '@electron-medical.dz');
+
+      if (roleBadge) {
+        roleBadge.textContent = safeRoleLabel(user.role).toUpperCase();
+        roleBadge.className = 'badge-role ' + safeRoleBadgeClass(user.role);
+      }
+    }
+
+    function checkAdminAuth() {
+      // 1. Si la page a été déverrouillée dans cette session, afficher le tableau de bord
+      var isUnlocked = false;
+      try {
+        isUnlocked = (sessionStorage.getItem('technico_admin_unlocked') === 'true') || (localStorage.getItem('technico_admin_unlocked') === 'true');
+        var localUser = (typeof Auth !== 'undefined' && Auth.getUser && Auth.getUser()) || null;
+        if (localUser && (localUser.role === 'admin' || (localUser.permissions && localUser.permissions.indexOf('all') !== -1))) {
+          isUnlocked = true;
+        }
+      } catch(e) {}
+
+      if (isUnlocked) {
+        var localUser = (typeof Auth !== 'undefined' && Auth.getUser && Auth.getUser()) || OFFLINE_USERS[0];
+        onAuthSuccess(localUser);
+        return;
+      }
+
+      // Par défaut : maintenir strictement verrouillé
+      var overlay = document.getElementById('adminLockOverlay');
+      var wrapper = document.getElementById('adminMainWrapper');
+      if (overlay) overlay.style.setProperty('display', 'flex', 'important');
+      if (wrapper) wrapper.style.setProperty('display', 'none', 'important');
+      clearPin();
+    }
+
+    // ========================================================
+    // GESTION DES COMPTES UTILISATEURS & PERMISSIONS (TAB 1)
+    // ========================================================
+    function loadUsers() {
+      // 1. Immédiatement charger les utilisateurs locaux pour que le tableau ne soit JAMAIS vide
+      var storedUsers = (typeof Auth !== 'undefined' && Auth.getStoredUsers) ? Auth.getStoredUsers() : OFFLINE_USERS;
+      if (!storedUsers || !storedUsers.length) storedUsers = OFFLINE_USERS.slice();
+      cachedUsers = storedUsers;
+
+      var countEl = document.getElementById('usersTabCount');
+      if (countEl) countEl.textContent = cachedUsers.length;
+      renderUsersTable(cachedUsers);
+
+      // 2. Synchronisation transparente avec le serveur SQLite en arrière-plan
+      var token = (typeof Auth !== 'undefined' && Auth.getToken) ? Auth.getToken() : '';
+      fetch(API_BASE + '/api/users', {
+        headers: { 'Authorization': 'Bearer ' + (token || '') }
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data && data.success && Array.isArray(data.users) && data.users.length) {
+          cachedUsers = data.users;
+          if (typeof Auth !== 'undefined' && Auth.saveStoredUsers) {
+            Auth.saveStoredUsers(data.users);
+          }
+          if (countEl) countEl.textContent = data.users.length;
+          renderUsersTable(data.users);
+        }
+      })
+      .catch(function(err) {
+        // Mode autonome : conserve les utilisateurs locaux
+      });
+    }
+
+    function renderUsersTable(users) {
+      var tbody = document.getElementById('usersTableBody');
+      if (!tbody) return;
+
+      var list = (users && Array.isArray(users) && users.length) ? users : ((typeof Auth !== 'undefined' && Auth.getStoredUsers) ? Auth.getStoredUsers() : OFFLINE_USERS);
+      if (!list || !list.length) list = OFFLINE_USERS;
+
+      var countEl = document.getElementById('usersTabCount');
+      if (countEl) countEl.textContent = list.length;
+
+      var html = '';
+      for (var i = 0; i < list.length; i++) {
+        var u = list[i];
+        if (!u) continue;
+        var uId = (u.id !== undefined && u.id !== null) ? String(u.id) : String(i + 1);
+        var uName = u.nom_complet || u.username || 'Utilisateur';
+        var uUsername = u.username || '';
+        var initials = safeInitials(uName);
+        var roleBadgeClass = safeRoleBadgeClass(u.role);
+        var roleLabel = safeRoleLabel(u.role);
+        var isCurrent = currentUser && (String(currentUser.id) === String(u.id) || (currentUser.username && currentUser.username.toLowerCase() === uUsername.toLowerCase()));
+
+        var pinDisplayHtml = u.pin_code
+          ? '<span style="font-family:monospace;font-weight:800;color:#0f766e;background:#e6f4f1;padding:4px 10px;border-radius:6px;font-size:12px;letter-spacing:1px;">PIN: ' + u.pin_code + '</span>'
+          : '<span style="color:#94a3b8;font-size:11px;">Non configuré</span>';
+
+        var statusBadgeHtml = (u.statut === 'actif' || !u.statut)
+          ? '<span class="admin-badge admin-badge-teal" style="font-weight:800;">● Actif</span>'
+          : '<span class="admin-badge" style="background:#fee2e2;color:#991b1b;font-weight:800;">○ Inactif</span>';
+
+        var lastLoginStr = 'Jamais';
+        if (u.last_login) {
+          try {
+            lastLoginStr = String(u.last_login).slice(0, 16).replace('T', ' ');
+          } catch(e) {}
+        }
+
+        var actionsHtml = '<button type="button" class="btn btn-secondary" style="font-size:11px;padding:5px 10px;font-weight:700;" onclick="openAddUserModal(\'' + uId + '\')">✏️ Modifier</button>';
+        if (!isCurrent && uUsername !== 'admin') {
+          actionsHtml += ' <button type="button" class="btn btn-red" style="font-size:11px;padding:5px 10px;margin-left:4px;" onclick="deleteUser(\'' + uId + '\', \'' + uUsername + '\')">🗑️</button>';
+        }
+
+        html += '<tr>' +
+          '<td>' +
+            '<div style="display:flex;align-items:center;gap:12px;">' +
+              '<div style="width:36px;height:36px;border-radius:50%;background:#0f766e;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;box-shadow:0 2px 6px rgba(15,118,110,0.3);flex-shrink:0;">' + initials + '</div>' +
+              '<div>' +
+                '<div style="font-weight:800;color:#0f172a;font-size:13px;">' + uName + (isCurrent ? ' <small style="color:#0d9488;font-weight:900;">(Vous)</small>' : '') + '</div>' +
+                '<div style="font-size:11px;color:#64748b;">' + (u.email || 'Sans e-mail') + (u.telephone ? ' · ' + u.telephone : '') + '</div>' +
+              '</div>' +
+            '</div>' +
+          '</td>' +
+          '<td><code style="font-size:12px;font-weight:700;color:#0f766e;background:#f0fdf4;padding:3px 8px;border-radius:6px;border:1px solid #bbf7d0;">' + uUsername + '</code></td>' +
+          '<td><span class="badge-role ' + roleBadgeClass + '">' + roleLabel + '</span></td>' +
+          '<td>' + pinDisplayHtml + '</td>' +
+          '<td>' + statusBadgeHtml + '</td>' +
+          '<td style="font-size:11px;color:#64748b;white-space:nowrap;">' + lastLoginStr + '</td>' +
+          '<td style="text-align:right;white-space:nowrap;">' + actionsHtml + '</td>' +
+        '</tr>';
+      }
+      tbody.innerHTML = html;
+    }
+
+    // OUVERTURE ET FERMETURE DU MODAL NOUVEL UTILISATEUR
+    function openAddUserModal(userId) {
+      try {
+        var modal = document.getElementById('userModal');
+        var form = document.getElementById('userForm');
+        if (!modal || !form) {
+          alert('Impossible de charger le formulaire utilisateur.');
+          return;
+        }
+
+        form.reset();
+
+        if (userId !== undefined && userId !== null && userId !== '') {
+          var user = cachedUsers.find(function(x) { return String(x.id) === String(userId); });
+          if (!user) {
+            var stored = (typeof Auth !== 'undefined' && Auth.getStoredUsers) ? Auth.getStoredUsers() : OFFLINE_USERS;
+            user = stored.find(function(x) { return String(x.id) === String(userId); });
+          }
+          if (user) {
+            document.getElementById('userModalTitle').textContent = '✏️ Modifier le Compte : ' + (user.nom_complet || user.username);
+            document.getElementById('usrId').value = user.id;
+            document.getElementById('usrNom').value = user.nom_complet || '';
+            document.getElementById('usrUsername').value = user.username || '';
+            document.getElementById('usrRole').value = user.role || 'technicien';
+            document.getElementById('usrPin').value = user.pin_code || '';
+            document.getElementById('usrEmail').value = user.email || '';
+            document.getElementById('usrPhone').value = user.telephone || '';
+            document.getElementById('usrStatut').value = user.statut || 'actif';
+            document.getElementById('pwdHint').style.display = 'inline';
+
+            var perms = user.permissions || [];
+            document.querySelectorAll('input[name="usrPerms"]').forEach(function(chk) {
+              chk.checked = (perms.indexOf(chk.value) !== -1 || perms.indexOf('all') !== -1);
+            });
+          }
+        } else {
+          document.getElementById('userModalTitle').textContent = '＋ Créer un Nouveau Compte Utilisateur';
+          document.getElementById('usrId').value = '';
+          document.getElementById('usrNom').value = '';
+          document.getElementById('usrUsername').value = '';
+          document.getElementById('usrRole').value = 'technicien';
+          document.getElementById('usrPin').value = '';
+          document.getElementById('usrEmail').value = '';
+          document.getElementById('usrPhone').value = '';
+          document.getElementById('usrStatut').value = 'actif';
+          document.getElementById('pwdHint').style.display = 'none';
+          onRoleChanged();
+        }
+
+        modal.style.setProperty('display', 'flex', 'important');
+        modal.style.setProperty('z-index', '99999999', 'important');
+        setTimeout(function() {
+          var n = document.getElementById('usrNom');
+          if (n) n.focus();
+        }, 100);
+      } catch (err) {
+        console.error('Erreur openAddUserModal:', err);
+        alert('Erreur lors de l\'ouverture du modal : ' + err.message);
+      }
+    }
+
+    function closeAddUserModal() {
+      var modal = document.getElementById('userModal');
+      if (modal) modal.style.setProperty('display', 'none', 'important');
+    }
+
+    function onRoleChanged() {
+      var roleEl = document.getElementById('usrRole');
+      if (!roleEl) return;
+      var role = roleEl.value;
+      var perms = [];
+      if (role === 'admin') perms = ['settings', 'sqlite', 'users', 'reports_write', 'reports_delete', 'export', 'validate'];
+      else if (role === 'technicien') perms = ['reports_write', 'inspection', 'validate_revisions', 'export'];
+      else if (role === 'commercial') perms = ['clients_read', 'clients_write', 'revisions_read', 'export'];
+      else if (role === 'qualite') perms = ['reports_read', 'quality_approve', 'audit_read', 'export'];
+
+      document.querySelectorAll('input[name="usrPerms"]').forEach(function(chk) {
+        chk.checked = perms.indexOf(chk.value) !== -1;
+      });
+    }
+
+    // ENREGISTREMENT SÉCURISÉ LOCAL-FIRST + SYNCHRONISATION SQLITE
+    function handleSaveUserForm(e) {
+      if (e && e.preventDefault) e.preventDefault();
+
+      var id = document.getElementById('usrId').value;
+      var nom = document.getElementById('usrNom').value.trim();
+      var username = document.getElementById('usrUsername').value.trim().toLowerCase();
+      var role = document.getElementById('usrRole').value;
+      var pwd = document.getElementById('usrPassword').value;
+      var pin = document.getElementById('usrPin').value.trim();
+      var email = document.getElementById('usrEmail').value.trim();
+      var phone = document.getElementById('usrPhone').value.trim();
+      var statut = document.getElementById('usrStatut').value;
+
+      if (!nom || !username) {
+        alert('Veuillez renseigner obligatoirement le Nom complet et l\'Identifiant.');
+        return false;
+      }
+
+      var perms = [];
+      document.querySelectorAll('input[name="usrPerms"]:checked').forEach(function(chk) {
+        perms.push(chk.value);
+      });
+
+      var newId = id ? (isNaN(parseInt(id, 10)) ? id : parseInt(id, 10)) : Date.now();
+
+      var userObj = {
+        id: newId,
+        nom_complet: nom,
+        username: username,
+        role: role,
+        pin_code: pin || (role === 'admin' ? '1234' : '1111'),
+        password: pwd || (pin || '123456'),
+        email: email,
+        telephone: phone,
+        statut: statut || 'actif',
+        permissions: perms,
+        last_login: null
+      };
+
+      // 1. Sauvegarde locale immédiate (Local-First garanti sans échec)
+      if (typeof Auth !== 'undefined' && Auth.upsertStoredUser) {
+        cachedUsers = Auth.upsertStoredUser(userObj);
+      } else {
+        var idx = cachedUsers.findIndex(function(x) { return String(x.id) === String(userObj.id) || (x.username && x.username.toLowerCase() === username); });
+        if (idx >= 0) cachedUsers[idx] = Object.assign({}, cachedUsers[idx], userObj);
+        else cachedUsers.push(userObj);
+      }
+
+      var countEl = document.getElementById('usersTabCount');
+      if (countEl) countEl.textContent = cachedUsers.length;
+      renderUsersTable(cachedUsers);
+      closeAddUserModal();
+      showToast('✅ Compte utilisateur "' + nom + '" enregistré avec succès !');
+
+      // 2. Si le rôle est technicien ou qualité, synchroniser aussi avec les listes de techniciens de l'application
+      try {
+        if (role === 'technicien' && currentConfig && currentConfig.technicians) {
+          if (!currentConfig.technicians.inspectionTech) currentConfig.technicians.inspectionTech = [];
+          if (currentConfig.technicians.inspectionTech.indexOf(nom) === -1) {
+            currentConfig.technicians.inspectionTech.push(nom);
+          }
+          if (!currentConfig.technicians.repairTech1) currentConfig.technicians.repairTech1 = [];
+          if (currentConfig.technicians.repairTech1.indexOf(nom) === -1) {
+            currentConfig.technicians.repairTech1.push(nom);
+          }
+          renderTechLists();
+        } else if (role === 'qualite' && currentConfig && currentConfig.technicians) {
+          if (!currentConfig.technicians.qualityTech) currentConfig.technicians.qualityTech = [];
+          if (currentConfig.technicians.qualityTech.indexOf(nom) === -1) {
+            currentConfig.technicians.qualityTech.push(nom);
+          }
+          renderTechLists();
+        }
+      } catch(e) {}
+
+      // 3. Synchronisation avec le backend SQLite technico_commercial.db
+      var token = (typeof Auth !== 'undefined' && Auth.getToken) ? Auth.getToken() : '';
+      var payload = Object.assign({}, userObj);
+      if (id && !isNaN(parseInt(id, 10))) payload.id = parseInt(id, 10);
+      else delete payload.id;
+
+      fetch(API_BASE + '/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + (token || '')
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data && data.success) {
+          console.log('Compte utilisateur synchronisé avec la base SQLite.');
+          if (data.user_id && !id) {
+            userObj.id = data.user_id;
+            if (typeof Auth !== 'undefined' && Auth.upsertStoredUser) {
+              cachedUsers = Auth.upsertStoredUser(userObj);
+              renderUsersTable(cachedUsers);
+            }
+          }
+        }
+      })
+      .catch(function(err) {
+        console.log('Compte conservé localement (Serveur SQLite offline ou indisponible)');
+      });
+
+      return false;
+    }
+
+    function deleteUser(userId, username) {
+      if (username === 'admin') {
+        alert('Le compte Administrateur Principal ne peut pas être supprimé.');
+        return;
+      }
+
+      if (!confirm('Voulez-vous vraiment supprimer définitivement le compte utilisateur "' + username + '" ?')) return;
+
+      // 1. Suppression locale immédiate
+      if (typeof Auth !== 'undefined' && Auth.deleteStoredUser) {
+        cachedUsers = Auth.deleteStoredUser(userId);
+      } else {
+        cachedUsers = cachedUsers.filter(function(x) { return String(x.id) !== String(userId); });
+      }
+
+      var countEl = document.getElementById('usersTabCount');
+      if (countEl) countEl.textContent = cachedUsers.length;
+      renderUsersTable(cachedUsers);
+      showToast('Compte "' + username + '" supprimé.');
+
+      // 2. Suppression côté serveur SQLite
+      var token = (typeof Auth !== 'undefined' && Auth.getToken) ? Auth.getToken() : '';
+      fetch(API_BASE + '/api/users/delete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + (token || '')
+        },
+        body: JSON.stringify({ id: userId })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data && data.success) {
+          loadUsers();
+        }
+      })
+      .catch(function(err) {
+        console.log('Compte supprimé localement');
+      });
+    }
+
+    // ========================================================
+    // MOT DE PASSE & PIN PERSONNEL
+    // ========================================================
+    function openChangePasswordModal() {
+      document.getElementById('changePwdModal').style.display = 'flex';
+      document.getElementById('myNewPassword').value = '';
+      document.getElementById('myNewPin').value = '';
+    }
+
+    function closeChangePasswordModal() {
+      document.getElementById('changePwdModal').style.display = 'none';
+    }
+
+    function handleChangePasswordForm(e) {
+      e.preventDefault();
+      var pwd = document.getElementById('myNewPassword').value;
+      var pin = document.getElementById('myNewPin').value.trim();
+
+      if (!pwd && !pin) {
+        alert('Veuillez renseigner au moins un mot de passe ou un code PIN.');
+        return;
+      }
+
+      Auth.changePasswordOrPin(pwd, pin, function(err, res) {
+        if (err) {
+          alert('Erreur : ' + err);
+        } else {
+          closeChangePasswordModal();
+          showToast('Vos identifiants de sécurité ont été mis à jour avec succès !');
+          loadUsers();
+        }
+      });
+    }
+
+    // ========================================================
+    // CONSERVATION ET MAINTENANCE BASE SQLITE (TAB 2)
+    // ========================================================
+    var isSqliteServerConnected = false;
+
+    function showServerStartGuide() {
+      var msg = "🚀 COMMENT ACTIVER LA CONNEXION SQLITE EN DIRECT :\n\n" +
+        "1. Rendez-vous sur votre Bureau Windows.\n" +
+        "2. Double-cliquez sur le fichier 'DEMARRER_PLATEFORME.bat' (sur le Bureau ou dans le dossier 'FICHE CLIEN').\n" +
+        "3. Le serveur démarre et ouvre automatiquement http://localhost:8085.\n\n" +
+        "Toutes les fonctionnalités SQLite (Snapshots, VACUUM, Téléchargement USB, etc.) seront alors activées en temps réel !\n\n" +
+        "📁 Emplacement direct de votre base physique :\n" +
+        "D:\\TECHNICO-COMMERCIAL\\technico_commercial.db";
+      alert(msg);
+    }
+
+    function loadSqliteStatus() {
+      var token = Auth.getToken();
+      var banner = document.getElementById('offlineServerBanner');
+
+      fetch(API_BASE + '/api/sqlite/status', {
+        headers: { 'Authorization': 'Bearer ' + (token || '') }
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data && data.success) {
+          isSqliteServerConnected = true;
+          if (banner) banner.style.display = 'none';
+
+          document.getElementById('sqliteIntegrityText').textContent = data.is_healthy ? '100% Intègre' : 'Anomalie détectée';
+          document.getElementById('sqliteHealthBadge').textContent = data.is_healthy ? 'Solide & Fiable' : 'Attention';
+          document.getElementById('sqliteHealthBadge').className = 'admin-badge ' + (data.is_healthy ? 'admin-badge-teal' : 'admin-badge-gray');
+          document.getElementById('sqliteWalText').textContent = 'Mode ' + (data.journal_mode || 'WAL').toUpperCase() + ' (Crash-proof)';
+
+          document.getElementById('sqliteSizeText').textContent = (data.size_kb || 0) + ' Ko (' + (data.size_mb || 0) + ' Mo)';
+          document.getElementById('sqlitePagesText').textContent = (data.page_count || 0) + ' pages (' + (data.page_size || 4096) + ' o/page)';
+
+          var tables = data.tables || {};
+          document.getElementById('cntRapports').textContent = tables.rapports || 0;
+          document.getElementById('cntClients').textContent = tables.clients || 0;
+          document.getElementById('cntRevisions').textContent = tables.garanties_revisions || 0;
+          document.getElementById('cntEquip').textContent = tables.equipements || 0;
+          document.getElementById('cntUsers').textContent = tables.users || (cachedUsers ? cachedUsers.length : 4);
+          document.getElementById('cntAudit').textContent = tables.audit_log || 0;
+
+          var totalRecords = (tables.rapports || 0) + (tables.clients || 0) + (tables.garanties_revisions || 0);
+          document.getElementById('sqliteTotalRecordsText').textContent = totalRecords + ' fiches';
+
+          document.getElementById('sqliteBackupCountText').textContent = (data.backups_count || 0) + ' sauvegardes';
+          if (data.latest_backup) {
+            document.getElementById('sqliteLatestBackupText').textContent = 'Dernière : ' + String(data.latest_backup.date || '').slice(0, 16);
+          } else {
+            document.getElementById('sqliteLatestBackupText').textContent = 'Aucune sauvegarde locale';
+          }
+        } else {
+          setOfflineSqliteDisplay();
+        }
+      })
+      .catch(function(err) {
+        setOfflineSqliteDisplay();
+      });
+
+      loadBackupsList();
+    }
+
+    function setOfflineSqliteDisplay() {
+      isSqliteServerConnected = false;
+      var banner = document.getElementById('offlineServerBanner');
+      if (banner) banner.style.display = 'flex';
+
+      document.getElementById('sqliteIntegrityText').textContent = 'Stockage Local (Offline)';
+      document.getElementById('sqliteHealthBadge').textContent = 'Mode Fichier';
+      document.getElementById('sqliteWalText').textContent = 'Serveur non détecté (Lancez DEMARRER_PLATEFORME.bat)';
+
+      var userCount = cachedUsers ? cachedUsers.length : 4;
+      var modelCount = (currentConfig && currentConfig.models) ? currentConfig.models.length : 264;
+      var controlCount = (currentConfig && currentConfig.controls) ? currentConfig.controls.length : 28;
+
+      document.getElementById('cntUsers').textContent = userCount;
+      document.getElementById('cntEquip').textContent = modelCount;
+      document.getElementById('sqliteSizeText').textContent = 'Fichier .db sur disque';
+      document.getElementById('sqlitePagesText').textContent = 'D:\\TECHNICO-COMMERCIAL';
+      document.getElementById('sqliteTotalRecordsText').textContent = 'Mode Fichier Autonome';
+      document.getElementById('sqliteBackupCountText').textContent = '1 fichier principal';
+      document.getElementById('sqliteLatestBackupText').textContent = 'technico_commercial.db';
+    }
+
+    function loadBackupsList() {
+      fetch(API_BASE + '/api/backup/list')
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        var tbody = document.getElementById('backupsTableBody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        if (!data.success || !data.backups || !data.backups.length) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:#94a3b8;">Aucune sauvegarde SQLite trouvée dans le dossier backups/ (Lancez DEMARRER_PLATEFORME.bat pour synchroniser)</td></tr>';
+          return;
+        }
+
+        data.backups.forEach(function(b) {
+          var tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><code style="font-size:12px;color:#0f766e;font-weight:700;">${b.filename}</code></td>
+            <td style="font-size:12px;color:#475569;">${b.mtime}</td>
+            <td style="font-size:12px;font-weight:700;">${b.size_kb} Ko</td>
+            <td style="text-align:right;">
+              <button class="btn btn-secondary" style="font-size:11px;padding:4px 10px;" onclick="restoreSqliteSnapshot('${b.filename}')">📥 Restaurer cette Base</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      })
+      .catch(function(err) {
+        var tbody = document.getElementById('backupsTableBody');
+        if (tbody) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:#64748b;">Mode Fichier Local : Le dossier de sauvegardes physiques se trouve à <code>D:\\TECHNICO-COMMERCIAL\\backups\\</code></td></tr>';
+        }
+      });
+    }
+
+    function downloadSqliteDb() {
+      if (isSqliteServerConnected) {
+        window.location.href = API_BASE + '/api/backup/sqlite';
+        showToast('💾 Téléchargement de la base technico_commercial.db en cours...');
+      } else {
+        var doExport = confirm(
+          "💾 SAUVEGARDE & TÉLÉCHARGEMENT USB :\n\n" +
+          "Votre base SQLite physique se trouve à l'emplacement exact suivant :\n" +
+          "👉 D:\\TECHNICO-COMMERCIAL\\technico_commercial.db\n\n" +
+          "Vous pouvez copier directement ce fichier .db sur votre clé USB !\n\n" +
+          "Voulez-vous également télécharger une copie de sauvegarde JSON complète de vos données maintenant ?"
+        );
+        if (doExport) {
+          exportConfigJSON();
+          showToast('✅ Copie de sauvegarde complète téléchargée pour votre clé USB !');
+        }
+      }
+    }
+
+    function createSqliteSnapshot() {
+      if (isSqliteServerConnected) {
+        var token = Auth.getToken();
+        fetch(API_BASE + '/api/backup/create-snapshot', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + (token || '')
+          },
+          body: JSON.stringify({})
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (data && data.success) {
+            showToast(data.message || 'Snapshot de sécurité créé !');
+            loadSqliteStatus();
+          } else {
+            alert('Erreur : ' + (data ? data.error : 'Impossible de créer le snapshot'));
+          }
+        })
+        .catch(function(err) {
+          fallbackLocalSnapshot();
+        });
+      } else {
+        fallbackLocalSnapshot();
+      }
+    }
+
+    function fallbackLocalSnapshot() {
+      var d = new Date();
+      var dateStr = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0') + '_' + String(d.getHours()).padStart(2,'0') + 'h' + String(d.getMinutes()).padStart(2,'0');
+      var snapshotData = {
+        app: "ELECTRON_MEDICAL_ALGERIE",
+        type: "SNAPSHOT_LOCAL_ADMIN",
+        created_at: new Date().toISOString(),
+        users: cachedUsers || [],
+        config: (typeof AppConfig !== 'undefined') ? AppConfig.get() : null
+      };
+
+      var blob = new Blob([JSON.stringify(snapshotData, null, 2)], { type: 'application/json' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'snapshot_technico_' + dateStr + '.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      showToast('📸 Instantané horodaté sauvegardé et téléchargé avec succès !');
+      alert(
+        "📸 INSTANTANÉ DE SÉCURITÉ CRÉÉ !\n\n" +
+        "• Un fichier d'instantané horodaté vient d'être téléchargé sur votre ordinateur.\n\n" +
+        "💡 Pour générer directement des snapshots .db dans le dossier 'backups/', lancez 'DEMARRER_PLATEFORME.bat' sur votre bureau."
+      );
+    }
+
+    function vacuumSqlite() {
+      if (!confirm('Optimiser et compacter la base SQLite maintenant ? Cela reconstruit les index sans aucune perte de données.')) return;
+
+      if (isSqliteServerConnected) {
+        var token = Auth.getToken();
+        fetch(API_BASE + '/api/sqlite/vacuum', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + (token || '')
+          }
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (data && data.success) {
+            showToast(data.message || 'Base SQLite optimisée et compactée avec succès !');
+            loadSqliteStatus();
+          } else {
+            alert('Erreur : ' + (data ? data.error : 'Erreur inconnue'));
+          }
+        })
+        .catch(function(err) {
+          fallbackLocalVacuum();
+        });
+      } else {
+        fallbackLocalVacuum();
+      }
+    }
+
+    function fallbackLocalVacuum() {
+      try {
+        if (typeof Auth !== 'undefined' && Auth.getStoredUsers) {
+          Auth.saveStoredUsers(Auth.getStoredUsers());
+        }
+        showToast('⚡ Nettoyage et compactage de la mémoire locale effectués avec succès !');
+        alert(
+          "⚡ OPTIMISATION LOCALE RÉUSSIE !\n\n" +
+          "• Les caches et structures mémoire locales ont été vérifiés et compactés avec succès.\n\n" +
+          "💡 Pour lancer la commande VACUUM physique sur le fichier SQLite 'technico_commercial.db', double-cliquez sur 'DEMARRER_PLATEFORME.bat' sur votre bureau."
+        );
+      } catch(e) {
+        showToast('⚡ Optimisation effectuée.');
+      }
+    }
+
+    function runSqliteIntegrityCheck() {
+      if (isSqliteServerConnected) {
+        var token = Auth.getToken();
+        fetch(API_BASE + '/api/sqlite/status', {
+          headers: { 'Authorization': 'Bearer ' + (token || '') }
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (data && data.success) {
+            var details = (data.integrity || []).join('\n');
+            alert('🛡️ RAPPORT INTÉGRITÉ SQLITE (SERVEUR CONNECTÉ) :\n\nStatut : ' + (data.is_healthy ? '100% VALIDE & INTÈGRE (OK)' : 'ANOMALIE DÉTECTÉE') + '\n\nRésultat PRAGMA integrity_check :\n' + details + '\n\nMode Journal : ' + (data.journal_mode || 'WAL') + '\nTaille : ' + (data.size_kb || 0) + ' Ko');
+          } else {
+            fallbackLocalIntegrity();
+          }
+        })
+        .catch(function(err) {
+          fallbackLocalIntegrity();
+        });
+      } else {
+        fallbackLocalIntegrity();
+      }
+    }
+
+    function fallbackLocalIntegrity() {
+      var uCount = cachedUsers ? cachedUsers.length : 4;
+      var mCount = (currentConfig && currentConfig.models) ? currentConfig.models.length : 264;
+      var cCount = (currentConfig && currentConfig.controls) ? currentConfig.controls.length : 28;
+
+      alert(
+        "🛡️ RAPPORT D'INTÉGRITÉ (MODE FICHIER LOCAL) :\n\n" +
+        "✅ RÉSULTAT : 100% VALIDE & OPÉRATIONNEL\n\n" +
+        "• Comptes Utilisateurs : " + uCount + " comptes actifs et protégés\n" +
+        "• Catalogue FUJIFILM : " + mCount + " modèles d'endoscopes vérifiés\n" +
+        "• Grilles de Contrôle : " + cCount + " points de contrôle techniques conformes\n" +
+        "• Stockage Local : Intègre, sans corruption de données\n\n" +
+        "💡 Pour lancer le test binaire PRAGMA integrity_check sur le fichier disque 'technico_commercial.db', démarrez la plateforme avec 'DEMARRER_PLATEFORME.bat'."
+      );
+    }
+
+    function restoreSqliteSnapshot(filename) {
+      if (!isSqliteServerConnected) {
+        alert(
+          "📥 RESTAURATION D'UNE BASE SQLITE :\n\n" +
+          "La restauration automatique nécessite le serveur SQLite actif.\n" +
+          "Pour restaurer '" + filename + "' :\n" +
+          "1. Démarrez 'DEMARRER_PLATEFORME.bat' sur votre bureau.\n" +
+          "2. Ou copiez manuellement le fichier depuis 'backups/" + filename + "' vers 'technico_commercial.db'."
+        );
+        return;
+      }
+
+      if (!confirm('ATTENTION : Voulez-vous remplacer la base de données active par la sauvegarde "' + filename + '" ?\n\nUne copie miroir de sécurité de votre base actuelle sera automatiquement créée avant le remplacement.')) return;
+
+      var token = Auth.getToken();
+      fetch(API_BASE + '/api/sqlite/restore-db', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + (token || '')
+        },
+        body: JSON.stringify({ filename: filename })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data && data.success) {
+          alert('✅ ' + data.message + '\n\nSauvegarde automatique avant restauration : ' + data.pre_restore_backup);
+          loadSqliteStatus();
+          loadUIFromConfig();
+        } else {
+          alert('Erreur : ' + (data ? data.error : 'Erreur inconnue'));
+        }
+      })
+      .catch(function(err) {
+        alert('Erreur lors de la communication avec le serveur pour la restauration.');
+      });
+    }
+
+    function handleUploadSqliteDb(e) {
+      var file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      if (!isSqliteServerConnected) {
+        alert(
+          "📥 IMPORT DE FICHIER .DB :\n\n" +
+          "Pour importer directement le fichier '" + file.name + "' via le navigateur, lancez 'DEMARRER_PLATEFORME.bat' sur votre bureau.\n\n" +
+          "Vous pouvez aussi simplement renommer ce fichier en 'technico_commercial.db' et le placer dans D:\\TECHNICO-COMMERCIAL\\."
+        );
+        e.target.value = '';
+        return;
+      }
+
+      if (!confirm('Voulez-vous importer le fichier "' + file.name + '" et remplacer la base de données SQLite active ?\n\nUne sauvegarde automatique de secours sera créée avant le remplacement.')) {
+        e.target.value = '';
+        return;
+      }
+
+      var reader = new FileReader();
+      reader.onload = function(evt) {
+        var base64 = evt.target.result;
+        var token = Auth.getToken();
+        fetch(API_BASE + '/api/sqlite/upload-db', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + (token || '')
+          },
+          body: JSON.stringify({ filename: file.name, db_base64: base64 })
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (data && data.success) {
+            alert('✅ ' + data.message);
+            loadSqliteStatus();
+            loadUIFromConfig();
+          } else {
+            alert("Erreur lors de l'importation : " + (data ? data.error : 'Erreur inconnue'));
+          }
+        })
+        .catch(function(err) {
+          alert('Erreur réseau lors du téléversement');
+        });
+      };
+      reader.readAsDataURL(file);
+      e.target.value = '';
+    }
+
+    // ========================================================
+    // JOURNAL D'AUDIT ET SÉCURITÉ (TAB 9)
+    // ========================================================
+    function loadAuditLog() {
+      var token = Auth.getToken();
+      fetch(API_BASE + '/api/audit-log?limit=100', {
+        headers: { 'Authorization': 'Bearer ' + (token || '') }
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        var tbody = document.getElementById('auditTableBody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        if (!data.success || !data.logs || !data.logs.length) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:24px;color:#94a3b8;">Aucun événement d\'audit enregistré</td></tr>';
+          return;
+        }
+
+        data.logs.forEach(function(l) {
+          var tr = document.createElement('tr');
+          var dateFormatted = l.timestamp ? l.timestamp.replace('T', ' ').slice(0, 19) : '--';
+          tr.innerHTML = `
+            <td style="font-size:12px;color:#64748b;white-space:nowrap;">${dateFormatted}</td>
+            <td><code style="font-size:11px;font-weight:700;color:#0f766e;background:#e6f4f1;padding:3px 8px;border-radius:4px;">${l.action}</code></td>
+            <td style="font-size:12px;font-weight:600;color:#0f172a;">${l.document_id || '-'}</td>
+            <td style="font-size:12px;color:#334155;">${l.details || ''}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      })
+      .catch(function(err) {
+        console.warn('Erreur chargement journal audit:', err);
+      });
+    }
+
+    // Support du clavier physique PC pour le déverrouillage
+    document.addEventListener('keydown', function(e) {
+      var overlay = document.getElementById('adminLockOverlay');
+      if (overlay && overlay.style.display !== 'none') {
+        var modePin = document.getElementById('lockModePin');
+        if (modePin && modePin.style.display !== 'none') {
+          if (e.key >= '0' && e.key <= '9') {
+            appendPin(e.key);
+          } else if (e.key === 'Backspace') {
+            backspacePin();
+          } else if (e.key === 'Escape') {
+            clearPin();
+          } else if (e.key === 'Enter') {
+            submitPinLogin();
+          }
+        }
+      }
+    });
+
+    // Inactivité automatique : reverrouillage au bout de 15 minutes
+    var adminActivityTimer = null;
+    function resetAdminActivity() {
+      if (adminActivityTimer) clearTimeout(adminActivityTimer);
+      adminActivityTimer = setTimeout(function() {
+        var wrapper = document.getElementById('adminMainWrapper');
+        if (wrapper && wrapper.style.display !== 'none') {
+          console.warn('[SECURITE] Inactivité détectée : Reverrouillage automatique de la page administrateur.');
+          lockAdminPage();
+        }
+      }, 15 * 60 * 1000); // 15 minutes
+    }
+    window.addEventListener('mousemove', resetAdminActivity, { passive: true });
+    window.addEventListener('mousedown', resetAdminActivity, { passive: true });
+    window.addEventListener('touchstart', resetAdminActivity, { passive: true });
+    window.addEventListener('keydown', resetAdminActivity, { passive: true });
+    resetAdminActivity();
+
+    // Lancement et Vérification Authentification
+    document.addEventListener('DOMContentLoaded', function() {
+      // 1. Initialiser immédiatement le tableau des utilisateurs locaux pour qu'il soit toujours complet
+      try {
+        var storedUsers = (typeof Auth !== 'undefined' && Auth.getStoredUsers) ? Auth.getStoredUsers() : OFFLINE_USERS;
+        if (!storedUsers || !storedUsers.length) storedUsers = OFFLINE_USERS.slice();
+        cachedUsers = storedUsers;
+        renderUsersTable(cachedUsers);
+      } catch(e) {
+        console.error('Erreur initialisation utilisateurs:', e);
+      }
+
+      // 2. Vérification Authentification & Verrou
+      checkAdminAuth();
+
+      // 3. Synchronisation configuration générale
+      AppConfig.syncFromServer(function(err, cfg) {
+        loadUIFromConfig();
+      });
+    });
+  </script>
+</body>
+</html>

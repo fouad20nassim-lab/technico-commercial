@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 120" width="480" height="120">
+  <g transform="translate(10, 10)">
+    <ellipse cx="60" cy="50" rx="50" ry="20" fill="none" stroke="#008767" stroke-width="5" transform="rotate(-25 60 50)" />
+    <circle cx="102" cy="35" r="6" fill="#00ab84" />
+    <text x="32" y="66" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="58" fill="#008767">e</text>
+    <text x="110" y="58" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="44" fill="#008767" letter-spacing="-1">electron</text>
+    <text x="112" y="86" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="17" fill="#005f48" letter-spacing="3">Medical Algerie</text>
+    <text x="112" y="18" font-family="Arial, Helvetica, sans-serif" font-style="italic" font-weight="700" font-size="12" fill="#008767">Améliorons ce qui est déjà excellent</text>
+  </g>
+</svg>

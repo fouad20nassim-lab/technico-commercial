@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plateforme Technico-Commercial — Electron Medical Algérie & Fujifilm</title>
+  <script>
+    // VÉRIFICATION DE SÉCURITÉ IMMÉDIATE : CONNEXION OBLIGATOIRE
+    (function() {
+      try {
+        var isSessionActive = (sessionStorage.getItem('technico_session_active') === 'true') ||
+                              (localStorage.getItem('technico_session_active') === 'true');
+        var token = localStorage.getItem('technico_auth_token') || sessionStorage.getItem('technico_auth_token') ||
+                    localStorage.getItem('technico_auth_token_v1') || sessionStorage.getItem('technico_auth_token_v1');
+        var user = localStorage.getItem('technico_auth_user') || sessionStorage.getItem('technico_auth_user') ||
+                   localStorage.getItem('technico_auth_user_v1') || sessionStorage.getItem('technico_auth_user_v1');
+        if (!isSessionActive || !token || !user) {
+          window.location.replace('login.html?redirect=index.html');
+        }
+      } catch (e) {
+        window.location.replace('login.html?redirect=index.html');
+      }
+    })();
+  </script>
+  <script src="js/theme.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    .qr-modal-body {
+      text-align: center;
+      padding: 15px 0;
+    }
+    .qr-ip-box {
+      background: var(--teal-soft);
+      border: 1px dashed var(--teal-primary);
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy-dark);
+      word-break: break-all;
+    }
+    .filter-pills-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .pill-btn {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy-dark);
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pill-btn:hover, .pill-btn.active {
+      background: var(--navy-dark);
+      color: #ffffff;
+      border-color: var(--navy-dark);
+    }
+    .pill-btn.active-warning {
+      background: #f59e0b;
+      color: #ffffff;
+      border-color: #f59e0b;
+    }
+    .pill-btn.active-danger {
+      background: #e11d48;
+      color: #ffffff;
+      border-color: #e11d48;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Global -->
+  <header class="main-header">
+    <div class="header-container">
+      <div class="brand-section">
+        <div class="brand-logos">
+          <a href="index.html"><img src="assets/electron-medical-logo.png" alt="Electron Medical Algérie" class="logo-em"></a>
+        </div>
+        <div class="brand-text">
+          <h1>PLATEFORME TECHNICO-COMMERCIAL</h1>
+          <p>Electron Medical Algérie · Distributeur Officiel Fujifilm Medical Systems</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Bouton Pill Mode Sombre / Clair [☀️ Mode] -->
+        <button type="button" class="theme-toggle-pill" id="themeToggleBtn" onclick="toggleAppTheme()" title="Basculer entre Mode Sombre et Mode Clair">
+          <span class="theme-icon" id="themeToggleIcon">☀️</span>
+          <span class="theme-label" id="themeToggleText">Mode</span>
+        </button>
+
+        <!-- Badge Utilisateur Connecté & Déconnexion -->
+        <div id="userHeaderBar" style="display:none; align-items:center; gap:8px; background:#f1f5f9; padding:5px 12px; border-radius:24px; border:1px solid #cbd5e1;">
+          <div style="width:28px; height:28px; border-radius:50%; background:#0f766e; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px;" id="hdrUserAvatar">A</div>
+          <div style="line-height:1.15; text-align:left;">
+            <div style="font-weight:700; font-size:12px; color:#0f172a;" id="hdrUserName">Utilisateur</div>
+            <span style="font-size:10px; font-weight:700; color:#0f766e;" id="hdrUserRole">RÔLE</span>
+          </div>
+          <button type="button" class="btn btn-logout-danger" onclick="handleUserLogout()" title="Se déconnecter de la plateforme" style="background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; font-size:11px; font-weight:800; padding:5px 12px; border-radius:14px; cursor:pointer; display:flex; align-items:center; gap:5px; margin-left:6px; transition:all 0.15s ease;">
+            <span>🚪</span>
+            <span>Déconnexion</span>
+          </button>
+        </div>
+
+        <div id="connectionBadge" class="status-pill offline" style="display:none;">
+          <span class="dot"></span> <b>Connexion...</b>
+        </div>
+        <button class="btn btn-secondary admin-only-item" onclick="openWifiModal()" title="Accéder depuis un smartphone ou une tablette sur le réseau local Wi-Fi">
+          📱 Accès Wi-Fi
+        </button>
+        <a href="RESUME_PLATEFORME_TECHNICO_COMMERCIAL.pdf" target="_blank" class="btn btn-secondary" title="Consulter ou télécharger le résumé officiel de la plateforme au format PDF">
+          📄 Résumé PDF
+        </a>
+        <button class="btn btn-secondary" onclick="API.downloadIcal()" title="Télécharger le fichier calendrier .ICS avec alarmes automatiques à J-10">
+          📅 Calendrier (.ICS)
+        </button>
+        <button class="btn btn-secondary admin-only-item" onclick="openBackupModal()" title="Sauvegarde de la base SQLite sur clé USB ou dossier de secours">
+          💾 Sauvegarde SQLite (USB)
+        </button>
+        <button class="btn btn-secondary" onclick="API.exportExcel()" title="Exporter toute la base de données en tableur Excel CSV">
+          📊 Export Excel
+        </button>
+        <a href="parametres_admin.html" class="btn btn-primary admin-only-item" style="background: #0f766e; border-color: #0f766e;" title="Administration sécurisée, contrôle des paramètres, gestion des comptes et conservation SQLite">
+          🔐 Administration Sécurisée
+        </a>
+        <button class="btn btn-secondary admin-only-item" onclick="API.exportBackup()" title="Sauvegarde JSON intégrale de la base SQLite">
+          💾 Export JSON
+        </button>
+        <button class="btn btn-secondary admin-only-item" onclick="document.getElementById('importBackupInput').click()" title="Restaurer une sauvegarde JSON">
+          📥 Restaurer
+        </button>
+        <input type="file" id="importBackupInput" accept=".json,application/json" hidden onchange="handleRestoreFile(event)">
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- BANDEAU D'ALERTE RAPPEL J-10 & RETARDS (DYNAMIQUE) -->
+    <div id="alertBanner10j" class="alert-banner-10j" style="display: none;">
+      <div class="alert-banner-content">
+        <div class="alert-icon-pulse">🔔</div>
+        <div class="alert-text">
+          <h4 id="alertBannerTitle">RAPPEL RENDEZ-VOUS J-10 : Révisions de Garantie à Planifier !</h4>
+          <p id="alertBannerSubtitle">Des équipements FUJIFILM sous garantie (2 ans) nécessitent leur révision semestrielle dans les 10 prochains jours.</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+        <button class="btn btn-dark" onclick="scrollToRevisions('urgents')">⚡ Voir les Rendez-vous Imminents</button>
+        <button class="btn btn-whatsapp" onclick="openQuickWhatsAppFirstAlert()">💬 WhatsApp (1 Clic)</button>
+        <button class="btn btn-secondary" onclick="API.downloadIcal()">📅 Calendrier (.ICS)</button>
+      </div>
+    </div>
+
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+      <div class="hero-content">
+        <span class="hero-tag">BASE DE DONNÉES SQLITE SOLID v2.1</span>
+        <h2>ESPACE TECHNICO-COMMERCIAL & SAV</h2>
+        <p>Gestion centralisée des Visites de Contrôle, Installations, Formations et suivi des <b>Garanties 2 Ans avec Révisions tous les 6 Mois (Rappels automatiques à J-10)</b>.</p>
+        <div style="margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap;">
+          <a href="visite_controle.html" class="btn btn-primary">+ Nouvelle Visite de Contrôle</a>
+          <a href="feuille_inspection.html" class="btn btn-primary" style="background: #0f766e; border-color: #0f766e;">+ Feuille d’Inspection</a>
+          <a href="rapport_installation.html" class="btn btn-secondary">+ Nouveau Rapport d'Installation</a>
+          <button class="btn btn-secondary" onclick="openAddWarrantyModal()">🛡️ Déclarer Matériel sous Garantie</button>
+          <a href="parametres_admin.html" class="btn btn-secondary" style="border-color: #0f766e; color: #0f766e; font-weight: 700;">⚙️ Paramètres & Personnalisation</a>
+        </div>
+      </div>
+      <div class="hero-media">
+        <img src="assets/fujifilm-ep8000.png" alt="Processeur FUJIFILM ELUXEO EP-8000">
+        <span>FUJIFILM ELUXEO EP-8000</span>
+      </div>
+      <div class="hero-media">
+        <img src="assets/fujifilm-endoscope.png" alt="Endoscope FUJIFILM">
+        <span>Endoscope Haute Définition</span>
+      </div>
+    </section>
+
+    <!-- KPIs Statistiques -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📋</div>
+        <div class="stat-info">
+          <div class="stat-value" id="kpiTotal">0</div>
+          <div class="stat-label">Total Rapports</div>
+        </div>
+      </div>
+      <div class="stat-card" style="cursor: pointer;" onclick="scrollToRevisions('urgents')">
+        <div class="stat-icon" style="background: #fef3c7; color: #b45309;">🔔</div>
+        <div class="stat-info">
+          <div class="stat-value" id="kpiAlertes10j" style="color: #b45309;">0</div>
+          <div class="stat-label">Alertes J-10 Révisions</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🔬</div>
+        <div class="stat-info">
+          <div class="stat-value" id="kpiVC">0</div>
+          <div class="stat-label">Visites de Contrôle</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #ccfbf1; color: #0f766e;">🔬</div>
+        <div class="stat-info">
+          <div class="stat-value" id="kpiINSP">0</div>
+          <div class="stat-label">Feuilles d’Inspection</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⚙️</div>
+        <div class="stat-info">
+          <div class="stat-value" id="kpiINS">0</div>
+          <div class="stat-label">Installations Client</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #eef2ff; color: #4338ca;">🎓</div>
+        <div class="stat-info">
+          <div class="stat-value" id="kpiFOR" style="color: #4338ca;">0</div>
+          <div class="stat-label">Formations</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-info">
+          <div class="stat-value" id="kpiMES">0</div>
+          <div class="stat-label">Mises en Service</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🇩🇿</div>
+        <div class="stat-info">
+          <div class="stat-value" id="kpiWilayas">58</div>
+          <div class="stat-label">Wilayas d'Algérie</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOUVELLE SECTION : SUIVI DES GARANTIES 2 ANS & RÉVISIONS 6 MOIS (RAPPEL J-10) -->
+    <section id="sectionRevisions" style="margin-bottom: 36px; scroll-margin-top: 85px;">
+      <div class="section-title">
+        <h3>🛡️ Suivi des Garanties (2 Ans) & Révisions Tous les 6 Mois (Rappel à J-10)</h3>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="openAddWarrantyModal()">＋ Déclarer un Équipement</button>
+          <button class="btn btn-secondary" onclick="API.downloadIcal()">📅 Calendrier (.ICS)</button>
+          <button class="btn btn-secondary" onclick="loadRevisionsData()">🔄 Actualiser</button>
+        </div>
+      </div>
+
+      <!-- Filtres révisions -->
+      <div class="filter-pills-bar">
+        <button class="pill-btn active" id="btnFilterAll" onclick="setRevisionFilter('')">Toutes les Révisions</button>
+        <button class="pill-btn" id="btnFilterUrgents" onclick="setRevisionFilter('urgents')">⚠️ Alertes J-10 & Retard (<span id="countUrgentsPill">0</span>)</button>
+        <button class="pill-btn" id="btnFilterPlanifie" onclick="setRevisionFilter('A_PLANIFIER')">⏳ À Venir</button>
+        <button class="pill-btn" id="btnFilterEffectue" onclick="setRevisionFilter('EFFECTUE')">✅ Effectuées</button>
+      </div>
+
+      <!-- Table des Révisions et Échéancier -->
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Client / Établissement</th>
+              <th>Matériel & N° Série</th>
+              <th>Wilaya</th>
+              <th>Date Installation</th>
+              <th>Étape Révision</th>
+              <th>Date Échéance</th>
+              <th>Statut & Alerte</th>
+              <th style="text-align: right;">Action Révision</th>
+            </tr>
+          </thead>
+          <tbody id="revisionsTableBody">
+            <tr>
+              <td colspan="8" style="text-align: center; padding: 25px;">Chargement des échéances de révision...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- NOUVELLE SECTION : FICHE CLIENT 360° & PARC MATÉRIEL PAR ÉTABLISSEMENT -->
+    <section id="sectionClient360" style="margin-bottom: 36px; scroll-margin-top: 85px;">
+      <div class="section-title">
+        <h3>🏥 Fiche Client 360° & Parc Matériel par Établissement</h3>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+          <input type="search" id="searchClient360" placeholder="🔍 Filtrer un hôpital..." style="padding: 7px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; min-width: 220px;" oninput="filterClients360List()">
+          <button class="btn btn-secondary" onclick="loadClients360Data()">🔄 Actualiser Clients</button>
+        </div>
+      </div>
+
+      <div class="client-360-container">
+        <!-- Volet gauche : Liste des Établissements -->
+        <div class="client-list-panel" id="client360ListPanel">
+          <div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 12px;">Chargement des hôpitaux et cliniques...</div>
+        </div>
+
+        <!-- Volet droit : Vue 360° détaillée de l'établissement sélectionné -->
+        <div class="client-details-panel" id="client360DetailsPanel">
+          <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+            Sélectionnez un établissement dans la liste à gauche pour afficher son parc matériel complet, les révisions de garantie et l'historique des rapports.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modules Grid (5 Cartes Interactives) -->
+    <section class="modules-section">
+      <div class="section-title">
+        <h3>Modules & Formulaires Officiels</h3>
+        <span style="font-size: 12px; color: var(--text-muted); font-weight: 600;">Sélectionnez un document à remplir ou consulter</span>
+      </div>
+
+      <div class="modules-grid">
+        <!-- 01 : Visite de Contrôle -->
+        <a href="visite_controle.html" class="module-card">
+          <span class="module-badge badge-vc">Module 01</span>
+          <h4>Visite de Contrôle</h4>
+          <p>Maintenance préventive, contrôle technique endoscope, étanchéité, béquillage ±5%, switches, photos et doubles signatures.</p>
+          <span class="module-link">Ouvrir le formulaire →</span>
+        </a>
+
+        <!-- 02 : Rapport d'Installation Client -->
+        <a href="rapport_installation.html" class="module-card">
+          <span class="module-badge badge-ins">Module 02</span>
+          <h4>Rapport d’Installation Client</h4>
+          <p>Réception de commande, mise en service des 12 équipements, inventaire consommables, réserves et validation.</p>
+          <span class="module-link">Ouvrir le formulaire →</span>
+        </a>
+
+        <!-- 03 : Rapport de Formation -->
+        <a href="rapport_formation.html" class="module-card">
+          <span class="module-badge badge-for">Module 03</span>
+          <h4>Rapport de Formation</h4>
+          <p>Formation du personnel hospitalier, équipe formée, validation des 8 chapitres constructeur FUJIFILM et émargement.</p>
+          <span class="module-link">Ouvrir le formulaire →</span>
+        </a>
+
+        <!-- 04 : Rapport de Mise en Service -->
+        <a href="rapport_mise_en_service.html" class="module-card">
+          <span class="module-badge badge-mes">Module 04</span>
+          <h4>Rapport de Mise en Service</h4>
+          <p>Intervention officielle, vérification des documents délivrés, contrôles techniques effectués et conformité réglementaire.</p>
+          <span class="module-link">Ouvrir le formulaire →</span>
+        </a>
+
+        <!-- 05 : Procédure d'Installation -->
+        <a href="procedure_installation.html" class="module-card">
+          <span class="module-badge badge-prc">Module 05</span>
+          <h4>Procédure d’Installation</h4>
+          <p>Checklist interactive en 6 étapes : préparation, montage de la colonne, réseau, désinfection et archivage ADV.</p>
+          <span class="module-link">Ouvrir la checklist →</span>
+        </a>
+
+        <!-- 06 : Feuille d’Inspection Technique -->
+        <a href="feuille_inspection.html" class="module-card">
+          <span class="module-badge badge-insp">Module 06</span>
+          <h4>Feuille d’Inspection</h4>
+          <p>Contrôle d’entrée et après réparation, 264 modèles techniques FUJIFILM intégrés, points de contrôle et techniciens personnalisables.</p>
+          <span class="module-link">Ouvrir le formulaire →</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Historique et Registre de la Base de Données -->
+    <section>
+      <div class="section-title">
+        <h3>Registre Central des Interventions & Rapports</h3>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary" onclick="loadDashboardData()">🔄 Actualiser</button>
+        </div>
+      </div>
+
+      <!-- Filtres et Recherche -->
+      <div class="filter-toolbar">
+        <div class="search-input-group">
+          <span class="search-icon">🔍</span>
+          <input type="search" id="filterSearch" placeholder="Rechercher par Hôpital, N° d'intervention, technicien, SN..." oninput="handleFilterChange()">
+        </div>
+
+        <select class="filter-select" id="filterType" onchange="handleFilterChange()">
+          <option value="">Tous les types de documents</option>
+          <option value="visite_controle">Visite de Contrôle</option>
+          <option value="feuille_inspection">Feuille d’Inspection</option>
+          <option value="rapport_installation">Rapport d'Installation</option>
+          <option value="rapport_formation">Rapport de Formation</option>
+          <option value="rapport_mise_en_service">Mise en Service</option>
+          <option value="procedure_installation">Procédure d'Installation</option>
+        </select>
+
+        <select class="filter-select" id="filterWilaya" onchange="handleFilterChange()">
+          <!-- Rempli par algeria_wilayas.js -->
+        </select>
+
+        <select class="filter-select" id="filterStatus" onchange="handleFilterChange()">
+          <option value="">Tous les statuts</option>
+          <option value="enregistre">Enregistré</option>
+          <option value="brouillon">Brouillon</option>
+        </select>
+      </div>
+
+      <!-- Table des Données -->
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Réf / ID</th>
+              <th>Type de Document</th>
+              <th>Établissement / Hôpital</th>
+              <th>Wilaya</th>
+              <th>Date</th>
+              <th>Technicien</th>
+              <th>Statut</th>
+              <th style="text-align: right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="rapportsTableBody">
+            <tr>
+              <td colspan="8" style="text-align: center; padding: 30px;">Chargement des données...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL : DÉCLARATION NOUVEL ÉQUIPEMENT SOUS GARANTIE 2 ANS -->
+  <div class="modal-overlay" id="addWarrantyModal">
+    <div class="modal-box" style="max-width: 620px;">
+      <div class="modal-header">
+        <h3>🛡️ Déclarer un Équipement sous Garantie 2 Ans</h3>
+        <button class="btn-close" onclick="closeAddWarrantyModal()">×</button>
+      </div>
+      <form id="addWarrantyForm" onsubmit="handleCreateWarrantySubmit(event)">
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+          Génération automatique des <b>4 révisions semestrielles (6 mois, 12 mois, 18 mois, 24 mois)</b> avec <b>rappel automatique 10 jours à l'avance</b>.
+        </p>
+        <div class="grid" style="gap: 12px; margin-bottom: 16px;">
+          <div class="field span2">
+            <label>Nom de l’Hôpital / Établissement *</label>
+            <input name="client_nom" id="wClientNom" required placeholder="Ex. EPH Rouiba, CHU Bab El Oued...">
+          </div>
+          <div class="field span2">
+            <label>Wilaya (58) *</label>
+            <select name="wilaya" id="wWilayaSelect" required></select>
+          </div>
+          <div class="field span2">
+            <label>Désignation du Matériel *</label>
+            <input name="materiel" required value="Colonne FUJIFILM ELUXEO EP-8000" placeholder="Processeur, endoscope...">
+          </div>
+          <div class="field span2">
+            <label>Numéro de Série (SN)</label>
+            <input name="numero_serie" placeholder="Ex. SN-884192">
+          </div>
+          <div class="field span2">
+            <label>Date d’Installation (Début Garantie 2 Ans) *</label>
+            <input type="date" name="date_installation" id="wDateInst" required>
+          </div>
+          <div class="field span2">
+            <label>Technicien Responsable</label>
+            <input name="technicien" placeholder="Technicien Electron Medical">
+          </div>
+          <div class="field span2">
+            <label>Téléphone Client (pour rappel)</label>
+            <input name="telephone" type="tel" placeholder="05 / 06 / 07 ...">
+          </div>
+          <div class="field span2">
+            <label>E-mail Client</label>
+            <input name="email" type="email" placeholder="contact@hopital.dz">
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn btn-secondary" onclick="closeAddWarrantyModal()">Annuler</button>
+          <button type="submit" class="btn btn-primary">✓ Créer l'Échéancier & Activer les Rappels</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Accès Réseau Wi-Fi -->
+  <div class="modal-overlay" id="wifiModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>📱 Accès Multi-Appareils (Wi-Fi / Réseau Local)</h3>
+        <button class="btn-close" onclick="closeWifiModal()">×</button>
+      </div>
+      <div class="qr-modal-body">
+        <p>Vous pouvez utiliser cette plateforme Technico-Commerciale directement sur votre <b>tablette, iPad ou smartphone</b> connecté au même réseau Wi-Fi.</p>
+        <div class="qr-ip-box" id="networkUrlDisplay">Chargement de l'adresse...</div>
+        <p style="font-size: 12px; color: var(--text-muted);">Ouvrez simplement le navigateur de votre tablette/téléphone et saisissez cette adresse pour créer ou signer les rapports sur le terrain !</p>
+      </div>
+      <div style="text-align: right; margin-top: 15px;">
+        <button class="btn btn-primary" onclick="closeWifiModal()">Compris</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL : ENVOI RAPPEL WHATSAPP & SMS EN 1 CLIC -->
+  <div class="modal-overlay" id="whatsappModal">
+    <div class="modal-box" style="max-width: 580px;">
+      <div class="modal-header">
+        <h3 style="display: flex; align-items: center; gap: 8px;">
+          <span style="color:#25D366; font-size: 20px;">💬</span> Rappel WhatsApp & SMS — Révision 6 Mois
+        </h3>
+        <button class="btn-close" onclick="closeWhatsAppModal()">×</button>
+      </div>
+      <div style="padding: 5px 0;">
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">
+          Ce message pré-rédigé respecte la charte officielle <b>Electron Medical Algérie & Fujifilm</b>. Vous pouvez le personnaliser avant l'envoi.
+        </p>
+        <div class="field" style="margin-bottom: 12px;">
+          <label style="font-weight: 800; font-size: 12px;">Numéro WhatsApp / Téléphone du Client (Algérie) :</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="tel" id="waPhoneInput" placeholder="Ex: 0550 12 34 56 ou +213 661..." style="font-size: 14px; font-weight: 750; font-family: monospace;">
+            <a id="waDirectCallBtn" href="#" class="btn-phone" style="white-space: nowrap; font-size: 12px; padding: 0 14px; display: inline-flex; align-items: center;">📞 Appeler</a>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 16px;">
+          <label style="font-weight: 800; font-size: 12px;">Texte du Message Professionnel :</label>
+          <textarea id="waMessageText" rows="10" style="font-family: inherit; font-size: 12px; line-height: 1.5; padding: 10px; border-radius: 6px; border: 1px solid var(--border); width: 100%; box-sizing: border-box;"></textarea>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <button type="button" class="btn btn-secondary" onclick="API.copyToClipboard(document.getElementById('waMessageText').value)">
+            📋 Copier le Message
+          </button>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn-secondary" onclick="closeWhatsAppModal()">Fermer</button>
+            <button type="button" class="btn-whatsapp" style="font-size: 13px; padding: 9px 16px;" onclick="triggerSendWhatsApp()">
+              🟢 Ouvrir WhatsApp (Web / Mobile)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL : ÉTIQUETTE ÉQUIPEMENT OFFICIELLE AVEC QR CODE (IMPRIMABLE) -->
+  <div class="modal-overlay" id="qrModal">
+    <div class="modal-box" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3>📱 Étiquette Matériel & QR Code Officiel</h3>
+        <button class="btn-close" onclick="closeQrModal()">×</button>
+      </div>
+      <div style="padding: 10px 0;">
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px; text-align: center;">
+          Étiquette constructeur avec QR Code à coller sur l'équipement. Scannable par smartphone sur site.
+        </p>
+
+        <!-- CARTE ÉTIQUETTE PHYSIQUE FORMAT 80x50 mm -->
+        <div class="label-card-print" id="printableEquipmentLabel">
+          <div class="label-header">
+            <div class="label-logos">
+              <img src="assets/electron-medical-logo.png" alt="Electron Medical" style="height: 24px;">
+            </div>
+            <span class="label-badge-fuji">GARANTIE 2 ANS</span>
+          </div>
+
+          <div class="label-body">
+            <div>
+              <div class="label-field">
+                <strong>ÉQUIPEMENT :</strong>
+                <span id="labelMateriel">FUJIFILM ELUXEO EP-8000</span>
+              </div>
+              <div class="label-field">
+                <strong>NUMÉRO DE SÉRIE :</strong>
+                <span class="label-sn" id="labelSN">SN-FUJI-88412</span>
+              </div>
+              <div class="label-field">
+                <strong>ÉTABLISSEMENT :</strong>
+                <span id="labelClient">CHU Mustapha Bacha</span>
+              </div>
+              <div class="label-field">
+                <strong>PROCHAINE RÉVISION :</strong>
+                <span style="color: #d97706;" id="labelProchaineRev">2026-11-01</span>
+              </div>
+            </div>
+
+            <div class="label-qr-box">
+              <div id="labelQrContainer"></div>
+            </div>
+          </div>
+
+          <div class="label-footer">
+            <span>SAV & Support : 0550 12 34 56</span>
+            <span>Distributeur Agréé Algérie</span>
+          </div>
+        </div>
+
+        <div style="margin-top: 18px; display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+          <button type="button" class="btn btn-secondary" onclick="downloadQrPng()">💾 Télécharger Image QR</button>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn-secondary" onclick="closeQrModal()">Fermer</button>
+            <button type="button" class="btn btn-primary" onclick="printEquipmentLabel()">🖨️ Imprimer l'Étiquette</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL : GESTION DE LA SAUVEGARDE SQLITE (USB / DISQUE) -->
+  <div class="modal-overlay" id="backupModal">
+    <div class="modal-box" style="max-width: 620px;">
+      <div class="modal-header">
+        <h3>💾 Sauvegarde & Sécurité de la Base SQLite</h3>
+        <button class="btn-close" onclick="closeBackupModal()">×</button>
+      </div>
+      <div style="padding: 10px 0;">
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 14px; margin-bottom: 16px;">
+          <h4 style="margin: 0 0 6px; font-size: 14px; color: #166534; display: flex; align-items: center; gap: 8px;">
+            <span>🛡️</span> Base de Données SQLite Solide (Mode WAL Concurrence & Fiabilité)
+          </h4>
+          <p style="margin: 0; font-size: 12px; color: #15803d; line-height: 1.45;">
+            Toutes vos interventions, révisions 6 mois à J-10 et fiches clients sont stockées de façon sécurisée dans le fichier <b>technico_commercial.db</b>.
+          </p>
+        </div>
+
+        <!-- Option 1 : Téléchargement direct du fichier .db -->
+        <div style="border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 14px; background: #fff;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <strong style="font-size: 13px; color: var(--navy-dark); display: block;">Option 1 : Télécharger le fichier SQLite brut (.db)</strong>
+              <small style="color: var(--text-muted); font-size: 11px;">Copie instantanée du fichier SQLite à copier directement sur une clé USB ou Google Drive.</small>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="API.downloadSqliteBackup()">
+              📥 Télécharger .DB (Clé USB)
+            </button>
+          </div>
+        </div>
+
+        <!-- Option 2 : Créer un snapshot dans backups/ -->
+        <div style="border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 18px; background: #fff;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <strong style="font-size: 13px; color: var(--navy-dark); display: block;">Option 2 : Créer un Snapshot dans le dossier de secours</strong>
+              <small style="color: var(--text-muted); font-size: 11px;">Crée une sauvegarde horodatée dans <code style="background:#f1f5f9;padding:2px 5px;border-radius:4px;">D:\TECHNICO-COMMERCIAL\backups\</code>.</small>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="handleTriggerSnapshot()">
+              📁 Sauvegarder dans Dossier Local
+            </button>
+          </div>
+        </div>
+
+        <!-- Historique des sauvegardes automatiques -->
+        <h4 style="font-size: 13px; margin: 0 0 10px; color: var(--navy-dark);">Historique des Sauvegardes Disponibles :</h4>
+        <div id="backupListContainer" style="max-height: 180px; overflow-y: auto; border: 1px solid var(--border); border-radius: 6px; padding: 8px; background: #f8fafc; font-size: 12px;">
+          Chargement de la liste...
+        </div>
+
+        <div style="margin-top: 18px; text-align: right;">
+          <button type="button" class="btn btn-secondary" onclick="closeBackupModal()">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL : PROCÈS-VERBAL OFFICIEL DE RÉVISION SEMESTRIELLE (A4 IMPRIMABLE) -->
+  <div class="modal-overlay" id="pvModal">
+    <div class="modal-box" style="max-width: 760px; max-height: 90vh; overflow-y: auto;">
+      <div class="modal-header no-print">
+        <h3>📄 Procès-Verbal Officiel de Révision Semestrielle</h3>
+        <button class="btn-close" onclick="closePvModal()">×</button>
+      </div>
+
+      <div id="printablePvDocument" style="padding: 15px; background: #fff; color: #000; font-family: 'Segoe UI', Arial, sans-serif;">
+        <!-- En-tête officiel entreprise -->
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #063740; padding-bottom: 12px; margin-bottom: 16px;">
+          <div>
+            <img src="assets/electron-medical-logo.png" alt="Electron Medical Algérie" style="height: 48px; object-fit: contain;">
+            <div style="font-size: 10px; color: #475569; margin-top: 4px; font-weight: 600;">
+              Distributeur Exclusif FUJIFILM Medical Systems en Algérie<br>
+              Agrément Ministère de la Santé N° MSP/2018/EM · NIF: 001816001234567
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <img src="assets/electron-medical-logo.png" alt="Electron Medical" style="height: 38px; object-fit: contain;">
+            <div style="font-size: 12px; font-weight: 800; color: #047857; margin-top: 5px;">CONTRAT GARANTIE CONSTRUCTEUR 2 ANS</div>
+          </div>
+        </div>
+
+        <!-- Titre du document -->
+        <div style="text-align: center; margin: 15px 0; background: #f0fdf4; border: 1px solid #86efac; padding: 10px; border-radius: 6px;">
+          <h2 style="margin: 0; font-size: 16px; color: #166534; letter-spacing: 0.05em;" id="pvDocTitle">PROCÈS-VERBAL DE MAINTENANCE PRÉVENTIVE SEMESTRIELLE</h2>
+          <div style="font-size: 11px; color: #15803d; font-weight: 700; margin-top: 4px;" id="pvDocRef">RÉFÉRENCE : PV-REV-2026-001</div>
+        </div>
+
+        <!-- Grille Client & Équipement -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; font-size: 12px;">
+          <div style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px;">
+            <strong style="color: #063740; font-size: 11px; text-transform: uppercase;">Établissement Bénéficiaire :</strong>
+            <div style="font-size: 14px; font-weight: 800; margin: 4px 0;" id="pvClientNom">CHU Mustapha Bacha</div>
+            <div><b>Wilaya :</b> <span id="pvWilaya">16 - Alger</span></div>
+            <div><b>Service :</b> Hépato-Gastro-Entérologie</div>
+            <div><b>Contact / Tél :</b> <span id="pvTelephone">0550 12 34 56</span></div>
+          </div>
+          <div style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px;">
+            <strong style="color: #063740; font-size: 11px; text-transform: uppercase;">Caractéristiques du Matériel :</strong>
+            <div style="font-size: 14px; font-weight: 800; margin: 4px 0;" id="pvMateriel">FUJIFILM ELUXEO EP-8000</div>
+            <div><b>Numéro de Série :</b> <span style="font-family: monospace; font-weight: 800;" id="pvSN">SN-FUJI-88412</span></div>
+            <div><b>Date Installation :</b> <span id="pvDateInst">2026-05-01</span></div>
+            <div><b>Échéance Révision :</b> <span id="pvDateEcheance" style="font-weight: 700; color: #b45309;">2026-11-01</span></div>
+          </div>
+        </div>
+
+        <!-- Points de Contrôle Normes Fujifilm -->
+        <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 18px;">
+          <thead>
+            <tr style="background: #063740; color: #fff;">
+              <th style="padding: 6px 8px; border: 1px solid #063740; text-align: center; width: 40px;">N°</th>
+              <th style="padding: 6px 8px; border: 1px solid #063740; text-align: left;">Point de Contrôle Technique Constructeur (FUJIFILM)</th>
+              <th style="padding: 6px 8px; border: 1px solid #063740; text-align: center; width: 90px;">Résultat</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: center;">01</td>
+              <td style="padding: 5px; border: 1px solid #cbd5e1;">Test d'étanchéité à sec & en immersion (Détection de fuite sous pression)</td>
+              <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: center; font-weight: 800; color: #16a34a;">✓ CONFORME</td>
+            </tr>
+            <tr>
+              <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: center;">02</td>
+              <td style="padding: 5px; border: 1px solid #cbd5e1;">Qualité de l'image vidéo, balances des blancs et modes spectraux BLI / LCI</td>
+              <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: center; font-weight: 800; color: #16a34a;">✓ CONFORME</td>
+            </tr>
+            <tr>
+              <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: center;">03</td>
+              <td style="padding: 5px; border: 1px solid #cbd5e1;">Système de béquillage (Angles Up/Down/Left/Right avec tolérance constructeur ±5%)</td>
+              <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: center; font-weight: 800; color: #16a34a;">✓ CONFORME</td>
+            </tr>
+            <tr>
+              <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: center;">04</td>
+              <td style="padding: 5px; border: 1px solid #cbd5e1;">Canaux d'air / eau, canal d'aspiration & vanne jet auxiliaire</td>
+              <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: center; font-weight: 800; color: #16a34a;">✓ CONFORME</td>
+            </tr>
+            <tr>
+              <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: center;">05</td>
+              <td style="padding: 5px; border: 1px solid #cbd5e1;">Vérification source lumineuse, connecteur optique et filtres thermiques</td>
+              <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: center; font-weight: 800; color: #16a34a;">✓ CONFORME</td>
+            </tr>
+            <tr>
+              <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: center;">06</td>
+              <td style="padding: 5px; border: 1px solid #cbd5e1;">Contrôle sécurité électrique (Courant de fuite & continuité de masse)</td>
+              <td style="padding: 5px; border: 1px solid #cbd5e1; text-align: center; font-weight: 800; color: #16a34a;">✓ CONFORME</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Conclusion & Signatures -->
+        <div style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; margin-bottom: 18px; font-size: 11px;">
+          <b>CONCLUSION TECHNIQUE :</b> L'équipement a subi avec succès l'ensemble des vérifications préventives conformément aux directives du constructeur FUJIFILM. Il est déclaré apte au service clinique dans le cadre de la Garantie Constructeur de 2 ans.
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 11px; margin-top: 10px;">
+          <div style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px; height: 110px;">
+            <strong style="color: #063740;">Visa & Signature Technicien Electron Medical :</strong>
+            <div style="margin-top: 4px;" id="pvTechnicienNom">Technicien Référent</div>
+            <div style="margin-top: 35px; border-top: 1px dashed #cbd5e1; padding-top: 3px; color: #64748b;">Cachet & Signature</div>
+          </div>
+          <div style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px; height: 110px;">
+            <strong style="color: #063740;">Visa & Cachet Représentant Hôpital / Client :</strong>
+            <div style="margin-top: 4px;">Ingénieur Biomédical / Chef de Service</div>
+            <div style="margin-top: 35px; border-top: 1px dashed #cbd5e1; padding-top: 3px; color: #64748b;">Cachet & Signature</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer no-print" style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px;">
+        <button type="button" class="btn btn-secondary" onclick="closePvModal()">Fermer</button>
+        <button type="button" class="btn btn-primary" onclick="printOfficialPv()">🖨️ Imprimer le PV Officiel (A4)</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/qrcode.min.js"></script>
+  <script src="js/algeria_wilayas.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    const TYPE_LABELS = {
+      'visite_controle': { label: 'Visite de Contrôle', badge: 'badge-vc', url: 'visite_controle.html' },
+      'feuille_inspection': { label: "Feuille d'Inspection", badge: 'badge-insp', url: 'feuille_inspection.html' },
+      'rapport_installation': { label: "Installation Client", badge: 'badge-ins', url: 'rapport_installation.html' },
+      'rapport_formation': { label: 'Formation', badge: 'badge-for', url: 'rapport_formation.html' },
+      'rapport_mise_en_service': { label: 'Mise en Service', badge: 'badge-mes', url: 'rapport_mise_en_service.html' },
+      'procedure_installation': { label: "Procédure d'Install.", badge: 'badge-prc', url: 'procedure_installation.html' }
+    };
+
+    let currentRevisionFilter = '';
+
+    async function loadDashboardData() {
+      // 0. Vérifier la connexion avec la base SQLite
+      await API.ensureConnection();
+
+      // 1. Initialiser les sélecteurs Wilayas
+      const filterWilaya = document.getElementById('filterWilaya');
+      if (filterWilaya && filterWilaya.children.length <= 1) populateWilayaSelect(filterWilaya);
+      const wWilaya = document.getElementById('wWilayaSelect');
+      if (wWilaya && wWilaya.children.length <= 1) populateWilayaSelect(wWilaya);
+
+      // 2. Charger les KPIs
+      try {
+        const stats = await API.getStats();
+        if (stats) {
+          const setKpi = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val !== undefined && val !== null ? val : 0;
+          };
+          setKpi('kpiTotal', stats.total_rapports);
+          setKpi('kpiVC', stats.by_type?.visite_controle);
+          setKpi('kpiINSP', stats.by_type?.feuille_inspection);
+          setKpi('kpiINS', stats.by_type?.rapport_installation);
+          setKpi('kpiFOR', stats.by_type?.rapport_formation);
+          setKpi('kpiMES', stats.by_type?.rapport_mise_en_service);
+          setKpi('kpiAlertes10j', stats.revisions_stats?.alertes_10j);
+        }
+      } catch (errKpi) {
+        console.warn('Erreur chargement KPIs:', errKpi);
+      }
+
+      // 3. Charger les alertes à J-10 et révisions
+      try {
+        await loadRevisionsData();
+      } catch (errRev) {
+        console.warn('Erreur chargement révisions:', errRev);
+      }
+
+      // 4. Charger la Fiche Client 360° & Parc Matériel
+      try {
+        await loadClients360Data();
+      } catch (err360) {
+        console.warn('Erreur chargement 360 clients:', err360);
+      }
+
+      // 5. Charger la table des rapports
+      try {
+        await applyFilters();
+      } catch (errRep) {
+        console.warn('Erreur chargement rapports:', errRep);
+      }
+    }
+
+    async function loadRevisionsData() {
+      // Récupérer les alertes urgentes (J-10 et en retard)
+      const alertes = await API.getAlertes10Jours();
+      const banner = document.getElementById('alertBanner10j');
+      const countUrgentsPill = document.getElementById('countUrgentsPill');
+      if (countUrgentsPill) countUrgentsPill.textContent = alertes.length;
+
+      if (alertes.length > 0) {
+        banner.style.display = 'flex';
+        const hasRetard = alertes.some(a => a.est_en_retard);
+        banner.className = 'alert-banner-10j' + (hasRetard ? ' has-retard' : '');
+
+        const retardCount = alertes.filter(a => a.est_en_retard).length;
+        const rappelCount = alertes.filter(a => !a.est_en_retard).length;
+
+        let title = `🔔 RAPPEL RENDEZ-VOUS J-10 : ${alertes.length} Révision(s) de Garantie à Effectuer !`;
+        let subtitle = '';
+        if (rappelCount > 0) subtitle += `<b>${rappelCount} révision(s)</b> dans les 10 prochains jours. `;
+        if (retardCount > 0) subtitle += `<span style="color:#e11d48;font-weight:800;">🚨 ${retardCount} révision(s) en retard !</span>`;
+
+        document.getElementById('alertBannerTitle').innerHTML = title;
+        document.getElementById('alertBannerSubtitle').innerHTML = subtitle;
+      } else {
+        banner.style.display = 'none';
+      }
+
+      // Charger la table complète des révisions avec filtre
+      const revisions = await API.getRevisions({ statut: currentRevisionFilter });
+      renderRevisionsTable(revisions);
+    }
+
+    function setRevisionFilter(filter) {
+      currentRevisionFilter = filter;
+      document.querySelectorAll('.filter-pills-bar .pill-btn').forEach(b => b.classList.remove('active', 'active-warning', 'active-danger'));
+      if (!filter) document.getElementById('btnFilterAll').classList.add('active');
+      else if (filter === 'urgents') document.getElementById('btnFilterUrgents').classList.add('active-warning');
+      else if (filter === 'A_PLANIFIER') document.getElementById('btnFilterPlanifie').classList.add('active');
+      else if (filter === 'EFFECTUE') document.getElementById('btnFilterEffectue').classList.add('active');
+      loadRevisionsData();
+    }
+
+    function scrollToRevisions(filter = '') {
+      if (filter) setRevisionFilter(filter);
+      const sec = document.getElementById('sectionRevisions');
+      if (sec) sec.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    window.__revisionsMap = window.__revisionsMap || {};
+
+    function renderRevisionsTable(revisions) {
+      const tbody = document.getElementById('revisionsTableBody');
+      if (!revisions || revisions.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 30px; color: var(--text-muted);">
+              Aucune révision ne correspond à ce filtre.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      window.__revisionsMap = {};
+      revisions.forEach(r => { window.__revisionsMap[r.id] = r; });
+
+      tbody.innerHTML = revisions.map(r => {
+        let badgeHtml = '';
+        let rowStyle = '';
+
+        if (r.statut === 'EFFECTUE') {
+          badgeHtml = `<span class="badge-effectue">✓ Effectuée</span>`;
+        } else if (r.statut === 'EN_RETARD') {
+          badgeHtml = `<span class="badge-retard">🚨 En retard (${Math.abs(r.jours_restants)}j)</span>`;
+          rowStyle = 'background: #fff5f5;';
+        } else if (r.statut === 'RAPPEL_10J') {
+          badgeHtml = `<span class="badge-rappel10j">⚠️ Rendez-vous dans ${r.jours_restants}j</span>`;
+          rowStyle = 'background: #fffdf5;';
+        } else {
+          badgeHtml = `<span class="badge-planifie">📅 Dans ${r.jours_restants}j</span>`;
+        }
+
+        // Lien pour créer la visite de contrôle en 1 clic pré-remplie
+        const params = new URLSearchParams({
+          hospital: r.client_nom || '',
+          wilaya: r.wilaya || '',
+          scopeModel: r.materiel || '',
+          scopeSN: r.numero_serie || '',
+          technician: r.technicien || '',
+          reportRef: `VC-REV-${r.numero_revision || '1'}-${new Date().getFullYear()}`,
+          phone: r.telephone || '',
+          conclusion: `Révision semestrielle (${r.titre_revision || ''}) effectuée sous garantie 2 ans.`
+        });
+        const createVcUrl = `visite_controle.html?${params.toString()}`;
+        const escapedId = escapeHtml(r.id);
+
+        return `
+          <tr style="${rowStyle}">
+            <td>
+              <strong>${escapeHtml(r.client_nom)}</strong>
+              ${r.telephone ? `<br><small style="color:var(--text-muted);">📞 <a href="tel:${escapeHtml(r.telephone)}" style="color:inherit;text-decoration:none;">${escapeHtml(r.telephone)}</a></small>` : ''}
+            </td>
+            <td>
+              <b>${escapeHtml(r.materiel)}</b>
+              ${r.numero_serie ? `<br><small style="color:var(--text-muted);font-family:monospace;font-weight:700;">SN : ${escapeHtml(r.numero_serie)}</small>` : ''}
+            </td>
+            <td>${escapeHtml(r.wilaya || '-')}</td>
+            <td>${escapeHtml(r.date_installation || '-')}</td>
+            <td><b>${escapeHtml(r.titre_revision)}</b></td>
+            <td><b>${escapeHtml(r.date_echeance)}</b></td>
+            <td>${badgeHtml}</td>
+            <td style="text-align: right;">
+              <div class="actions-cell" style="justify-content: flex-end; gap: 4px;">
+                <a href="${createVcUrl}" class="btn btn-primary" style="padding: 5px 8px; font-size: 11px;" title="Créer la Visite de Contrôle pré-remplie en 1 clic">
+                  ⚡ Visite
+                </a>
+                <button type="button" class="btn-whatsapp" onclick="openWhatsAppModalForRevision('${escapedId}')" title="Envoyer rappel WhatsApp au client">
+                  💬
+                </button>
+                <button type="button" class="btn-qr" onclick="openQrLabelModal('${escapeHtml(r.materiel)}', '${escapeHtml(r.numero_serie)}', '${escapeHtml(r.client_nom)}', '${escapeHtml(r.wilaya)}', '${escapeHtml(r.date_installation)}', '${escapeHtml(r.date_echeance)}', '${escapeHtml(r.titre_revision)}')" title="Imprimer Étiquette avec QR Code">
+                  📱
+                </button>
+                <button type="button" class="btn-icon" onclick="openPvModal('${escapedId}')" title="Générer Procès-Verbal de Révision A4 officiel">
+                  📄
+                </button>
+                <button type="button" class="btn-icon" onclick="API.downloadIcal('${escapedId}')" title="Télécharger rappel calendrier .ICS (Alarme à J-10)">
+                  📅
+                </button>
+                ${r.statut !== 'EFFECTUE' ? `
+                  <button type="button" class="btn-icon" onclick="validerRevisionDone('${escapedId}', '${escapeHtml(r.client_nom)}')" title="Marquer cette révision comme effectuée" style="color: var(--success); font-weight: 800;">
+                    ✓
+                  </button>
+                ` : ''}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function validerRevisionDone(revId, clientNom) {
+      if (!confirm(`Confirmer que la révision pour [${clientNom}] a été effectuée avec succès ?`)) return;
+      await API.validerRevision(revId, {
+        date_effectuee: new Date().toISOString().slice(0, 10),
+        notes: "Validé depuis le tableau de bord"
+      });
+      loadRevisionsData();
+    }
+
+    function openAddWarrantyModal() {
+      document.getElementById('wDateInst').value = new Date().toISOString().slice(0, 10);
+      document.getElementById('addWarrantyModal').classList.add('active');
+    }
+
+    function closeAddWarrantyModal() {
+      document.getElementById('addWarrantyModal').classList.remove('active');
+    }
+
+    async function handleCreateWarrantySubmit(e) {
+      e.preventDefault();
+      const f = document.getElementById('addWarrantyForm');
+      const data = {
+        client_nom: f.client_nom.value.trim(),
+        wilaya: f.wilaya.value,
+        materiel: f.materiel.value.trim(),
+        numero_serie: f.numero_serie.value.trim(),
+        date_installation: f.date_installation.value,
+        technicien: f.technicien.value.trim(),
+        telephone: f.telephone.value.trim(),
+        email: f.email.value.trim()
+      };
+      await API.createRevisionSchedule(data);
+      closeAddWarrantyModal();
+      f.reset();
+      loadRevisionsData();
+    }
+
+    async function applyFilters() {
+      const q = document.getElementById('filterSearch')?.value?.trim() || '';
+      const type = document.getElementById('filterType')?.value || '';
+      const wilaya = document.getElementById('filterWilaya')?.value || '';
+      const status = document.getElementById('filterStatus')?.value || '';
+
+      try {
+        const rapports = await API.getRapports({ q, type, wilaya, status });
+        renderRapportsTable(rapports);
+      } catch (err) {
+        console.error('Erreur getRapports:', err);
+        renderRapportsTable([]);
+      }
+    }
+
+    function handleFilterChange() {
+      applyFilters();
+    }
+
+    function renderRapportsTable(rapports) {
+      const tbody = document.getElementById('rapportsTableBody');
+      if (!rapports || rapports.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8">
+              <div class="empty-state">
+                <div class="empty-state-icon">📂</div>
+                <h4>Aucun rapport trouvé</h4>
+                <p>Aucun document ne correspond à vos critères de recherche ou la base est vide.</p>
+                <div style="margin-top: 14px;">
+                  <a href="visite_controle.html" class="btn btn-primary">+ Créer un rapport</a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = rapports.map(r => {
+        const typeInfo = TYPE_LABELS[r.type] || { label: r.type, badge: 'badge-vc', url: 'visite_controle.html' };
+        const openUrl = `${typeInfo.url}?id=${encodeURIComponent(r.id)}`;
+        return `
+          <tr>
+            <td><b>${escapeHtml(r.ref_number || r.id)}</b></td>
+            <td><span class="doc-type-tag ${typeInfo.badge}">${typeInfo.label}</span></td>
+            <td><strong>${escapeHtml(r.client_nom || 'Non spécifié')}</strong></td>
+            <td>${escapeHtml(r.wilaya || '-')}</td>
+            <td>${escapeHtml(r.date_intervention || '-')}</td>
+            <td>${escapeHtml(r.technicien || '-')}</td>
+            <td>
+              <span style="font-size: 11px; font-weight: 700; color: ${r.status === 'brouillon' ? 'var(--warning)' : 'var(--success)'};">
+                ${r.status === 'brouillon' ? '● Brouillon' : '● Validé'}
+              </span>
+            </td>
+            <td style="text-align: right;">
+              <div class="actions-cell" style="justify-content: flex-end;">
+                <a href="${openUrl}" class="btn-icon" title="Ouvrir et modifier">✏️</a>
+                <a href="${openUrl}&print=1" class="btn-icon" title="Imprimer ou Exporter en PDF">🖨️</a>
+                <button type="button" class="btn-icon" onclick="deleteRapport('${escapeHtml(r.id)}')" title="Supprimer" style="color: var(--danger);">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function deleteRapport(id) {
+      if (!confirm(`Êtes-vous sûr de vouloir supprimer définitivement le rapport [${id}] ?`)) return;
+      await API.deleteRapport(id);
+      loadDashboardData();
+    }
+
+    async function openWifiModal() {
+      const modal = document.getElementById('wifiModal');
+      const box = document.getElementById('networkUrlDisplay');
+      modal.classList.add('active');
+      try {
+        const res = await fetch(`${API_BASE}/api/network-ip`);
+        if (res.ok) {
+          const d = await res.json();
+          box.textContent = d.url;
+        } else {
+          box.textContent = `http://${window.location.hostname}:8085`;
+        }
+      } catch (e) {
+        box.textContent = `http://${window.location.hostname}:8085`;
+      }
+    }
+
+    function closeWifiModal() {
+      document.getElementById('wifiModal').classList.remove('active');
+    }
+
+    async function handleRestoreFile(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const json = JSON.parse(text);
+        if (API.isOnline) {
+          const res = await fetch(`${API_BASE}/api/restore`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(json)
+          });
+          const resData = await res.json();
+          API.toast(resData.message || 'Sauvegarde restaurée avec succès !', 'success');
+        } else {
+          const rapports = json.rapports || json;
+          if (Array.isArray(rapports)) {
+            localStorage.setItem(DB_STORAGE_KEY, JSON.stringify(rapports));
+            API.toast('Restauration locale terminée !', 'success');
+          }
+        }
+        loadDashboardData();
+      } catch (err) {
+        API.toast('Fichier JSON invalide pour la restauration.', 'error');
+      }
+      e.target.value = '';
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text).replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+      })[m]);
+    }
+
+    // --- LOGIQUE FICHE CLIENT 360° & PARC MATÉRIEL ---
+    let allClients360 = [];
+    let selectedClientIndex = 0;
+
+    async function loadClients360Data() {
+      const panel = document.getElementById('client360ListPanel');
+      if (!panel) return;
+      const res = await API.getClients360();
+      allClients360 = (res && res.clients) ? res.clients : [];
+      renderClients360List(allClients360);
+      if (allClients360.length > 0) {
+        selectClient360(0);
+      } else {
+        document.getElementById('client360DetailsPanel').innerHTML = `
+          <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+            Aucun client enregistré pour l'instant. Les clients s'enregistrent automatiquement lors de chaque installation ou visite.
+          </div>
+        `;
+      }
+    }
+
+    function renderClients360List(clients) {
+      const panel = document.getElementById('client360ListPanel');
+      if (!clients || clients.length === 0) {
+        panel.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:12px;">Aucun établissement trouvé.</div>';
+        return;
+      }
+      panel.innerHTML = clients.map((c, idx) => {
+        const alertCount = (c.stats?.revisions_retard || 0) + (c.stats?.revisions_rappel_10j || 0);
+        const alertBadge = alertCount > 0 ? `<span style="background:#fee2e2;color:#991b1b;padding:2px 6px;border-radius:10px;font-size:10px;font-weight:800;">🔔 ${alertCount} alerte(s)</span>` : '';
+        const activeClass = idx === selectedClientIndex ? 'active' : '';
+        return `
+          <div class="client-item-card ${activeClass}" onclick="selectClient360(${idx})">
+            <div class="client-item-title">${escapeHtml(c.raison_sociale)}</div>
+            <div class="client-item-sub">
+              <span>📍 ${escapeHtml(c.wilaya || 'Algérie')}</span>
+              <span>🔬 ${c.stats?.total_equipements || 0} mat.</span>
+            </div>
+            ${alertBadge ? `<div style="margin-top:6px;">${alertBadge}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterClients360List() {
+      const q = (document.getElementById('searchClient360')?.value || '').toLowerCase().trim();
+      const filtered = allClients360.filter(c => 
+        (c.raison_sociale || '').toLowerCase().includes(q) || 
+        (c.wilaya || '').toLowerCase().includes(q)
+      );
+      renderClients360List(filtered);
+      if (filtered.length > 0) {
+        selectClient360(0, filtered);
+      }
+    }
+
+    function selectClient360(idx, list = null) {
+      const currentList = list || allClients360;
+      if (!currentList || !currentList[idx]) return;
+      selectedClientIndex = idx;
+      const c = currentList[idx];
+
+      document.querySelectorAll('.client-item-card').forEach((el, i) => {
+        el.classList.toggle('active', i === idx);
+      });
+
+      const detailsPanel = document.getElementById('client360DetailsPanel');
+      if (!detailsPanel) return;
+
+      const phone = c.telephone || '';
+      const waBtn = phone ? `
+        <button type="button" class="btn-whatsapp" onclick="openWhatsAppForClient('${escapeHtml(c.raison_sociale)}', '${escapeHtml(phone)}')">
+          💬 WhatsApp
+        </button>
+      ` : '';
+
+      const callBtn = phone ? `
+        <a href="tel:${escapeHtml(phone)}" class="btn-phone">📞 ${escapeHtml(phone)}</a>
+      ` : '';
+
+      let equipTableHtml = '<div style="font-size:12px;color:var(--text-muted);padding:10px 0;">Aucun équipement actuellement répertorié pour cet établissement.</div>';
+      if (c.equipements && c.equipements.length > 0) {
+        equipTableHtml = `
+          <table class="data-table" style="margin-top:10px;font-size:12px;">
+            <thead>
+              <tr>
+                <th>Matériel & Modèle</th>
+                <th>Numéro de Série (SN)</th>
+                <th>Date d'Installation</th>
+                <th>Garantie</th>
+                <th style="text-align:right;">Étiquette & QR</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${c.equipements.map(eq => `
+                <tr>
+                  <td><b>${escapeHtml(eq.materiel)}</b></td>
+                  <td><span style="font-family:monospace;font-weight:700;color:var(--teal-primary);">${escapeHtml(eq.numero_serie || 'N/A')}</span></td>
+                  <td>${escapeHtml(eq.date_installation || '-')}</td>
+                  <td><span class="badge-effectue">${escapeHtml(eq.garantie || '2 Ans')}</span></td>
+                  <td style="text-align:right;">
+                    <button type="button" class="btn-qr" onclick="openQrLabelModal('${escapeHtml(eq.materiel)}', '${escapeHtml(eq.numero_serie)}', '${escapeHtml(c.raison_sociale)}', '${escapeHtml(c.wilaya)}', '${escapeHtml(eq.date_installation)}', '', 'Garantie 2 Ans')" title="Imprimer Étiquette avec QR Code">
+                      📱 QR Étiquette
+                    </button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
+      }
+
+      let revTimelineHtml = '<div style="font-size:12px;color:var(--text-muted);padding:10px 0;">Aucune révision planifiée pour cet établissement.</div>';
+      if (c.revisions && c.revisions.length > 0) {
+        revTimelineHtml = `
+          <div class="rev-timeline" style="margin-top:10px;">
+            ${c.revisions.map(rev => {
+              let stepClass = 'planifie';
+              let badgeText = `Dans ${rev.jours_restants}j`;
+              if (rev.statut === 'EFFECTUE') {
+                stepClass = 'effectue';
+                badgeText = `✓ Effectuée le ${rev.date_effectuee || ''}`;
+              } else if (rev.statut === 'EN_RETARD' || rev.jours_restants < 0) {
+                stepClass = 'retard';
+                badgeText = `🚨 Retard (${Math.abs(rev.jours_restants)}j)`;
+              } else if (rev.statut === 'RAPPEL_10J' || (rev.jours_restants <= 10)) {
+                stepClass = 'rappel10j';
+                badgeText = `⚠️ J-10 (${rev.jours_restants}j)`;
+              }
+              return `
+                <div class="rev-step ${stepClass}">
+                  <div class="rev-step-num">Semestre ${rev.numero_revision}</div>
+                  <div class="rev-step-title">${escapeHtml(rev.titre_revision)}</div>
+                  <div class="rev-step-date">📅 Échéance : <b>${escapeHtml(rev.date_echeance)}</b></div>
+                  <div style="margin-top:4px;font-size:10px;font-weight:800;">${badgeText}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }
+
+      const params = new URLSearchParams({
+        hospital: c.raison_sociale,
+        wilaya: c.wilaya || '',
+        phone: phone
+      });
+      const newVisitUrl = `visite_controle.html?${params.toString()}`;
+
+      detailsPanel.innerHTML = `
+        <div class="client-profile-header">
+          <div class="client-profile-info">
+            <h3>${escapeHtml(c.raison_sociale)}</h3>
+            <div class="client-meta-chips">
+              <span class="meta-chip">📍 Wilaya : <b>${escapeHtml(c.wilaya || 'Non spécifiée')}</b></span>
+              ${c.service ? `<span class="meta-chip">🏥 Service : <b>${escapeHtml(c.service)}</b></span>` : ''}
+              ${c.contact_nom ? `<span class="meta-chip">👤 Contact : <b>${escapeHtml(c.contact_nom)}</b></span>` : ''}
+              ${c.email ? `<span class="meta-chip">📧 ${escapeHtml(c.email)}</span>` : ''}
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <a href="${newVisitUrl}" class="btn btn-primary" style="font-size:12px;">⚡ Nouvelle Visite</a>
+            ${waBtn}
+            ${callBtn}
+          </div>
+        </div>
+
+        <div class="client-stats-grid">
+          <div class="client-stat-box">
+            <div class="num">${c.stats?.total_equipements || 0}</div>
+            <div class="lbl">Équipements Installés</div>
+          </div>
+          <div class="client-stat-box">
+            <div class="num" style="color:#059669;">${c.stats?.garanties_actives || 0}</div>
+            <div class="lbl">Garanties 2 Ans</div>
+          </div>
+          <div class="client-stat-box">
+            <div class="num" style="color:#d97706;">${c.stats?.revisions_rappel_10j || 0}</div>
+            <div class="lbl">Alertes J-10</div>
+          </div>
+          <div class="client-stat-box">
+            <div class="num" style="color:#dc2626;">${c.stats?.revisions_retard || 0}</div>
+            <div class="lbl">En Retard</div>
+          </div>
+          <div class="client-stat-box">
+            <div class="num" style="color:#2563eb;">${c.stats?.revisions_effectuees || 0}</div>
+            <div class="lbl">Effectuées</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:24px;">
+          <h4 style="font-size:14px;font-weight:800;color:var(--navy-dark);margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+            <span>🔬</span> Parc Matériel Installé (FUJIFILM)
+          </h4>
+          ${equipTableHtml}
+        </div>
+
+        <div style="margin-bottom:24px;">
+          <h4 style="font-size:14px;font-weight:800;color:var(--navy-dark);margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+            <span>🛡️</span> Échéancier des 4 Révisions Semestrielles (Garantie 2 Ans)
+          </h4>
+          ${revTimelineHtml}
+        </div>
+      `;
+    }
+
+    // --- LOGIQUE WHATSAPP 1-CLIC ---
+    let currentActiveRevisionForWa = null;
+
+    function openWhatsAppModalForRevision(revDataOrId) {
+      let rev = typeof revDataOrId === 'string' ? (window.__revisionsMap?.[revDataOrId] || null) : revDataOrId;
+      if (!rev && typeof revDataOrId === 'string') {
+        try { rev = JSON.parse(revDataOrId); } catch(e) {}
+      }
+      if (!rev) return;
+      currentActiveRevisionForWa = rev;
+      const modal = document.getElementById('whatsappModal');
+      const phoneInput = document.getElementById('waPhoneInput');
+      const msgArea = document.getElementById('waMessageText');
+      const directCall = document.getElementById('waDirectCallBtn');
+
+      phoneInput.value = rev.telephone || '';
+      if (rev.telephone) {
+        directCall.href = `tel:${rev.telephone}`;
+        directCall.style.display = 'inline-flex';
+      } else {
+        directCall.style.display = 'none';
+      }
+
+      msgArea.value = API.getRevisionWhatsAppMessage(rev);
+      modal.classList.add('active');
+    }
+
+    function openWhatsAppForClient(clientNom, phone) {
+      const modal = document.getElementById('whatsappModal');
+      const phoneInput = document.getElementById('waPhoneInput');
+      const msgArea = document.getElementById('waMessageText');
+      const directCall = document.getElementById('waDirectCallBtn');
+
+      phoneInput.value = phone || '';
+      if (phone) {
+        directCall.href = `tel:${phone}`;
+        directCall.style.display = 'inline-flex';
+      } else {
+        directCall.style.display = 'none';
+      }
+
+      msgArea.value = `🏥 *ELECTRON MEDICAL ALGÉRIE*
+Distributeur Officiel FUJIFILM Medical Systems
+Service Après-Vente & Maintenance Biomédicale
+---------------------------------------
+Bonjour,
+
+Nous prenons contact avec vous concernant le suivi de maintenance et le parc d'endoscopie FUJIFILM installé au sein de votre établissement *${clientNom}*.
+
+Notre équipe technique reste à votre entière disposition pour toute intervention ou révision périodique.
+
+📞 *Contact SAV :* 0550 12 34 56
+📧 *Email :* sav@electronmedical-dz.com`;
+
+      modal.classList.add('active');
+    }
+
+    async function openQuickWhatsAppFirstAlert() {
+      const alertes = await API.getAlertes10Jours();
+      if (alertes && alertes.length > 0) {
+        openWhatsAppModalForRevision(alertes[0]);
+      } else {
+        API.toast('Aucune alerte urgente en cours.', 'info');
+      }
+    }
+
+    function closeWhatsAppModal() {
+      document.getElementById('whatsappModal').classList.remove('active');
+    }
+
+    function triggerSendWhatsApp() {
+      const phone = document.getElementById('waPhoneInput').value.trim();
+      const text = document.getElementById('waMessageText').value;
+      if (!text) {
+        API.toast('Veuillez saisir un texte de message.', 'error');
+        return;
+      }
+      API.openWhatsApp(phone, text);
+    }
+
+    // --- LOGIQUE ÉTIQUETTE ÉQUIPEMENT & QR CODE ---
+    let currentQrCodeInstance = null;
+
+    function openQrLabelModal(materiel, sn, client, wilaya, dateInst, dateEch, titreRev) {
+      const modal = document.getElementById('qrModal');
+      document.getElementById('labelMateriel').textContent = materiel || 'FUJIFILM ELUXEO';
+      document.getElementById('labelSN').textContent = sn || 'SN-FUJIFILM';
+      document.getElementById('labelClient').textContent = `${client || 'Hôpital'} (${wilaya || ''})`;
+      document.getElementById('labelProchaineRev').textContent = dateEch ? `${dateEch} (${titreRev || 'Révision'})` : 'Garantie 2 Ans';
+
+      const container = document.getElementById('labelQrContainer');
+      container.innerHTML = '';
+
+      const host = window.location.host || 'localhost:8085';
+      const qrTargetUrl = `http://${host}/?sn=${encodeURIComponent(sn || '')}&client=${encodeURIComponent(client || '')}`;
+
+      if (typeof QRCode !== 'undefined') {
+        currentQrCodeInstance = new QRCode(container, {
+          text: qrTargetUrl,
+          width: 100,
+          height: 100,
+          colorDark: "#063740",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      } else {
+        container.innerHTML = `<span style="font-size:10px;color:var(--text-muted);">QR Code indisponible</span>`;
+      }
+
+      modal.classList.add('active');
+    }
+
+    function closeQrModal() {
+      document.getElementById('qrModal').classList.remove('active');
+    }
+
+    function printEquipmentLabel() {
+      window.print();
+    }
+
+    function downloadQrPng() {
+      const container = document.getElementById('labelQrContainer');
+      const canvas = container.querySelector('canvas');
+      if (canvas) {
+        const a = document.createElement('a');
+        a.href = canvas.toDataURL('image/png');
+        const sn = document.getElementById('labelSN').textContent || 'EQUIPEMENT';
+        a.download = `QR_CODE_FUJIFILM_${sn}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        API.toast('Image QR Code téléchargée !', 'success');
+      } else {
+        API.toast('Canvas QR Code non prêt.', 'error');
+      }
+    }
+
+    // --- LOGIQUE SAUVEGARDE SQLITE ---
+    async function openBackupModal() {
+      const modal = document.getElementById('backupModal');
+      modal.classList.add('active');
+      const container = document.getElementById('backupListContainer');
+      container.innerHTML = 'Chargement de la liste des sauvegardes...';
+      const res = await API.getBackupList();
+      if (res && res.backups && res.backups.length > 0) {
+        container.innerHTML = `
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="text-align:left;border-bottom:1px solid #cbd5e1;color:#64748b;">
+                <th style="padding:4px 6px;">Fichier</th>
+                <th style="padding:4px 6px;">Date & Heure</th>
+                <th style="padding:4px 6px;">Taille</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${res.backups.map(b => `
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:6px;font-family:monospace;font-weight:700;">💾 ${escapeHtml(b.filename)}</td>
+                  <td style="padding:6px;">${escapeHtml(b.mtime)}</td>
+                  <td style="padding:6px;font-weight:800;color:var(--teal-primary);">${b.size_kb} Ko</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
+      } else {
+        container.innerHTML = '<div style="text-align:center;padding:12px;color:var(--text-muted);">Aucune sauvegarde locale trouvée pour l\'instant.</div>';
+      }
+    }
+
+    function closeBackupModal() {
+      document.getElementById('backupModal').classList.remove('active');
+    }
+
+    async function handleTriggerSnapshot() {
+      const res = await API.createBackupSnapshot();
+      if (res && res.success) {
+        API.toast(res.message, 'success');
+        openBackupModal();
+      } else {
+        API.toast(res.error || 'Erreur lors de la sauvegarde.', 'error');
+      }
+    }
+
+    // --- LOGIQUE PV DE RÉVISION SEMESTRIELLE (A4) ---
+    function openPvModal(revDataOrId) {
+      let rev = typeof revDataOrId === 'string' ? (window.__revisionsMap?.[revDataOrId] || null) : revDataOrId;
+      if (!rev && typeof revDataOrId === 'string') {
+        try { rev = JSON.parse(revDataOrId); } catch(e) {}
+      }
+      if (!rev) return;
+      document.getElementById('pvDocRef').textContent = `RÉFÉRENCE : PV-${escapeHtml(rev.id || 'REV-001')}`;
+      document.getElementById('pvDocTitle').textContent = `PROCÈS-VERBAL DE ${escapeHtml((rev.titre_revision || 'Révision Semestrielle').toUpperCase())}`;
+      document.getElementById('pvClientNom').textContent = rev.client_nom || 'Établissement Hospitalier';
+      document.getElementById('pvWilaya').textContent = rev.wilaya || 'Algérie';
+      document.getElementById('pvTelephone').textContent = rev.telephone || '-';
+      document.getElementById('pvMateriel').textContent = rev.materiel || 'Endoscope Fujifilm';
+      document.getElementById('pvSN').textContent = rev.numero_serie || 'SN-FUJIFILM';
+      document.getElementById('pvDateInst').textContent = rev.date_installation || '-';
+      document.getElementById('pvDateEcheance').textContent = rev.date_echeance || '-';
+      document.getElementById('pvTechnicienNom').textContent = rev.technicien || 'Technicien Electron Medical';
+
+      document.getElementById('pvModal').classList.add('active');
+    }
+
+    function closePvModal() {
+      document.getElementById('pvModal').classList.remove('active');
+    }
+
+    function printOfficialPv() {
+      window.print();
+    }
+
+    function handleUserLogout() {
+      try {
+        sessionStorage.clear();
+        localStorage.removeItem('technico_session_active');
+        localStorage.removeItem('technico_auth_token');
+        localStorage.removeItem('technico_auth_user');
+      } catch (e) {}
+      if (typeof Auth !== 'undefined' && Auth.logout) {
+        Auth.logout(function() {
+          window.location.replace('login.html');
+        });
+      } else {
+        window.location.replace('login.html');
+      }
+    }
+
+    function updateUserHeaderPill(user) {
+      if (!user) return;
+      const bar = document.getElementById('userHeaderBar');
+      if (!bar) return;
+      const initials = (user.nom_complet || user.username || 'U').split(' ').map(s => s[0]).join('').slice(0, 2).toUpperCase();
+      document.getElementById('hdrUserAvatar').textContent = initials;
+      document.getElementById('hdrUserName').textContent = user.nom_complet || user.username;
+      const roleBadge = document.getElementById('hdrUserRole');
+      roleBadge.textContent = Auth.getRoleLabel(user.role);
+      bar.style.display = 'flex';
+
+      // Masquer les boutons et badges d'administration pour les autres utilisateurs (non-admin)
+      const isAdmin = user && (user.role === 'admin' || (user.permissions && user.permissions.includes('all')));
+      document.querySelectorAll('.admin-only-item').forEach(el => {
+        el.style.display = isAdmin ? '' : 'none';
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Contrôle de session - Rediriger vers login.html si non connecté
+      Auth.checkSession((err, user) => {
+        if (!user) {
+          window.location.href = 'login.html';
+          return;
+        }
+        updateUserHeaderPill(user);
+      });
+
+      loadDashboardData();
+
+      // Fermeture des modals en cliquant sur le fond ou avec la touche Echap
+      document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', (e) => {
+          if (e.target === overlay) {
+            overlay.classList.remove('active');
+          }
+        });
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+        }
+      });
+
+      setInterval(() => {
+        API.checkConnection();
+        loadRevisionsData();
+        loadClients360Data();
+      }, 30000);
+    });
+  </script>
+</body>
+</html>

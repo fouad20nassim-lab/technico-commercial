@@ -1,0 +1,76 @@
+// Liste officielle des 58 Wilayas d'Algérie
+const WILAYAS_ALGERIE = [
+  { code: "01", nom: "01 - Adrar", region: "Sud" },
+  { code: "02", nom: "02 - Chlef", region: "Centre" },
+  { code: "03", nom: "03 - Laghouat", region: "Sud" },
+  { code: "04", nom: "04 - Oum El Bouaghi", region: "Est" },
+  { code: "05", nom: "05 - Batna", region: "Est" },
+  { code: "06", nom: "06 - Béjaïa", region: "Est" },
+  { code: "07", nom: "07 - Biskra", region: "Sud" },
+  { code: "08", nom: "08 - Béchar", region: "Sud" },
+  { code: "09", nom: "09 - Blida", region: "Centre" },
+  { code: "10", nom: "10 - Bouira", region: "Centre" },
+  { code: "11", nom: "11 - Tamanrasset", region: "Sud" },
+  { code: "12", nom: "12 - Tébessa", region: "Est" },
+  { code: "13", nom: "13 - Tlemcen", region: "Ouest" },
+  { code: "14", nom: "14 - Tiaret", region: "Ouest" },
+  { code: "15", nom: "15 - Tizi Ouzou", region: "Centre" },
+  { code: "16", nom: "16 - Alger", region: "Centre" },
+  { code: "17", nom: "17 - Djelfa", region: "Centre" },
+  { code: "18", nom: "18 - Jijel", region: "Est" },
+  { code: "19", nom: "19 - Sétif", region: "Est" },
+  { code: "20", nom: "20 - Saïda", region: "Ouest" },
+  { code: "21", nom: "21 - Skikda", region: "Est" },
+  { code: "22", nom: "22 - Sidi Bel Abbès", region: "Ouest" },
+  { code: "23", nom: "23 - Annaba", region: "Est" },
+  { code: "24", nom: "24 - Guelma", region: "Est" },
+  { code: "25", nom: "25 - Constantine", region: "Est" },
+  { code: "26", nom: "26 - Médéa", region: "Centre" },
+  { code: "27", nom: "27 - Mostaganem", region: "Ouest" },
+  { code: "28", nom: "28 - M'Sila", region: "Est" },
+  { code: "29", nom: "29 - Mascara", region: "Ouest" },
+  { code: "30", nom: "30 - Ouargla", region: "Sud" },
+  { code: "31", nom: "31 - Oran", region: "Ouest" },
+  { code: "32", nom: "32 - El Bayadh", region: "Ouest" },
+  { code: "33", nom: "33 - Illizi", region: "Sud" },
+  { code: "34", nom: "34 - Bordj Bou Arréridj", region: "Est" },
+  { code: "35", nom: "35 - Boumerdès", region: "Centre" },
+  { code: "36", nom: "36 - El Tarf", region: "Est" },
+  { code: "37", nom: "37 - Tindouf", region: "Sud" },
+  { code: "38", nom: "38 - Tissemsilt", region: "Centre" },
+  { code: "39", nom: "39 - El Oued", region: "Sud" },
+  { code: "40", nom: "40 - Khenchela", region: "Est" },
+  { code: "41", nom: "41 - Souk Ahras", region: "Est" },
+  { code: "42", nom: "42 - Tipaza", region: "Centre" },
+  { code: "43", nom: "43 - Mila", region: "Est" },
+  { code: "44", nom: "44 - Aïn Defla", region: "Centre" },
+  { code: "45", nom: "45 - Naâma", region: "Ouest" },
+  { code: "46", nom: "46 - Aïn Témouchent", region: "Ouest" },
+  { code: "47", nom: "47 - Ghardaïa", region: "Sud" },
+  { code: "48", nom: "48 - Relizane", region: "Ouest" },
+  { code: "49", nom: "49 - Timimoun", region: "Sud" },
+  { code: "50", nom: "50 - Bordj Badji Mokhtar", region: "Sud" },
+  { code: "51", nom: "51 - Ouled Djellal", region: "Sud" },
+  { code: "52", nom: "52 - Béni Abbès", region: "Sud" },
+  { code: "53", nom: "53 - In Salah", region: "Sud" },
+  { code: "54", nom: "54 - In Guezzam", region: "Sud" },
+  { code: "55", nom: "55 - Touggourt", region: "Sud" },
+  { code: "56", nom: "56 - Djanet", region: "Sud" },
+  { code: "57", nom: "57 - El M'Ghair", region: "Sud" },
+  { code: "58", nom: "58 - El Meniaa", region: "Sud" }
+];
+
+function populateWilayaSelect(selectElement, defaultVal = "") {
+  if (!selectElement) return;
+  const currentVal = defaultVal || selectElement.value;
+  selectElement.innerHTML = '<option value="">-- Sélectionner la Wilaya (58) --</option>';
+  WILAYAS_ALGERIE.forEach(w => {
+    const opt = document.createElement("option");
+    opt.value = w.nom;
+    opt.textContent = w.nom;
+    if (currentVal && (currentVal === w.nom || currentVal.includes(w.code))) {
+      opt.selected = true;
+    }
+    selectElement.appendChild(opt);
+  });
+}

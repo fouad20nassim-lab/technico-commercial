@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+*.bak
+*.safety_backup
+.DS_Store
+Thumbs.db
+Electron_Medical_*/
+
+

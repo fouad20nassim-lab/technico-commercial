@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Connexion — Plateforme Technico-Commercial</title>
+  <script src="js/theme.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --em-teal: #0f766e;
+      --em-teal-dark: #092c2a;
+      --em-teal-light: #e6f4f1;
+      --em-green: #00b87c;
+      --em-green-hover: #009e6a;
+      --bg-dark: #07151c;
+      --card-dark: #0d1e27;
+      --card-border: #16323f;
+      --input-bg: #09171f;
+      --input-border: #1a3947;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(circle at top center, #0f3530 0%, #081d26 45%, #050e13 100%);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #f8fafc;
+    }
+
+    /* Boîte principale de connexion (Style sombre épuré conforme au visuel) */
+    .login-wrapper {
+      max-width: 480px;
+      width: 100%;
+      background: var(--card-dark);
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 184, 124, 0.08);
+      padding: 34px 30px;
+      position: relative;
+      animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.96) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* Barre supérieure : Logos + Bouton + Nouvel Utilisateur */
+    .login-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .login-brand-logos {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 6px 14px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .login-brand-logos img {
+      height: 38px;
+      object-fit: contain;
+    }
+
+    /* Bouton + Nouvel Utilisateur vert émeraude */
+    .btn-new-user-green {
+      background: var(--em-green);
+      color: #ffffff;
+      border: none;
+      border-radius: 20px;
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 15px rgba(0, 184, 124, 0.4);
+      transition: all 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-new-user-green:hover {
+      background: var(--em-green-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 184, 124, 0.55);
+    }
+    .btn-new-user-green:active {
+      transform: scale(0.96);
+    }
+
+    .login-title-box {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+    .login-title-box h1 {
+      margin: 0 0 6px 0;
+      font-size: 22px;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+    .login-title-box p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Onglets de sélection du mode */
+    .login-mode-tabs {
+      display: flex;
+      gap: 6px;
+      background: #081720;
+      border: 1px solid #142e3b;
+      padding: 4px;
+      border-radius: 12px;
+      margin-bottom: 22px;
+    }
+    .login-mode-tab {
+      flex: 1;
+      padding: 10px 14px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .login-mode-tab.active {
+      background: #102a37;
+      color: #38bdf8;
+      border: 1px solid #1e4457;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    /* Utilisateurs rapides 1 Clic */
+    .quick-users-bar {
+      margin-bottom: 20px;
+    }
+    .quick-users-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .quick-users-grid {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .quick-user-chip {
+      background: #08161f;
+      border: 1px solid #1b3542;
+      border-radius: 16px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #cbd5e1;
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .quick-user-chip:hover, .quick-user-chip.selected {
+      background: #0f323c;
+      border-color: #00b87c;
+      color: #34d399;
+      transform: translateY(-1px);
+    }
+    .quick-user-chip .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--em-green);
+    }
+
+    /* === FORMULAIRE STYLE SOMBRE EXACT (Conforme à l'image demandée) === */
+    .form-group-exact {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .form-group-exact label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-bottom: 8px;
+    }
+
+    .dark-input-wrap {
+      background: var(--input-bg);
+      border: 1.5px solid var(--input-border);
+      border-radius: 12px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      transition: all 0.2s ease;
+    }
+    .dark-input-wrap:focus-within {
+      border-color: #00b87c;
+      box-shadow: 0 0 0 3px rgba(0, 184, 124, 0.2);
+      background: #0a1b24;
+    }
+
+    .dark-input-icon {
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+    .dark-input-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .dark-input-field {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #ffffff;
+      font-size: 15px;
+      font-family: inherit;
+    }
+    .dark-input-field::placeholder {
+      color: #64748b;
+    }
+
+    .btn-toggle-pwd {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #94a3b8;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.15s ease;
+    }
+    .btn-toggle-pwd:hover {
+      color: #ffffff;
+    }
+    .btn-toggle-pwd svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* Ligne "Rester connecté" */
+    .remember-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 18px 0 24px 0;
+      font-size: 14px;
+    }
+    .remember-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      color: #cbd5e1;
+      user-select: none;
+    }
+    .remember-checkbox {
+      width: 18px;
+      height: 18px;
+      accent-color: #00b87c;
+      cursor: pointer;
+    }
+
+    .forgot-link {
+      color: #38bdf8;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      transition: color 0.15s ease;
+      cursor: pointer;
+    }
+    .forgot-link:hover {
+      color: #7dd3fc;
+      text-decoration: underline;
+    }
+
+    /* Bouton vert émeraude officiel avec flèche */
+    .btn-login-exact {
+      width: 100%;
+      height: 52px;
+      background: var(--em-green);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 18px rgba(0, 184, 124, 0.4);
+      transition: all 0.2s ease;
+      letter-spacing: -0.01em;
+    }
+    .btn-login-exact:hover {
+      background: var(--em-green-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 22px rgba(0, 184, 124, 0.55);
+    }
+    .btn-login-exact:active {
+      transform: scale(0.98);
+    }
+    .btn-login-exact .arrow-icon {
+      font-size: 20px;
+      line-height: 1;
+      transition: transform 0.2s ease;
+    }
+    .btn-login-exact:hover .arrow-icon {
+      transform: translateX(4px);
+    }
+
+    /* Pavé tactile PIN (Tablette & Tactile) */
+    .pin-box-wrapper {
+      max-width: 320px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .pin-dots-display {
+      width: 100%;
+      height: 54px;
+      background: #09171f;
+      border: 1.5px solid #1a3947;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: 16px;
+      color: #00b87c;
+      transition: border 0.2s;
+    }
+    .pin-dots-display.has-focus {
+      border-color: #00b87c;
+      box-shadow: 0 0 0 3px rgba(0, 184, 124, 0.2);
+    }
+
+    .pin-keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+    .pin-digit-btn {
+      height: 60px;
+      background: #0c202a;
+      border: 1px solid #1c3d4e;
+      border-radius: 14px;
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      transition: all 0.1s ease;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .pin-digit-btn:active {
+      transform: scale(0.94);
+      background: #00b87c;
+      color: #ffffff;
+    }
+    .pin-digit-btn.action-btn {
+      font-size: 14px;
+      font-weight: 700;
+      background: #091720;
+      color: #94a3b8;
+    }
+
+    /* Message d'alerte */
+    .login-error-alert {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid #ef4444;
+      color: #fca5a5;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 16px;
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+
+    /* Liens d'action sous le formulaire */
+    .login-sub-actions {
+      margin-top: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+    .btn-link-action {
+      background: none;
+      border: none;
+      color: #38bdf8;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-link-action:hover {
+      background: rgba(56, 189, 248, 0.1);
+      color: #7dd3fc;
+    }
+
+    /* Pied de page */
+    .login-footer-info {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid #16323f;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* Fenêtres modales */
+    .modal-overlay {
+      position: fixed !important;
+      inset: 0 !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      background: rgba(4, 13, 18, 0.88) !important;
+      backdrop-filter: blur(8px) !important;
+      z-index: 9999999 !important;
+      display: none;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 20px !important;
+      box-sizing: border-box !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+    .modal-overlay.active, .modal-overlay.show {
+      display: flex !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+    .modal-box {
+      background: #0d1e27 !important;
+      border: 1px solid #1c3d4e !important;
+      border-radius: 20px !important;
+      max-width: 500px !important;
+      width: 100% !important;
+      max-height: 92vh !important;
+      overflow-y: auto !important;
+      padding: 28px !important;
+      box-sizing: border-box !important;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.7) !important;
+      color: #f8fafc !important;
+      transform: none !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+      overflow-y: auto;
+      padding: 28px;
+      box-sizing: border-box;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+      color: #f8fafc;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #16323f;
+      padding-bottom: 14px;
+    }
+    .modal-header h3 {
+      margin: 0;
+      font-size: 18px;
+      color: #00b87c;
+      font-weight: 800;
+    }
+    .modal-close-btn {
+      background: #142e3b;
+      border: 1px solid #204658;
+      border-radius: 8px;
+      color: #94a3b8;
+      width: 32px;
+      height: 32px;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .modal-close-btn:hover {
+      background: #1e4457;
+      color: #ffffff;
+    }
+
+    .form-group-modal {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .form-group-modal label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+    }
+    .form-input-modal {
+      width: 100%;
+      height: 46px;
+      background: #08161f;
+      border: 1.5px solid #1c3d4e;
+      border-radius: 10px;
+      padding: 0 14px;
+      color: #ffffff;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      box-sizing: border-box;
+      transition: border 0.15s ease;
+    }
+    .form-input-modal:focus {
+      border-color: #00b87c;
+    }
+    .form-input-modal::placeholder {
+      color: #64748b;
+    }
+    select.form-input-modal {
+      background: #08161f;
+      color: #ffffff;
+    }
+    select.form-input-modal option {
+      background: #0d1e27;
+      color: #ffffff;
+    }
+
+    /* Support Mode Clair pour login.html */
+    [data-theme="light"] body {
+      background: radial-gradient(circle at top center, #e6f7f3 0%, #f0f7f5 45%, #e2ece9 100%) !important;
+      color: #0f172a !important;
+    }
+    [data-theme="light"] .login-wrapper {
+      background: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.12) !important;
+      color: #0f172a !important;
+    }
+    [data-theme="light"] .login-title-box h1 {
+      color: #042f2e !important;
+    }
+    [data-theme="light"] .login-title-box p {
+      color: #475569 !important;
+    }
+    [data-theme="light"] .login-input-group {
+      background: #f8fafc !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    [data-theme="light"] .login-input-group input {
+      color: #0f172a !important;
+    }
+    [data-theme="light"] .login-tab-btn {
+      background: #f1f5f9 !important;
+      color: #475569 !important;
+    }
+    [data-theme="light"] .login-tab-btn.active {
+      background: #ffffff !important;
+      color: #0f766e !important;
+    }
+    [data-theme="light"] .registered-users-bar {
+      background: #f8fafc !important;
+      border-color: #e2e8f0 !important;
+    }
+    [data-theme="light"] .user-chip {
+      background: #ffffff !important;
+      color: #1e293b !important;
+      border: 1px solid #cbd5e1 !important;
+    }
+    [data-theme="light"] .btn-link-edit {
+      color: #0f766e !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-wrapper">
+
+    <!-- Barre supérieure : Logos + Bouton + Nouvel Utilisateur -->
+    <div class="login-top-bar">
+      <div class="login-brand-logos">
+        <img src="assets/electron-medical-logo.png" alt="Electron Medical Algérie">
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <!-- Bouton Pill Mode Sombre / Clair [☀️ Mode] -->
+        <button type="button" class="theme-toggle-pill" id="themeToggleBtn" onclick="toggleAppTheme()" title="Basculer entre Mode Sombre et Mode Clair">
+          <span class="theme-icon" id="themeToggleIcon">☀️</span>
+          <span class="theme-label" id="themeToggleText">Mode</span>
+        </button>
+        <button type="button" class="btn-new-user-green" onclick="openRegisterModal()">
+          ＋ Nouvel Utilisateur
+        </button>
+      </div>
+    </div>
+
+    <!-- Titre de l'application -->
+    <div class="login-title-box">
+      <h1>CONNEXION PLATEFORME</h1>
+      <p>Electron Medical Algérie · Distributeur Officiel Fujifilm</p>
+    </div>
+
+    <!-- Onglets de sélection du mode -->
+    <div class="login-mode-tabs">
+      <button type="button" class="login-mode-tab active" id="tabBtnPwd" onclick="switchMode('pwd')">
+        💻 Mot de passe PC
+      </button>
+      <button type="button" class="login-mode-tab" id="tabBtnPin" onclick="switchMode('pin')">
+        📱 Code PIN Tablette
+      </button>
+    </div>
+
+    <!-- Utilisateurs rapides 1 Clic -->
+    <div class="quick-users-bar">
+      <div class="quick-users-label">
+        <span>Comptes enregistrés</span>
+        <span style="color:#00b87c;cursor:pointer;" onclick="openRegisterModal()">＋ Ajouter</span>
+      </div>
+      <div class="quick-users-grid" id="quickUsersContainer">
+        <!-- Rempli dynamiquement -->
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODE 1 : IDENTIFIANT / MOT DE PASSE PC (EXACT DU VISUEL) -->
+    <!-- ======================================================== -->
+    <div id="sectionPwdMode">
+      <form id="pwdLoginForm" onsubmit="submitPasswordForm(event)">
+
+        <!-- Champ 1 : Identifiant ou Adresse Email -->
+        <div class="form-group-exact">
+          <label>Identifiant ou Adresse Email</label>
+          <div class="dark-input-wrap">
+            <span class="dark-input-icon">
+              <!-- SVG User Icon -->
+              <svg viewBox="0 0 24 24">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </span>
+            <input type="text" id="loginUsername" class="dark-input-field" placeholder="ex: k.benali@electron-medical.dz ou admin" required autocomplete="username">
+          </div>
+        </div>
+
+        <!-- Champ 2 : Mot de passe -->
+        <div class="form-group-exact">
+          <label>Mot de passe</label>
+          <div class="dark-input-wrap">
+            <span class="dark-input-icon">
+              <!-- SVG Lock Icon -->
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </span>
+            <input type="password" id="loginPassword" class="dark-input-field" placeholder="Entrez votre mot de passe..." required autocomplete="current-password">
+            <button type="button" class="btn-toggle-pwd" onclick="togglePasswordVisibility('loginPassword', this)" title="Afficher/Masquer le mot de passe">
+              <!-- SVG Eye Icon -->
+              <svg viewBox="0 0 24 24">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Option Rester connecté & Mot de passe oublié -->
+        <div class="remember-row">
+          <label class="remember-label">
+            <input type="checkbox" id="rememberMe" checked class="remember-checkbox">
+            <span>Rester connecté sur cet appareil</span>
+          </label>
+          <a href="javascript:void(0)" onclick="openChangePasswordModal()" class="forgot-link">Modifier mot de passe</a>
+        </div>
+
+        <!-- Bouton vert officiel avec flèche -->
+        <button type="submit" class="btn-login-exact">
+          <span>Se connecter à la plateforme</span>
+          <span class="arrow-icon">→</span>
+        </button>
+
+      </form>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODE 2 : CODE PIN RAPIDE (TABLETTE ET TACTILE)           -->
+    <!-- ======================================================== -->
+    <div id="sectionPinMode" style="display:none;">
+      <div class="pin-box-wrapper">
+        <div class="pin-dots-display has-focus" id="pinDisplayBox">····</div>
+        <div class="pin-keypad">
+          <button type="button" class="pin-digit-btn" onclick="pressPin('1')">1</button>
+          <button type="button" class="pin-digit-btn" onclick="pressPin('2')">2</button>
+          <button type="button" class="pin-digit-btn" onclick="pressPin('3')">3</button>
+          <button type="button" class="pin-digit-btn" onclick="pressPin('4')">4</button>
+          <button type="button" class="pin-digit-btn" onclick="pressPin('5')">5</button>
+          <button type="button" class="pin-digit-btn" onclick="pressPin('6')">6</button>
+          <button type="button" class="pin-digit-btn" onclick="pressPin('7')">7</button>
+          <button type="button" class="pin-digit-btn" onclick="pressPin('8')">8</button>
+          <button type="button" class="pin-digit-btn" onclick="pressPin('9')">9</button>
+          <button type="button" class="pin-digit-btn action-btn" onclick="clearPinInput()">Effacer</button>
+          <button type="button" class="pin-digit-btn" onclick="pressPin('0')">0</button>
+          <button type="button" class="pin-digit-btn action-btn" onclick="backspacePinInput()">⌫</button>
+        </div>
+        <button type="button" class="btn-login-exact" onclick="submitPin()" style="margin-top:8px;">
+          <span>🔓 Entrer sur la Plateforme</span>
+          <span class="arrow-icon">→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Message d'erreur -->
+    <div id="loginAlertBox" class="login-error-alert"></div>
+
+    <!-- Liens d'actions supplémentaires (Espace Modifier le mot de passe) -->
+    <div class="login-sub-actions">
+      <button type="button" class="btn-link-action" onclick="openChangePasswordModal()">
+        🔑 Espace Modification du Mot de Passe & Code PIN
+      </button>
+    </div>
+
+    <!-- Pied de page -->
+    <div class="login-footer-info">
+      <span>🛡️ Base SQLite Multi-Postes</span>
+      
+      <span style="color:#38bdf8;cursor:pointer;" onclick="showNetworkHelp()">📱 Accès Tablette & Réseau</span>
+    </div>
+
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL : ESPACE MODIFIER LE MOT DE PASSE & CODE PIN       -->
+  <!-- ======================================================== -->
+  <div id="changePasswordModal" class="modal-overlay" onclick="if(event.target === this) closeChangePasswordModal()">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>🔑 Modifier Mon Mot de Passe / Code PIN</h3>
+        <button type="button" class="modal-close-btn" onclick="closeChangePasswordModal()">✕</button>
+      </div>
+      <form id="changePwdForm" onsubmit="handleChangePasswordSubmit(event)">
+        <p style="font-size:13px;color:#94a3b8;margin:0 0 16px 0;">
+          Personnalisez votre mot de passe et votre code PIN rapide pour tablette.
+        </p>
+
+        <div class="form-group-modal">
+          <label>Compte Utilisateur *</label>
+          <select id="chgUserSelect" class="form-input-modal" required onchange="onUserSelectForPasswordChange()">
+            <!-- Rempli dynamiquement -->
+          </select>
+        </div>
+
+        <div class="form-group-modal">
+          <label>Mot de passe actuel ou Code PIN actuel * </label>
+          <input type="password" id="chgCurrentSecret" class="form-input-modal" placeholder="Votre secret actuel..." required>
+        </div>
+
+        <div class="form-group-modal">
+          <label>Nouveau Mot de passe (PC) *</label>
+          <div style="position:relative;">
+            <input type="password" id="chgNewPassword" class="form-input-modal" placeholder="Minimum 4 caractères..." required minlength="4">
+            <button type="button" class="btn-toggle-pwd" onclick="togglePasswordVisibility('chgNewPassword', this)" style="position:absolute;right:10px;top:12px;">
+              <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group-modal">
+          <label>Confirmer le Nouveau Mot de passe *</label>
+          <input type="password" id="chgConfirmPassword" class="form-input-modal" placeholder="Retapez le mot de passe..." required minlength="4">
+        </div>
+
+        <div class="form-group-modal">
+          <label>Nouveau Code PIN Rapide Tablette (4 chiffres) <small style="color:#64748b;">(Optionnel)</small></label>
+          <input type="text" id="chgNewPin" class="form-input-modal" placeholder="ex: 8899" maxlength="6" inputmode="numeric">
+        </div>
+
+        <div id="chgAlertBox" class="login-error-alert" style="margin-bottom:14px;"></div>
+
+        <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:22px;border-top:1px solid #16323f;padding-top:16px;">
+          <button type="button" class="btn-login-exact" style="background:#142e3b;color:#cbd5e1;width:auto;padding:0 18px;height:44px;" onclick="closeChangePasswordModal()">Annuler</button>
+          <button type="submit" class="btn-login-exact" style="width:auto;padding:0 24px;height:44px;">
+            <span>💾 Enregistrer & Valider</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL : CRÉER UN NOUVEL UTILISATEUR                     -->
+  <!-- ======================================================== -->
+  <div id="registerModal" class="modal-overlay" onclick="if(event.target === this) closeRegisterModal()">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>＋ Créer un Nouvel Utilisateur</h3>
+        <button type="button" class="modal-close-btn" onclick="closeRegisterModal()">✕</button>
+      </div>
+      <form id="registerForm" onsubmit="handleRegisterSubmit(event)">
+        <div class="form-group-modal">
+          <label>Nom complet & Prénom *</label>
+          <input type="text" id="regNom" class="form-input-modal" placeholder="ex: Yacine Medjadji" required>
+        </div>
+        <div class="form-group-modal">
+          <label>Identifiant de connexion *</label>
+          <input type="text" id="regUsername" class="form-input-modal" placeholder="ex: yacine.m" required autocomplete="username">
+        </div>
+        <div class="form-group-modal">
+          <label>Rôle dans l'établissement *</label>
+          <select id="regRole" class="form-input-modal" required>
+            <option value="technicien">👨‍🔧 Technicien SAV / Ingénieur Biomédical</option>
+            <option value="commercial">💼 Commercial / ADV</option>
+            <option value="qualite">🛡️ Responsable Qualité / Validation</option>
+            <option value="admin">👑 Administrateur (Accès Total)</option>
+          </select>
+        </div>
+        <div class="form-group-modal">
+          <label>Code PIN Rapide Tablette (4 chiffres) *</label>
+          <input type="text" id="regPin" class="form-input-modal" placeholder="ex: 5566" maxlength="6" inputmode="numeric" required>
+        </div>
+        <div class="form-group-modal">
+          <label>Mot de passe PC</label>
+          <input type="password" id="regPwd" class="form-input-modal" placeholder="Mot de passe..." autocomplete="new-password">
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:22px;border-top:1px solid #16323f;padding-top:16px;">
+          <button type="button" class="btn-login-exact" style="background:#142e3b;color:#cbd5e1;width:auto;padding:0 18px;height:44px;" onclick="closeRegisterModal()">Annuler</button>
+          <button type="submit" class="btn-login-exact" style="width:auto;padding:0 24px;height:44px;">
+            <span>Enregistrer & Connecter</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    var currentPinVal = '';
+    var selectedUsername = '';
+
+    // Liste des utilisateurs disponibles (chargée dynamiquement ou secours)
+    var usersList = [
+      { id: 1, username: 'admin', nom_complet: 'Administrateur Principal', role: 'admin', pin: '1234', pin_code: '1234', password: 'admin' },
+      { id: 2, username: 'mustapha.b', nom_complet: 'Mustapha B. (SAV)', role: 'technicien', pin: '1111', pin_code: '1111', password: '1111' },
+      { id: 3, username: 'karim.t', nom_complet: 'Karim T. (Commercial)', role: 'commercial', pin: '2222', pin_code: '2222', password: '2222' },
+      { id: 4, username: 'dr.benali', nom_complet: 'Dr. Benali (Qualité)', role: 'qualite', pin: '3333', pin_code: '3333', password: '3333' }
+    ];
+
+    function togglePasswordVisibility(inputId, btn) {
+      var input = document.getElementById(inputId);
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.style.color = '#00b87c';
+      } else {
+        input.type = 'password';
+        btn.style.color = '#94a3b8';
+      }
+    }
+
+    function switchMode(mode) {
+      document.getElementById('tabBtnPwd').className = 'login-mode-tab ' + (mode === 'pwd' ? 'active' : '');
+      document.getElementById('tabBtnPin').className = 'login-mode-tab ' + (mode === 'pin' ? 'active' : '');
+      document.getElementById('sectionPwdMode').style.display = (mode === 'pwd' ? 'block' : 'none');
+      document.getElementById('sectionPinMode').style.display = (mode === 'pin' ? 'block' : 'none');
+      hideAlert();
+    }
+
+    function pressPin(d) {
+      if (currentPinVal.length < 6) {
+        currentPinVal += d;
+        renderPinDots();
+        if (currentPinVal.length === 4) {
+          submitPin();
+        }
+      }
+    }
+
+    function clearPinInput() {
+      currentPinVal = '';
+      renderPinDots();
+    }
+
+    function backspacePinInput() {
+      currentPinVal = currentPinVal.slice(0, -1);
+      renderPinDots();
+    }
+
+    function renderPinDots() {
+      var box = document.getElementById('pinDisplayBox');
+      if (!currentPinVal) {
+        box.textContent = '····';
+        box.style.color = '#64748b';
+      } else {
+        box.textContent = '●'.repeat(currentPinVal.length);
+        box.style.color = '#00b87c';
+      }
+    }
+
+    function showAlert(msg) {
+      var box = document.getElementById('loginAlertBox');
+      box.textContent = msg;
+      box.style.display = 'block';
+    }
+
+    function hideAlert() {
+      document.getElementById('loginAlertBox').style.display = 'none';
+    }
+
+    function submitPin() {
+      hideAlert();
+      if (!currentPinVal) {
+        showAlert('Veuillez saisir votre code PIN.');
+        return;
+      }
+
+      // 1. Accès direct Administrateur
+      if (currentPinVal === '1234' && (!selectedUsername || selectedUsername.toLowerCase() === 'admin')) {
+        var adminUser = usersList.find(function(x) { return x.role === 'admin'; }) || usersList[0];
+        if (typeof Auth !== 'undefined') {
+          Auth.setToken('offline_token_admin_' + Date.now(), true);
+          Auth.setUser(adminUser);
+        }
+        loginRedirect(adminUser);
+        return;
+      }
+
+      // 2. Vérification locale immédiate
+      var found = usersList.find(function(x) {
+        var matchPin = (x.pin_code === currentPinVal || x.pin === currentPinVal);
+        if (selectedUsername) return x.username.toLowerCase() === selectedUsername.toLowerCase() && matchPin;
+        return matchPin;
+      });
+      if (found) {
+        if (typeof Auth !== 'undefined') {
+          Auth.setToken('offline_token_' + found.id + '_' + Date.now(), true);
+          Auth.setUser(found);
+        }
+        loginRedirect(found);
+        return;
+      }
+
+      // 3. Fallback Auth
+      Auth.loginWithPin(currentPinVal, selectedUsername, function(err, user) {
+        if (err) {
+          showAlert(err || 'Code PIN non reconnu.');
+          clearPinInput();
+        } else {
+          loginRedirect(user);
+        }
+      });
+    }
+
+    function submitPasswordForm(e) {
+      e.preventDefault();
+      hideAlert();
+      var u = (document.getElementById('loginUsername').value || '').trim();
+      var p = (document.getElementById('loginPassword').value || '').trim();
+
+      // 1. Accès direct Administrateur garanti (admin / 1234 ou admin / admin)
+      if (u.toLowerCase() === 'admin' && (p === 'admin' || p === '1234')) {
+        var adminUser = (usersList && usersList.find(function(x) { return x.role === 'admin'; })) || { id: 1, username: 'admin', nom_complet: 'Administrateur Principal', role: 'admin', pin_code: '1234' };
+        if (typeof Auth !== 'undefined') {
+          Auth.setToken('token_admin_' + Date.now(), true);
+          Auth.setUser(adminUser);
+        }
+        loginRedirect(adminUser);
+        return;
+      }
+
+      // 2. Vérification locale immédiate (mot de passe ou PIN d'un technicien/utilisateur)
+      var stored = (typeof Auth !== 'undefined' && Auth.getStoredUsers) ? Auth.getStoredUsers() : usersList;
+      var found = stored.find(function(x) {
+        var matchUser = (x.username && x.username.toLowerCase() === u.toLowerCase()) || (x.email && x.email.toLowerCase() === u.toLowerCase());
+        var matchPass = (x.password === p) || (x.pin_code === p) || (x.pin === p);
+        return matchUser && matchPass;
+      });
+
+      if (found) {
+        if (typeof Auth !== 'undefined') {
+          Auth.setToken('offline_token_' + found.id + '_' + Date.now(), true);
+          Auth.setUser(found);
+        }
+        loginRedirect(found);
+        return;
+      }
+
+      // 3. Authentification serveur avec fallback transparent
+      Auth.login(u, p, function(err, user) {
+        if (err) {
+          showAlert(err || 'Identifiant ou mot de passe incorrect.');
+        } else {
+          loginRedirect(user);
+        }
+      });
+    }
+
+    function loginRedirect(user) {
+      try {
+        sessionStorage.setItem('technico_session_active', 'true');
+        localStorage.setItem('technico_session_active', 'true');
+        if (user && typeof Auth !== 'undefined' && Auth.setUser) {
+          Auth.setUser(user);
+        }
+      } catch (e) {}
+      var params = new URLSearchParams(window.location.search);
+      var redirect = params.get('redirect');
+      if (redirect) {
+        window.location.href = redirect;
+        return;
+      }
+      window.location.href = 'index.html';
+    }
+
+    function loadRegisteredUsers() {
+      var container = document.getElementById('quickUsersContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      var stored = (typeof Auth !== 'undefined' && Auth.getStoredUsers) ? Auth.getStoredUsers() : usersList;
+      if (stored && stored.length) {
+        usersList = stored;
+        renderQuickUsers(stored);
+      } else {
+        renderQuickUsers(usersList);
+      }
+
+      var token = (typeof Auth !== 'undefined' && Auth.getToken) ? Auth.getToken() : '';
+      var API_BASE = (window.location && window.location.origin.startsWith('http')) ? '' : 'http://localhost:8085';
+
+      fetch(API_BASE + '/api/users', {
+        headers: { 'Authorization': 'Bearer ' + (token || '') }
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data && data.success && data.users && data.users.length) {
+          usersList = data.users;
+          if (typeof Auth !== 'undefined' && Auth.saveStoredUsers) Auth.saveStoredUsers(data.users);
+          renderQuickUsers(data.users);
+        }
+      })
+      .catch(function(err) {});
+    }
+
+    function renderQuickUsers(users) {
+      var container = document.getElementById('quickUsersContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      users.forEach(function(u) {
+        var chip = document.createElement('div');
+        chip.className = 'quick-user-chip';
+        chip.innerHTML = '<span class="dot"></span>' + (u.nom_complet || u.username);
+        chip.onclick = function() {
+          selectedUsername = u.username;
+          document.querySelectorAll('.quick-user-chip').forEach(function(c) { c.classList.remove('selected'); });
+          chip.classList.add('selected');
+          document.getElementById('loginUsername').value = u.username;
+          document.getElementById('loginPassword').focus();
+        };
+        container.appendChild(chip);
+      });
+    }
+
+    // --- MODAL NOUVEL UTILISATEUR ---
+    function openRegisterModal() {
+      var modal = document.getElementById('registerModal');
+      if (!modal) return;
+      modal.classList.add('active');
+      modal.style.setProperty('display', 'flex', 'important');
+      modal.style.setProperty('opacity', '1', 'important');
+      modal.style.setProperty('pointer-events', 'auto', 'important');
+      var form = document.getElementById('registerForm');
+      if (form) form.reset();
+      setTimeout(function() {
+        var n = document.getElementById('regNom');
+        if (n) n.focus();
+      }, 100);
+    }
+
+    function closeRegisterModal() {
+      var modal = document.getElementById('registerModal');
+      if (!modal) return;
+      modal.classList.remove('active');
+      modal.style.setProperty('display', 'none', 'important');
+    }
+
+    function handleRegisterSubmit(e) {
+      e.preventDefault();
+      var nom = document.getElementById('regNom').value.trim();
+      var username = document.getElementById('regUsername').value.trim().toLowerCase();
+      var role = document.getElementById('regRole').value;
+      var pin = document.getElementById('regPin').value.trim();
+      var pwd = document.getElementById('regPwd').value;
+
+      var payload = {
+        nom_complet: nom,
+        username: username,
+        role: role,
+        pin_code: pin,
+        password: pwd || pin,
+        statut: 'actif',
+        permissions: role === 'admin' ? ['all', 'settings', 'sqlite', 'users', 'reports_write', 'export'] : ['reports_write', 'export']
+      };
+
+      if (typeof Auth !== 'undefined' && Auth.upsertStoredUser) {
+        Auth.upsertStoredUser(payload);
+      }
+
+      var API_BASE = (window.location && window.location.origin.startsWith('http')) ? '' : 'http://localhost:8085';
+
+      fetch(API_BASE + '/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        closeRegisterModal();
+        if (data && data.user_id) payload.id = data.user_id;
+        if (typeof Auth !== 'undefined' && Auth.upsertStoredUser) Auth.upsertStoredUser(payload);
+        loadRegisteredUsers();
+        Auth.setUser(payload);
+        loginRedirect(payload);
+      })
+      .catch(function(err) {
+        closeRegisterModal();
+        usersList.push(payload);
+        loadRegisteredUsers();
+        Auth.setUser(payload);
+        loginRedirect(payload);
+      });
+    }
+
+    // --- ESPACE MODIFIER LE MOT DE PASSE ---
+    function openChangePasswordModal() {
+      var modal = document.getElementById('changePasswordModal');
+      if (!modal) return;
+      var select = document.getElementById('chgUserSelect');
+      var alertBox = document.getElementById('chgAlertBox');
+      if (alertBox) alertBox.style.display = 'none';
+
+      // Remplir la liste des utilisateurs dans le sélecteur
+      if (select) {
+        select.innerHTML = '';
+        var list = (typeof Auth !== 'undefined' && Auth.getStoredUsers) ? Auth.getStoredUsers() : usersList;
+        if (!list || !list.length) list = usersList;
+
+        list.forEach(function(u) {
+          var opt = document.createElement('option');
+          opt.value = u.username;
+          opt.textContent = (u.nom_complet || u.username) + ' (' + u.username + ')';
+          select.appendChild(opt);
+        });
+
+        // Si un utilisateur était sélectionné sur le formulaire, le pré-sélectionner
+        var curUser = document.getElementById('loginUsername') ? document.getElementById('loginUsername').value.trim() : '';
+        if (curUser) {
+          for (var i = 0; i < select.options.length; i++) {
+            if (select.options[i].value.toLowerCase() === curUser.toLowerCase()) {
+              select.selectedIndex = i;
+              break;
+            }
+          }
+        }
+      }
+
+      var s = document.getElementById('chgCurrentSecret'); if (s) s.value = '';
+      var p = document.getElementById('chgNewPassword'); if (p) p.value = '';
+      var c = document.getElementById('chgConfirmPassword'); if (c) c.value = '';
+      var pin = document.getElementById('chgNewPin'); if (pin) pin.value = '';
+
+      modal.classList.add('active');
+      modal.style.setProperty('display', 'flex', 'important');
+      modal.style.setProperty('opacity', '1', 'important');
+      modal.style.setProperty('pointer-events', 'auto', 'important');
+      setTimeout(function() {
+        var s = document.getElementById('chgCurrentSecret');
+        if (s) s.focus();
+      }, 100);
+    }
+
+    function closeChangePasswordModal() {
+      var modal = document.getElementById('changePasswordModal');
+      if (!modal) return;
+      modal.classList.remove('active');
+      modal.style.setProperty('display', 'none', 'important');
+    }
+
+    function onUserSelectForPasswordChange() {
+      document.getElementById('chgCurrentSecret').focus();
+    }
+
+    function handleChangePasswordSubmit(e) {
+      e.preventDefault();
+      var alertBox = document.getElementById('chgAlertBox');
+      alertBox.style.display = 'none';
+
+      var username = document.getElementById('chgUserSelect').value;
+      var curSecret = document.getElementById('chgCurrentSecret').value.trim();
+      var newPwd = document.getElementById('chgNewPassword').value;
+      var confirmPwd = document.getElementById('chgConfirmPassword').value;
+      var newPin = document.getElementById('chgNewPin').value.trim();
+
+      if (newPwd !== confirmPwd) {
+        alertBox.textContent = 'Les deux nouveaux mots de passe ne correspondent pas.';
+        alertBox.style.display = 'block';
+        return;
+      }
+
+      var list = (typeof Auth !== 'undefined' && Auth.getStoredUsers) ? Auth.getStoredUsers() : usersList;
+      var user = list.find(function(x) { return x.username.toLowerCase() === username.toLowerCase(); });
+
+      if (!user) {
+        alertBox.textContent = 'Utilisateur introuvable.';
+        alertBox.style.display = 'block';
+        return;
+      }
+
+      // Vérification du mot de passe / PIN actuel ou passe-partout admin 1234
+      var isSecretValid = (curSecret === '1234') ||
+                          (curSecret === 'admin' && username.toLowerCase() === 'admin') ||
+                          (user.password && user.password === curSecret) ||
+                          (user.pin_code && user.pin_code === curSecret) ||
+                          (user.pin && user.pin === curSecret);
+
+      if (!isSecretValid) {
+        alertBox.textContent = 'Mot de passe ou code PIN actuel incorrect.';
+        alertBox.style.display = 'block';
+        return;
+      }
+
+      // 1. Sauvegarde locale immédiate
+      user.password = newPwd;
+      if (newPin) user.pin_code = newPin;
+      if (typeof Auth !== 'undefined' && Auth.upsertStoredUser) {
+        Auth.upsertStoredUser(user);
+      }
+
+      // 2. Synchronisation serveur SQLite
+      var API_BASE = (window.location && window.location.origin.startsWith('http')) ? '' : 'http://localhost:8085';
+      fetch(API_BASE + '/api/users/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: user.id,
+          username: user.username,
+          new_password: newPwd,
+          new_pin: newPin || undefined
+        })
+      })
+      .then(function(res) { return res.json(); })
+      .catch(function(err) {})
+      .finally(function() {
+        closeChangePasswordModal();
+        alert('✅ MOT DE PASSE MIS À JOUR AVEC SUCCÈS !\n\nVous pouvez maintenant vous connecter avec votre nouveau mot de passe.');
+        document.getElementById('loginUsername').value = user.username;
+        document.getElementById('loginPassword').value = newPwd;
+        loadRegisteredUsers();
+      });
+    }
+
+    function showNetworkHelp() {
+      alert(
+        "📱 CONNEXION TABLETTE, SMARTPHONE & AUTRE PC :\n\n" +
+        "1. Sur votre PC Windows, double-cliquez sur 'DEMARRER_SERVEUR.bat' (sur votre Bureau).\n" +
+        "2. La fenêtre verte affichera votre adresse IP locale (ex: http://192.168.1.9:8085).\n" +
+        "3. Ouvrez Chrome sur votre tablette ou autre PC connecté au même Wi-Fi et entrez cette adresse !\n\n" +
+        "Tous vos appareils partageront la même base SQLite en temps réel !"
+      );
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      loadRegisteredUsers();
+
+      // Support du clavier physique sur PC
+      document.addEventListener('keydown', function(e) {
+        var pinSection = document.getElementById('sectionPinMode');
+        if (pinSection && pinSection.style.display !== 'none') {
+          if (e.key >= '0' && e.key <= '9') {
+            pressPin(e.key);
+          } else if (e.key === 'Backspace') {
+            backspacePinInput();
+          } else if (e.key === 'Enter') {
+            submitPin();
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

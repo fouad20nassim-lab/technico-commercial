@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <script>
+    // VÉRIFICATION DE SÉCURITÉ IMMÉDIATE : CONNEXION OBLIGATOIRE
+    (function() {
+      try {
+        var isSessionActive = (sessionStorage.getItem('technico_session_active') === 'true' || localStorage.getItem('technico_session_active') === 'true');
+        var token = localStorage.getItem('technico_auth_token') || sessionStorage.getItem('technico_auth_token') || localStorage.getItem('technico_auth_token_v1') || sessionStorage.getItem('technico_auth_token_v1');
+        var user = localStorage.getItem('technico_auth_user') || sessionStorage.getItem('technico_auth_user') || localStorage.getItem('technico_auth_user_v1') || sessionStorage.getItem('technico_auth_user_v1');
+        if (!isSessionActive || !token || !user) {
+          window.location.replace('login.html?redirect=procedure_installation.html');
+        }
+      } catch (e) {
+        window.location.replace('login.html?redirect=procedure_installation.html');
+      }
+    })();
+  </script>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Electron Medical Algérie — Procédure d’Installation</title>
+<script src="js/theme.js"></script>
+<link rel="stylesheet" href="css/main.css">
+<style>
+:root{--navy:#073b43;--teal:#078d78;--mint:#eaf5ef;--pale:#f4f8f6;--line:#d4e3dc;--text:#183d43;--muted:#607b7d}
+.container-narrow{max-width:1150px;margin:24px auto 90px;padding:0 20px}
+.card{background:white;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:16px;box-shadow:var(--shadow-sm)}
+.head{padding:14px 18px;display:flex;gap:12px;align-items:center;background:linear-gradient(90deg,#e8f4ed,#fff);border-bottom:1px solid var(--line)}
+.badge{width:36px;height:36px;border-radius:9px;background:#087d73;color:white;display:grid;place-items:center;font-weight:900;flex-shrink:0}
+.head h3{font-size:15px;margin:0;color:var(--navy)}
+.head p{font-size:11px;color:var(--muted);margin:2px 0 0}
+.body{padding:18px}
+.checkgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px}
+.check-item{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:12px;background:#f8fbf9;border:1px solid #e1ece5;border-radius:8px;line-height:1.45;cursor:pointer}
+.check-item input{accent-color:var(--teal);width:18px;height:18px;margin-top:1px;flex-shrink:0}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:11px;font-weight:800;color:#3b5c60}
+.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font:13px inherit;outline:none}
+.field textarea{resize:vertical;min-height:90px}
+.bottom-actions{position:fixed;bottom:0;left:0;right:0;background:#ffffffed;border-top:1px solid var(--line);padding:12px 24px;display:flex;justify-content:flex-end;gap:10px;z-index:90;backdrop-filter:blur(8px)}
+@media print{
+  .main-header,.bottom-actions,.no-print{display:none!important}
+  .container-narrow{margin:0;padding:0;max-width:100%}
+  .card{break-inside:avoid;box-shadow:none;margin-bottom:8px}
+  body{font-size:10px;background:#fff}
+}
+</style>
+</head>
+<body>
+
+<header class="main-header">
+  <div class="header-container">
+    <div class="brand-section">
+      <div class="brand-logos">
+        <a href="index.html"><img src="assets/electron-medical-logo.png" alt="Electron Medical Algérie" class="logo-em"></a>
+      </div>
+      <div class="brand-text">
+        <h1>PROCÉDURE D’INSTALLATION & CHECKLIST</h1>
+        <p>Guide technique étape par étape · S.A.R.L Electron Medical Algérie</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <!-- Bouton Pill Mode Sombre / Clair [☀️ Mode] -->
+      <button type="button" class="theme-toggle-pill" id="themeToggleBtn" onclick="toggleAppTheme()" title="Basculer entre Mode Sombre et Mode Clair">
+        <span class="theme-icon" id="themeToggleIcon">☀️</span>
+        <span class="theme-label" id="themeToggleText">Mode</span>
+      </button>
+      <div id="connectionBadge" class="status-pill offline" style="display:none;"><span class="dot"></span> <b>Connexion...</b></div>
+      <a href="index.html" class="btn btn-secondary">⌂ Tableau de Bord</a>
+      <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer / PDF</button>
+      <button class="btn btn-primary" id="saveTopBtn">💾 Enregistrer</button>
+    </div>
+  </div>
+</header>
+
+<main class="container-narrow">
+  <form id="procedureForm">
+    <input type="hidden" id="reportId" name="id">
+
+    <div class="card" style="background:#f4fbf8;border-color:#bce1d4;">
+      <div class="body" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+        <div class="field"><label>Établissement / Client *</label><input name="hospital" id="hospitalInput" required placeholder="Hôpital / Clinique"></div>
+        <div class="field"><label>Wilaya (58) *</label><select name="wilaya" id="wilayaSelect" required></select></div>
+        <div class="field"><label>Date de l'Intervention</label><input type="date" name="date" id="dateInput"></div>
+        <div class="field"><label>Conseiller Technique</label><input name="technician" id="techInput" placeholder="Technicien responsable"></div>
+      </div>
+    </div>
+
+    <!-- 01 -->
+    <div class="card">
+      <div class="head"><div class="badge">01</div><div><h3>Les Infos Utiles Avant Installation</h3><p>Points de préparation et vérification en amont</p></div></div>
+      <div class="body"><div class="checkgrid">
+        <label class="check-item"><input type="checkbox" name="p_techInLoop" checked> <span>Mettre le technicien du secteur dans la boucle dès la validation de la commande afin de vérifier les manques (câbles, accessoires, etc.).</span></label>
+        <label class="check-item"><input type="checkbox" name="p_scope" checked> <span>Vérifier que le conseiller technique intervient uniquement sur les installations de chariot et de processeur.</span></label>
+        <label class="check-item"><input type="checkbox" name="p_advRequest" checked> <span>Réceptionner la demande d’installation par l’ADV (livraison sous 48 h après validation du commercial et du technicien).</span></label>
+      </div></div>
+    </div>
+
+    <!-- 02 -->
+    <div class="card">
+      <div class="head"><div class="badge">02</div><div><h3>Rôle du Technicien — Préparation</h3><p>Avant le départ pour l’installation sur site</p></div></div>
+      <div class="body"><div class="checkgrid">
+        <label class="check-item"><input type="checkbox" name="p_quote" checked> <span>Vérification méticuleuse du devis pour éviter les manques d’accessoires ou d'options.</span></label>
+        <label class="check-item"><input type="checkbox" name="p_contacts" checked> <span>Obtenir les contacts directs du client pour prévoir l’installation (date, accessoires extérieurs comme pour les LDE).</span></label>
+        <label class="check-item"><input type="checkbox" name="p_dateDelivery" checked> <span>Prévoir la date d’installation avec le client après réception du devis signé et coordonner le déclenchement de livraison avec le commercial.</span></label>
+      </div></div>
+    </div>
+
+    <!-- 03 -->
+    <div class="card">
+      <div class="head"><div class="badge">03</div><div><h3>Installation & Montage</h3><p>Montage mécanique, paramétrage logiciel et contrôles</p></div></div>
+      <div class="body"><div class="checkgrid">
+        <label class="check-item"><input type="checkbox" name="p_column" checked> <span>Montage de la colonne d'endoscopie (bras articulé, tablette supplémentaire, support bouteille de CO₂).</span></label>
+        <label class="check-item"><input type="checkbox" name="p_processor" checked> <span>Installation des processeurs FUJIFILM et périphériques, paramétrage vidéo et mise à jour firmware si nécessaire.</span></label>
+        <label class="check-item"><input type="checkbox" name="p_network"> <span>Mise en réseau de la colonne (DICOM / PACS / Réseau interne hôpital).</span></label>
+        <label class="check-item"><input type="checkbox" name="p_endoscope" checked> <span>Contrôle visuel et technique des endoscopes s’ils sont livrés en même temps que le chariot.</span></label>
+      </div></div>
+    </div>
+
+    <!-- 04 -->
+    <div class="card">
+      <div class="head"><div class="badge">04</div><div><h3>Formation Pratique</h3><p>Accompagnement du personnel médical et biomédical</p></div></div>
+      <div class="body"><div class="checkgrid">
+        <label class="check-item"><input type="checkbox" name="p_disinfectionTraining" checked> <span>Formation à la désinfection, au nettoyage et au prélèvement sur les nouveaux dispositifs.</span></label>
+        <label class="check-item"><input type="checkbox" name="p_useTraining" checked> <span>Formation au branchement, à l'ergonomie et à la première utilisation de la colonne.</span></label>
+      </div></div>
+    </div>
+
+    <!-- 05 -->
+    <div class="card">
+      <div class="head"><div class="badge">05</div><div><h3>Complément d’Installation</h3><p>Adaptations sur mesure selon la configuration du site</p></div></div>
+      <div class="body"><div class="checkgrid">
+        <label class="check-item"><input type="checkbox" name="p_manualDisinfection"> <span>Fabrication et raccordement d’une pieuvre de désinfection manuelle (pour paillasse de lavage).</span></label>
+      </div></div>
+    </div>
+
+    <!-- 06 -->
+    <div class="card">
+      <div class="head"><div class="badge">06</div><div><h3>Rapport d’Installation & Clôture ADV</h3><p>Formalités administratives et archivage légal</p></div></div>
+      <div class="body">
+        <div class="checkgrid">
+          <label class="check-item"><input type="checkbox" name="p_serviceForm" checked> <span>Remplir, faire signer et tamponner la fiche officielle de mise en service.</span></label>
+          <label class="check-item"><input type="checkbox" name="p_deliveryDocs" checked> <span>Faire signer et tamponner les bons de livraison originaux (BL).</span></label>
+          <label class="check-item"><input type="checkbox" name="p_sendAdv" checked> <span>Transmettre sans délai les documents signés au délégué commercial et au service ADV.</span></label>
+          <label class="check-item"><input type="checkbox" name="p_archive" checked> <span>Archiver la fiche de mise en service et le rapport dans le dossier serveur du conseiller technique.</span></label>
+        </div>
+        <div class="field" style="margin-top:16px;">
+          <label>Notes & Commentaires de la Procédure</label>
+          <textarea name="notes" id="procedureNotes" rows="3" placeholder="Noter toute observation sur le déroulement de la procédure..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-actions">
+      <a href="index.html" class="btn btn-secondary">✕ Annuler & Retour</a>
+      <button type="button" class="btn btn-secondary" onclick="window.print()">🖨️ Exporter PDF / Imprimer</button>
+      <button type="submit" class="btn btn-primary">✓ Enregistrer la Checklist (SQLite)</button>
+    </div>
+  </form>
+</main>
+
+<script src="js/algeria_wilayas.js"></script>
+<script src="js/api.js"></script>
+<script>
+function collectData() {
+  const f = document.getElementById('procedureForm');
+  const d = {
+    id: document.getElementById('reportId').value || '',
+    type: 'procedure_installation',
+    ref_number: 'PRC-' + (document.getElementById('hospitalInput').value || 'PROC').slice(0, 10).replace(/[^a-zA-Z0-9]/g, ''),
+    client_nom: document.getElementById('hospitalInput').value || '',
+    wilaya: document.getElementById('wilayaSelect').value || '',
+    date_intervention: document.getElementById('dateInput').value || '',
+    technicien: document.getElementById('techInput').value || '',
+    status: 'enregistre',
+    checks: {},
+    notes: document.getElementById('procedureNotes').value
+  };
+
+  document.querySelectorAll('#procedureForm input[type=checkbox]').forEach(cb => {
+    d.checks[cb.name] = cb.checked;
+  });
+
+  return d;
+}
+
+async function saveReport(e) {
+  if (e) e.preventDefault();
+  const d = collectData();
+  if (!d.client_nom) {
+    alert('Veuillez renseigner le nom de l’Hôpital / Établissement.');
+    return;
+  }
+  const res = await API.saveRapport(d);
+  if (res && res.id) {
+    document.getElementById('reportId').value = res.id;
+  }
+}
+
+async function loadExisting(id) {
+  const rep = await API.getRapportById(id);
+  if (!rep) return;
+  const d = rep.data || rep;
+
+  document.getElementById('reportId').value = rep.id || d.id || '';
+  if (rep.client_nom) document.getElementById('hospitalInput').value = rep.client_nom;
+  if (rep.wilaya) document.getElementById('wilayaSelect').value = rep.wilaya;
+  if (rep.date_intervention) document.getElementById('dateInput').value = rep.date_intervention;
+  if (rep.technicien) document.getElementById('techInput').value = rep.technicien;
+
+  if (d.checks) {
+    Object.entries(d.checks).forEach(([k, v]) => {
+      const cb = document.querySelector(`input[type=checkbox][name="${CSS.escape(k)}"]`);
+      if (cb) cb.checked = !!v;
+    });
+  }
+  if (d.notes) document.getElementById('procedureNotes').value = d.notes;
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  populateWilayaSelect(document.getElementById('wilayaSelect'));
+  document.getElementById('dateInput').value = new Date().toISOString().slice(0, 10);
+  document.getElementById('procedureForm').addEventListener('submit', saveReport);
+  document.getElementById('saveTopBtn').addEventListener('click', saveReport);
+
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (id) await loadExisting(id);
+  if (params.get('print') === '1') setTimeout(() => window.print(), 500);
+});
+</script>
+</body>
+</html>

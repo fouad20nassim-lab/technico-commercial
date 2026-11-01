@@ -1,0 +1,2 @@
+# Application 100% Python Standard Library (aucune dépendance externe requise)
+

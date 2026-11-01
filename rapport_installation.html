@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <script>
+    // VÉRIFICATION DE SÉCURITÉ IMMÉDIATE : CONNEXION OBLIGATOIRE
+    (function() {
+      try {
+        var isSessionActive = (sessionStorage.getItem('technico_session_active') === 'true' || localStorage.getItem('technico_session_active') === 'true');
+        var token = localStorage.getItem('technico_auth_token') || sessionStorage.getItem('technico_auth_token') || localStorage.getItem('technico_auth_token_v1') || sessionStorage.getItem('technico_auth_token_v1');
+        var user = localStorage.getItem('technico_auth_user') || sessionStorage.getItem('technico_auth_user') || localStorage.getItem('technico_auth_user_v1') || sessionStorage.getItem('technico_auth_user_v1');
+        if (!isSessionActive || !token || !user) {
+          window.location.replace('login.html?redirect=rapport_installation.html');
+        }
+      } catch (e) {
+        window.location.replace('login.html?redirect=rapport_installation.html');
+      }
+    })();
+  </script>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Electron Medical Algérie — Rapport d'Installation Client</title>
+<script src="js/theme.js"></script>
+<link rel="stylesheet" href="css/main.css">
+<style>
+:root{--navy:#073b43;--teal:#078d78;--mint:#eaf5ef;--pale:#f4f8f6;--line:#d4e3dc;--text:#183d43;--muted:#607b7d}
+.shell{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 72px);max-width:1560px;margin:auto}
+.sidebar{background:#fff;border-right:1px solid var(--line);padding:22px 14px}
+.navbtn{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;padding:12px 10px;border-radius:8px;font-weight:700;color:var(--text);cursor:pointer;margin:4px 0;text-align:left}
+.navbtn.active,.navbtn:hover{background:var(--mint);color:var(--teal)}
+main{padding:20px 28px 80px;min-width:0}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:16px;box-shadow:var(--shadow-sm);scroll-margin-top:80px}
+.card-head{padding:14px 18px;display:flex;gap:12px;align-items:center;background:linear-gradient(90deg,#e8f4ed,#fff);border-bottom:1px solid var(--line)}
+.badge{width:36px;height:36px;border-radius:9px;background:#087d73;color:white;display:grid;place-items:center;font-weight:900;flex-shrink:0}
+.card-head h3{font-size:15px;margin:0;color:var(--navy)}
+.card-head p{font-size:11px;color:var(--muted);margin:2px 0 0}
+.card-body{padding:18px}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field label{font-size:11px;font-weight:800;color:#3b5c60}
+.field input,.field select,.field textarea{width:100%;min-width:0;padding:9px 10px;border:1px solid #d2e1da;border-radius:7px;background:white;color:#173d43;font:13px inherit;outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px #078d7818}
+.span2{grid-column:span 2}
+.span4{grid-column:1/-1}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th,td{border:1px solid #cbdcd2;padding:7px;text-align:left}
+th{background:#e8f4ed;color:#284b44;font-weight:800}
+td input,td select{width:100%;min-width:0;padding:7px 8px;border:1px solid #d7e3dc;border-radius:5px;font:inherit}
+td.num{text-align:center;font-weight:800;background:#f0f6ec;width:40px}
+.tablebtn{margin-top:10px;background:#f2faf6;border:1px solid #cde0d7;color:#086b5b;border-radius:7px;padding:8px 12px;font-weight:800;cursor:pointer}
+.siggrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.sigbox{border:1px solid var(--line);padding:14px;border-radius:9px;background:#fbfdfc}
+.sigbox h4{font-size:12px;margin:0 0 8px;color:var(--navy)}
+.sig{width:100%;height:120px;border:1px dashed #adc6bb;border-radius:7px;display:block;touch-action:none;background:#fff}
+.bottom-actions{position:sticky;bottom:0;z-index:90;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;padding:12px 20px;background:#ffffffed;border-top:1px solid var(--line);margin:20px -28px -80px;backdrop-filter:blur(8px)}
+@media print{
+  .main-header,.sidebar,.bottom-actions,.tablebtn,.no-print{display:none!important}
+  .shell{display:block}
+  main{padding:0}
+  .card{box-shadow:none;margin-bottom:8px;break-inside:avoid}
+  body{font-size:10px;background:#fff}
+}
+</style>
+</head>
+<body>
+
+<header class="main-header">
+  <div class="header-container">
+    <div class="brand-section">
+      <div class="brand-logos">
+        <a href="index.html"><img src="assets/electron-medical-logo.png" alt="Electron Medical Algérie" class="logo-em"></a>
+      </div>
+      <div class="brand-text">
+        <h1>RAPPORT D’INSTALLATION CLIENT</h1>
+        <p>Mise en service · Formation · Réception officielle</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <!-- Bouton Pill Mode Sombre / Clair [☀️ Mode] -->
+      <button type="button" class="theme-toggle-pill" id="themeToggleBtn" onclick="toggleAppTheme()" title="Basculer entre Mode Sombre et Mode Clair">
+        <span class="theme-icon" id="themeToggleIcon">☀️</span>
+        <span class="theme-label" id="themeToggleText">Mode</span>
+      </button>
+      <div id="connectionBadge" class="status-pill offline" style="display:none;"><span class="dot"></span> <b>Connexion...</b></div>
+      <a href="parametres_admin.html" class="btn btn-secondary" title="Accéder aux Paramètres & Administration">⚙️ Paramètres</a>
+      <a href="index.html" class="btn btn-secondary">⌂ Tableau de Bord</a>
+      <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer / PDF</button>
+      <button class="btn btn-primary" id="saveTopBtn">💾 Enregistrer</button>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div style="font-size:10px;color:var(--muted);font-weight:800;letter-spacing:.12em;padding:0 8px;margin-bottom:12px;">SECTIONS RAPPORT</div>
+    <button class="navbtn active" data-target="cardDetails">01 · Intervention</button>
+    <button class="navbtn" data-target="cardClient">02 · Établissement</button>
+    <button class="navbtn" data-target="cardEquipments">03 · Matériel Installé</button>
+    <button class="navbtn" data-target="cardConsumables">04 · Consommables</button>
+    <button class="navbtn" data-target="cardValidation">05 · Réception & Signatures</button>
+
+    <div style="margin-top:24px;padding:14px;border:1px solid var(--line);border-radius:10px;background:#f9fcfb;text-align:center;">
+      <img src="assets/fujifilm-ep8000.png" alt="EP-8000" style="max-height:75px;max-width:100%;object-fit:contain;">
+      <div style="font-size:11px;font-weight:800;color:var(--navy);margin-top:6px;">FUJIFILM ELUXEO</div>
+    </div>
+  </aside>
+
+  <main>
+    <form id="installForm">
+      <input type="hidden" id="reportId" name="id">
+
+      <!-- 01 : Détails Intervention -->
+      <div class="card" id="cardDetails">
+        <div class="card-head">
+          <div class="badge">01</div>
+          <div><h3>Détails de l’Installation & Contacts</h3><p>Références administratives, bons de livraison et planning</p></div>
+        </div>
+        <div class="card-body">
+          <div class="grid">
+            <div class="field"><label>Numéro d’intervention *</label><input name="interventionNo" id="interventionNoInput" required placeholder="Ex. INS-2026-001"></div>
+            <div class="field"><label>INS-N° Client</label><input name="insClient" placeholder="Identifiant client"></div>
+            <div class="field"><label>Numéro de Commande</label><input name="orderNo" placeholder="BC-..."></div>
+            <div class="field"><label>Bon de Livraison N° (BL)</label><input name="deliveryNo" placeholder="BL-..."></div>
+            <div class="field"><label>Date de l'Installation *</label><input name="date" id="installDateInput" type="date" required></div>
+            <div class="field"><label>Heure d’arrivée</label><input name="arrival" type="time"></div>
+            <div class="field"><label>Heure de départ</label><input name="departure" type="time"></div>
+            <div class="field"><label>Temps de trajet A/R</label><input name="travelTime" placeholder="Ex. 03:00"></div>
+            <div class="field span2"><label>Contact Client / Cadre Biomédical</label><input name="clientContact"></div>
+            <div class="field"><label>Téléphone Client</label><input name="clientPhone" type="tel"></div>
+            <div class="field"><label>E-mail Client</label><input name="clientMail" type="email"></div>
+            <div class="field span2"><label>Conseiller Technique Electron Medical *</label><input name="technicianName" id="technicianNameInput" required placeholder="Nom du technicien"></div>
+            <div class="field"><label>Contact Fujifilm</label><input name="fujifilmContact"></div>
+            <div class="field"><label>Téléphone Fujifilm</label><input name="fujifilmPhone" type="tel"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 02 : Informations Client -->
+      <div class="card" id="cardClient">
+        <div class="card-head">
+          <div class="badge">02</div>
+          <div><h3>Informations de l'Établissement</h3><p>Hôpital ou clinique de destination</p></div>
+        </div>
+        <div class="card-body">
+          <div class="grid">
+            <div class="field span2"><label>Nom de l’Hôpital / Établissement *</label><input name="hospital" id="hospitalInput" required placeholder="Hôpital public, clinique privée..."></div>
+            <div class="field span2"><label>Wilaya (58) *</label><select name="wilaya" id="wilayaSelect" required></select></div>
+            <div class="field span2"><label>Adresse</label><input name="address"></div>
+            <div class="field"><label>Ville</label><input name="city"></div>
+            <div class="field"><label>Code Postal</label><input name="postalCode"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 03 : Matériel Mis en Service -->
+      <div class="card" id="cardEquipments">
+        <div class="card-head">
+          <div class="badge">03</div>
+          <div><h3>Équipements Mis en Service (12 lignes constructeur)</h3><p>Vérification des numéros de série (SN) et mise en marche</p></div>
+        </div>
+        <div class="card-body">
+          <div style="overflow-x:auto;">
+            <table id="equipmentTable">
+              <thead>
+                <tr>
+                  <th style="width:40px;">#</th>
+                  <th>Modèle du Dispositif</th>
+                  <th>Numéro de Série (SN)</th>
+                  <th>Commentaire / Emplacement</th>
+                </tr>
+              </thead>
+              <tbody id="equipTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 04 : Consommables -->
+      <div class="card" id="cardConsumables">
+        <div class="card-head">
+          <div class="badge">04</div>
+          <div><h3>Consommables & Accessoires Livrés</h3><p>Directives, tubulures, valves, accessoires</p></div>
+        </div>
+        <div class="card-body">
+          <div style="overflow-x:auto;">
+            <table id="consumablesTable">
+              <thead>
+                <tr>
+                  <th>Référence</th>
+                  <th>Description</th>
+                  <th style="width:100px;">Quantité</th>
+                  <th style="width:120px;">À envoyer</th>
+                  <th>Commentaire</th>
+                  <th style="width:40px;" class="no-print"></th>
+                </tr>
+              </thead>
+              <tbody id="consumablesBody"></tbody>
+            </table>
+          </div>
+          <button type="button" class="tablebtn no-print" onclick="addConsumableRow()">＋ Ajouter un consommable</button>
+        </div>
+      </div>
+
+      <!-- 05 : Validation & Signatures -->
+      <div class="card" id="cardValidation">
+        <div class="card-head">
+          <div class="badge">05</div>
+          <div><h3>Résultat de l’Installation & Réception</h3><p>Validation et signatures officielles conjointe</p></div>
+        </div>
+        <div class="card-body">
+          <div class="grid">
+            <div class="field span2">
+              <label>Installation terminée & opérationnelle ?</label>
+              <select name="installationComplete" id="installationComplete">
+                <option value="Oui">OUI — Matériel conforme et en ordre de marche</option>
+                <option value="Non">NON — Réserves techniques</option>
+              </select>
+            </div>
+            <div class="field span4">
+              <label>Réserves éventuelles / Justificatif si non terminée</label>
+              <textarea name="whyNot" placeholder="Noter toute réserve ou composant manquant..." rows="2"></textarea>
+            </div>
+          </div>
+
+          <div class="siggrid" style="margin-top:16px;">
+            <div class="sigbox">
+              <h4>Signature du Technicien Electron Medical</h4>
+              <canvas class="sig" id="sigTech"></canvas>
+              <button type="button" class="tablebtn no-print" onclick="clearSig('sigTech')">Effacer</button>
+              <div class="field" style="margin-top:8px;"><label>Nom du Technicien</label><input name="technicianSigner"></div>
+            </div>
+            <div class="sigbox">
+              <h4>Signature & Cachet du Client</h4>
+              <canvas class="sig" id="sigClient"></canvas>
+              <button type="button" class="tablebtn no-print" onclick="clearSig('sigClient')">Effacer</button>
+              <div class="field" style="margin-top:8px;"><label>Nom & Titre du Réceptionnaire</label><input name="clientSigner"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-actions">
+        <a href="index.html" class="btn btn-secondary">✕ Annuler & Retour</a>
+        <button type="button" class="btn btn-secondary" onclick="window.print()">🖨️ Exporter PDF / Imprimer</button>
+        <button type="submit" class="btn btn-primary">✓ Enregistrer dans la Base SQLite</button>
+      </div>
+    </form>
+  </main>
+</div>
+
+<script src="js/algeria_wilayas.js"></script>
+<script src="js/api.js"></script>
+<script>
+const defaultEquipments = [
+  "Processeur FUJIFILM EP-8000 / Eluxeo",
+  "Source de lumière FUJIFILM",
+  "Moniteur Médical Haute Résolution",
+  "Chariot / Colonne d'Endoscopie",
+  "Gastroscope Haute Définition",
+  "Coloscope Haute Définition",
+  "Pompe de Lavage / Irrigation",
+  "Insufflateur de Gaz CO2",
+  "Système d'Archivage / Capture d'Image",
+  "Bouteille & Détendeur CO2",
+  "Bac de Pré-désinfection",
+  "Pied à Sérum & Accessoires"
+];
+
+function initEquipmentRows() {
+  const tbody = document.getElementById('equipTableBody');
+  tbody.innerHTML = '';
+  for (let i = 1; i <= 12; i++) {
+    const tr = tbody.insertRow();
+    const defaultModel = defaultEquipments[i - 1] || '';
+    tr.innerHTML = `
+      <td class="num">${i}</td>
+      <td><input name="eq_model_${i}" value="${defaultModel}" placeholder="Modèle dispositif"></td>
+      <td><input name="eq_sn_${i}" placeholder="Numéro de série SN"></td>
+      <td><input name="eq_com_${i}" placeholder="Emplacement / État"></td>
+    `;
+  }
+}
+
+function addConsumableRow(data = {}) {
+  const tr = document.getElementById('consumablesBody').insertRow();
+  tr.innerHTML = `
+    <td><input name="c_ref" value="${data.ref || ''}" placeholder="Réf produit"></td>
+    <td><input name="c_desc" value="${data.desc || ''}" placeholder="Description consommable"></td>
+    <td><input name="c_qty" type="number" min="0" value="${data.qty || '1'}"></td>
+    <td><select name="c_send"><option ${data.send==='Non'?'selected':''}>Non</option><option ${data.send==='Oui'?'selected':''}>Oui</option></select></td>
+    <td><input name="c_com" value="${data.com || ''}" placeholder="Observations"></td>
+    <td class="no-print"><button type="button" class="tablebtn" style="color:var(--danger);" onclick="this.closest('tr').remove()">×</button></td>
+  `;
+}
+
+// Canvases
+const canvases = {};
+['sigTech', 'sigClient'].forEach(id => {
+  const c = document.getElementById(id);
+  const ctx = c.getContext('2d');
+  let drawing = false;
+  function resize() {
+    const r = c.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    c.width = r.width * dpr;
+    c.height = 120 * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#073b43';
+  }
+  resize();
+  c.addEventListener('pointerdown', e => {
+    drawing = true;
+    c.setPointerCapture(e.pointerId);
+    const r = c.getBoundingClientRect();
+    ctx.beginPath();
+    ctx.moveTo(e.clientX - r.left, e.clientY - r.top);
+  });
+  c.addEventListener('pointermove', e => {
+    if (!drawing) return;
+    const r = c.getBoundingClientRect();
+    ctx.lineTo(e.clientX - r.left, e.clientY - r.top);
+    ctx.stroke();
+  });
+  ['pointerup', 'pointercancel'].forEach(ev => c.addEventListener(ev, () => drawing = false));
+  canvases[id] = c;
+});
+
+function clearSig(id) {
+  const c = canvases[id];
+  c.getContext('2d').clearRect(0, 0, c.width, c.height);
+}
+
+function collectData() {
+  const f = document.getElementById('installForm');
+  const d = {
+    id: document.getElementById('reportId').value || '',
+    type: 'rapport_installation',
+    ref_number: document.getElementById('interventionNoInput').value || '',
+    client_nom: document.getElementById('hospitalInput').value || '',
+    wilaya: document.getElementById('wilayaSelect').value || '',
+    date_intervention: document.getElementById('installDateInput').value || '',
+    technicien: document.getElementById('technicianNameInput').value || '',
+    status: 'enregistre',
+    fields: {},
+    equipments: [],
+    consumables: [],
+    signatures: {
+      sigTech: canvases.sigTech.toDataURL('image/png'),
+      sigClient: canvases.sigClient.toDataURL('image/png')
+    }
+  };
+
+  new FormData(f).forEach((v, k) => {
+    if (k !== 'id') d.fields[k] = v;
+  });
+
+  // Table équipements
+  for (let i = 1; i <= 12; i++) {
+    d.equipments.push({
+      num: i,
+      model: f[`eq_model_${i}`]?.value || '',
+      sn: f[`eq_sn_${i}`]?.value || '',
+      com: f[`eq_com_${i}`]?.value || ''
+    });
+  }
+
+  // Consommables
+  document.querySelectorAll('#consumablesBody tr').forEach(tr => {
+    d.consumables.push({
+      ref: tr.querySelector('[name=c_ref]')?.value || '',
+      desc: tr.querySelector('[name=c_desc]')?.value || '',
+      qty: tr.querySelector('[name=c_qty]')?.value || '',
+      send: tr.querySelector('[name=c_send]')?.value || '',
+      com: tr.querySelector('[name=c_com]')?.value || ''
+    });
+  });
+
+  return d;
+}
+
+async function saveReport(e) {
+  if (e) e.preventDefault();
+  const d = collectData();
+  if (!d.client_nom) {
+    alert('Veuillez renseigner le nom de l’Hôpital / Établissement.');
+    return;
+  }
+  const res = await API.saveRapport(d);
+  if (res && res.id) {
+    document.getElementById('reportId').value = res.id;
+    document.getElementById('interventionNoInput').value = res.ref_number || res.id;
+  }
+}
+
+async function loadExisting(id) {
+  const rep = await API.getRapportById(id);
+  if (!rep) return;
+  const d = rep.data || rep;
+
+  document.getElementById('reportId').value = rep.id || d.id || '';
+  if (rep.client_nom) document.getElementById('hospitalInput').value = rep.client_nom;
+  if (rep.wilaya) document.getElementById('wilayaSelect').value = rep.wilaya;
+  if (rep.date_intervention) document.getElementById('installDateInput').value = rep.date_intervention;
+  if (rep.technicien) document.getElementById('technicianNameInput').value = rep.technicien;
+  if (rep.ref_number) document.getElementById('interventionNoInput').value = rep.ref_number;
+
+  const fields = d.fields || d;
+  Object.entries(fields).forEach(([k, v]) => {
+    const el = document.querySelector(`#installForm [name="${CSS.escape(k)}"]`);
+    if (el) el.value = v;
+  });
+
+  // Équipements
+  if (d.equipments && d.equipments.length) {
+    d.equipments.forEach(eq => {
+      const f = document.getElementById('installForm');
+      if (f[`eq_model_${eq.num}`]) f[`eq_model_${eq.num}`].value = eq.model || '';
+      if (f[`eq_sn_${eq.num}`]) f[`eq_sn_${eq.num}`].value = eq.sn || '';
+      if (f[`eq_com_${eq.num}`]) f[`eq_com_${eq.num}`].value = eq.com || '';
+    });
+  }
+
+  // Consommables
+  if (d.consumables && d.consumables.length) {
+    document.getElementById('consumablesBody').innerHTML = '';
+    d.consumables.forEach(c => addConsumableRow(c));
+  }
+
+  // Signatures
+  Object.entries(d.signatures || {}).forEach(([id, src]) => {
+    if (!canvases[id] || !src) return;
+    const c = canvases[id], ctx = c.getContext('2d'), im = new Image();
+    im.onload = () => ctx.drawImage(im, 0, 0, c.width, c.height);
+    im.src = src;
+  });
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  populateWilayaSelect(document.getElementById('wilayaSelect'));
+  initEquipmentRows();
+  addConsumableRow({ ref: "FUJI-TUB-01", desc: "Tubulure d'insufflation", qty: "2", send: "Non" });
+  addConsumableRow({ ref: "FUJI-VAL-02", desc: "Valves air/eau et aspiration", qty: "4", send: "Non" });
+
+  document.getElementById('installDateInput').value = new Date().toISOString().slice(0, 10);
+  document.getElementById('installForm').addEventListener('submit', saveReport);
+  document.getElementById('saveTopBtn').addEventListener('click', saveReport);
+
+  document.querySelectorAll('.navbtn').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.navbtn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      const el = document.getElementById(b.dataset.target);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (id) await loadExisting(id);
+  if (params.get('print') === '1') setTimeout(() => window.print(), 500);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Résumé Officiel — Plateforme Technico-Commercial & SAV Fujifilm</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 14mm 16mm;
+    }
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+      color: #0f172a;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+      font-size: 11pt;
+      line-height: 1.5;
+    }
+    
+    /* En-tête officiel */
+    .header-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2.5px solid #063740;
+      padding-bottom: 12px;
+      margin-bottom: 18px;
+    }
+    .logos-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .logo-em {
+      height: 48px;
+      object-fit: contain;
+    }
+    .divider {
+      width: 1.5px;
+      height: 38px;
+      background: #cbd5e1;
+    }
+    .logo-fuji {
+      height: 24px;
+      object-fit: contain;
+    }
+    .company-sub {
+      font-size: 8pt;
+      color: #475569;
+      margin-top: 3px;
+      line-height: 1.3;
+    }
+    .doc-badge-right {
+      text-align: right;
+    }
+    .doc-badge-pill {
+      display: inline-block;
+      background: #063740;
+      color: #ffffff;
+      font-size: 9pt;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+    .doc-version {
+      font-size: 8pt;
+      color: #64748b;
+      margin-top: 3px;
+      font-weight: 600;
+    }
+
+    /* Titre Principal */
+    .hero-title-box {
+      background: linear-gradient(135deg, #f0fdf4 0%, #e6f7f2 100%);
+      border: 1.5px solid #86efac;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+    }
+    .hero-title-box h1 {
+      margin: 0 0 5px 0;
+      color: #063740;
+      font-size: 17pt;
+      letter-spacing: -0.02em;
+    }
+    .hero-title-box p {
+      margin: 0;
+      color: #078d78;
+      font-size: 9.5pt;
+      font-weight: 700;
+    }
+
+    /* Sections */
+    .section {
+      margin-bottom: 18px;
+      page-break-inside: avoid;
+    }
+    .section-title {
+      font-size: 12pt;
+      font-weight: 800;
+      color: #063740;
+      border-left: 4px solid #078d78;
+      padding-left: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Tableaux */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5pt;
+      margin-bottom: 12px;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 10px;
+      text-align: left;
+      vertical-align: middle;
+    }
+    th {
+      background: #f1f5f9;
+      color: #0f172a;
+      font-weight: 800;
+      font-size: 9pt;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 8pt;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .badge-urgent { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .badge-retard { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    .badge-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .badge-info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+    .badge-dark { background: #0f172a; color: #ffffff; }
+
+    /* Grille de cartes */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .feature-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 10px 12px;
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .feature-card h4 {
+      margin: 0 0 4px 0;
+      font-size: 10pt;
+      color: #063740;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .feature-card p {
+      margin: 0;
+      font-size: 8.5pt;
+      color: #475569;
+      line-height: 1.4;
+    }
+
+    /* Cadre de démarrage rapide */
+    .quick-start-box {
+      background: #f8fafc;
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 6px;
+      padding: 12px 14px;
+      font-size: 9pt;
+      margin-top: 14px;
+      page-break-inside: avoid;
+    }
+    .quick-start-box code {
+      background: #063740;
+      color: #5ce0cd;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+      font-weight: 700;
+    }
+
+    /* Footer */
+    .doc-footer {
+      border-top: 1px solid #e2e8f0;
+      padding-top: 10px;
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 7.5pt;
+      color: #64748b;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- EN-TÊTE OFFICIEL -->
+  <div class="header-banner">
+    <div class="logos-left">
+      <img src="assets/electron-medical-logo.png" alt="Electron Medical Algérie" class="logo-em">
+    </div>
+    <div class="doc-badge-right">
+      <span class="doc-badge-pill">DOSSIER SYNTHÈSE SAV</span>
+      <div class="doc-version">Version 2.2 · Octobre 2026</div>
+    </div>
+  </div>
+
+  <!-- TITRE PRINCIPAL -->
+  <div class="hero-title-box">
+    <h1>PLATEFORME TECHNICO-COMMERCIAL & SAV FUJIFILM</h1>
+    <p>Distributeur Officiel Fujifilm Medical Systems en Algérie · Base de Données SQLite Solide (Mode WAL)</p>
+  </div>
+
+  <!-- SECTION 1 : VUE D'ENSEMBLE & ARCHITECTURE -->
+  <div class="section">
+    <div class="section-title">1. Présentation & Architecture de la Plateforme</div>
+    <p style="font-size: 9.5pt; margin-top: 0;">
+      La <b>Plateforme TECHNICO-COMMERCIAL</b> est l’outil numérique de référence développé pour gérer l’intégralité des interventions techniques, des installations, des formations et du service après-vente des équipements d’endoscopie médicale <b>FUJIFILM</b> sur tout le territoire algérien (<b>58 Wilayas</b>).
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 28%;">Composant</th>
+          <th style="width: 27%;">Technologie</th>
+          <th style="width: 45%;">Rôle & Avantage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Moteur de Données</b></td>
+          <td>SQLite 3 (Mode WAL)</td>
+          <td>Base ultra-robuste avec journalisation transactionnelle WAL, zéro perte de données et accès concurrent instantané.</td>
+        </tr>
+        <tr>
+          <td><b>Serveur Embarqué</b></td>
+          <td>Python 3.11 REST API</td>
+          <td>Serveur local léger tournant sur le <b>Port 8085</b>, autonome sans installation lourde ni dépendances externes.</td>
+        </tr>
+        <tr>
+          <td><b>Multi-Appareils</b></td>
+          <td>Réseau Local Wi-Fi</td>
+          <td>Accessible depuis n’importe quel PC de bureau, tablette iPad ou smartphone de l’équipe technique (<code>http://192.168.1.9:8085</code>).</td>
+        </tr>
+        <tr>
+          <td><b>Continuité Hors-Ligne</b></td>
+          <td>Offline-First Client Cache</td>
+          <td>Fonctionnement à 100% hors connexion Internet dans les blocs opératoires ou en déplacement.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECTION 2 : GARANTIE 2 ANS & RÉVISIONS 6 MOIS -->
+  <div class="section">
+    <div class="section-title">2. Gestion des Garanties 2 Ans & Révisions Semestrielles (Rappel J-10)</div>
+    <p style="font-size: 9.5pt; margin-top: 0;">
+      Tout équipement déclaré sous <b>Garantie Constructeur de 2 Ans</b> fait l'objet d'un suivi automatisé avec déclenchement de <b>4 révisions semestrielles obligatoires</b> et d'alertes préventives calculées exactement <b>10 jours à l'avance</b>.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Étape de Révision</th>
+          <th>Délai après Installation</th>
+          <th>Date de Rappel Automatique</th>
+          <th>Statut & Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>1ère Révision Semestrielle</b></td>
+          <td><b>+ 6 Mois</b></td>
+          <td>Échéance – 10 Jours</td>
+          <td><span class="badge badge-urgent">Rappel J-10</span> Alerte visuelle & WhatsApp</td>
+        </tr>
+        <tr>
+          <td><b>2ème Révision (1 An)</b></td>
+          <td><b>+ 12 Mois</b></td>
+          <td>Échéance – 10 Jours</td>
+          <td><span class="badge badge-info">À Planifier</span> Visite préventive annuelle</td>
+        </tr>
+        <tr>
+          <td><b>3ème Révision Semestrielle</b></td>
+          <td><b>+ 18 Mois</b></td>
+          <td>Échéance – 10 Jours</td>
+          <td><span class="badge badge-info">À Planifier</span> Contrôle technique optique & béquillage</td>
+        </tr>
+        <tr>
+          <td><b>4ème Révision (Clôture)</b></td>
+          <td><b>+ 24 Mois (2 Ans)</b></td>
+          <td>Échéance – 10 Jours</td>
+          <td><span class="badge badge-success">Fin de Garantie</span> Rapport de conformité final</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size: 8.5pt; color: #475569; background: #f1f5f9; padding: 8px 12px; border-radius: 5px;">
+      <b>⚡ Action en 1 Clic :</b> Le bouton <code>⚡ Visite</code> pré-remplit instantanément le formulaire officiel de visite avec le nom du CHU/Clinique, la wilaya, le modèle, le numéro de série et le technicien référent.
+    </div>
+  </div>
+
+  <!-- SECTION 3 : LES 5 MODULES OFFICIELS -->
+  <div class="section">
+    <div class="section-title">3. Les 5 Modules & Formulaires Techniques Officiels</div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 25%;">Module</th>
+          <th style="width: 45%;">Points de Contrôle & Normes Constructeur</th>
+          <th style="width: 30%;">Sortie Documentaire</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>01. Visite de Contrôle</b></td>
+          <td>Étanchéité en immersion, balances des blancs/BLI/LCI, béquillage $\pm 5\%$, canaux air/eau/aspiration, switches.</td>
+          <td>Fiche technique SAV, photos horodatées & double signature tactile.</td>
+        </tr>
+        <tr>
+          <td><b>02. Rapport d'Installation</b></td>
+          <td>Réception officielle, contrôle de conformité des 12 équipements constructeur, inventaire des consommables.</td>
+          <td>PV de réception avec réserves éventuelles et signatures conjointes.</td>
+        </tr>
+        <tr>
+          <td><b>03. Rapport de Formation</b></td>
+          <td>Formation théorique et pratique du personnel médical & biomédical (8 chapitres constructeur FUJIFILM).</td>
+          <td>Attestation de formation & registre d’émargement des praticiens.</td>
+        </tr>
+        <tr>
+          <td><b>04. Rapport Mise en Service</b></td>
+          <td>Vérification électrique, alimentation, environnement clinique, protocoles de sécurité constructeur.</td>
+          <td>Bon de mise en service officielle et activation de la garantie 2 ans.</td>
+        </tr>
+        <tr>
+          <td><b>05. Procédure Installation</b></td>
+          <td>Checklist interactive en 6 étapes : préparation, montage de la colonne, intégration réseau et archivage ADV.</td>
+          <td>Guide opérationnel de conformité qualité pour les ingénieurs.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- EN-TÊTE PAGE 2 -->
+  <div class="header-banner">
+    <div class="logos-left">
+      <img src="assets/electron-medical-logo.png" alt="Electron Medical Algérie" class="logo-em">
+    </div>
+    <div class="doc-badge-right">
+      <span class="doc-badge-pill">DOSSIER SYNTHÈSE SAV (SUITE)</span>
+      <div class="doc-version">Page 2 / 2</div>
+    </div>
+  </div>
+
+  <!-- SECTION 4 : LES 5 NOUVELLES FONCTIONNALITÉS DÉPLOYÉES -->
+  <div class="section">
+    <div class="section-title">4. Les Nouvelles Fonctionnalités Majeures Déployées</div>
+    <div class="cards-grid">
+      <div class="feature-card">
+        <h4>💬 Rappels WhatsApp & SMS en 1 Clic</h4>
+        <p>Bouton direct ouvrant WhatsApp Web/Mobile avec un message officiel pré-rédigé (Hôpital, Matériel, Numéro de Série, Date d'échéance des 6 mois, Technicien et Contact SAV).</p>
+      </div>
+      <div class="feature-card">
+        <h4>🏥 Fiche Client 360° & Parc Matériel</h4>
+        <p>Tableau de bord interactif par établissement (CHU, EPH, Cliniques) avec inventaire de tout leur matériel installé, suivi des garanties, historique des pannes et timeline des révisions.</p>
+      </div>
+      <div class="feature-card">
+        <h4>📱 QR Code & Étiquettes Équipement</h4>
+        <p>Générateur de QR Code 100% hors-ligne. Impression d'étiquettes constructeur (Format 80x50mm ou A4) à coller sur les appareils pour scan direct sur le terrain avec smartphone.</p>
+      </div>
+      <div class="feature-card">
+        <h4>💾 Sauvegarde Sécurisée SQLite (USB)</h4>
+        <p>Bouton de téléchargement direct du fichier <code>technico_commercial.db</code> sur clé USB ou disque dur externe, complété par des sauvegardes automatiques quotidiennes horodatées.</p>
+      </div>
+      <div class="feature-card" style="grid-column: span 2;">
+        <h4>📄 Procès-Verbal Officiel de Révision Semestrielle (Format A4 Imprimable)</h4>
+        <p>Génération en 1 clic d'un PV formel aux normes Fujifilm avec en-tête réglementaire Electron Medical (NIF, Agrément Ministère de la Santé), grille des 6 points de contrôle qualité et double cadre de signature et cachet.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5 : GUIDE DE DÉMARRAGE RAPIDE -->
+  <div class="section">
+    <div class="section-title">5. Guide de Démarrage Rapide & Utilisation au Quotidien</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Opération</th>
+          <th>Procédure / Raccourci</th>
+          <th>Résultat</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Lancement depuis le Bureau</b></td>
+          <td>Double-clic sur <code>OUVRIR_TECHNICO_COMMERCIAL.bat</code> sur le bureau</td>
+          <td>Démarrage automatique du serveur Python et ouverture du navigateur.</td>
+        </tr>
+        <tr>
+          <td><b>Accès sur Poste Local</b></td>
+          <td>Navigateur web : <code>http://localhost:8085</code></td>
+          <td>Accès au tableau de bord complet, aux alertes et aux formulaires.</td>
+        </tr>
+        <tr>
+          <td><b>Accès Mobile / Tablette</b></td>
+          <td>Même réseau Wi-Fi : <code>http://192.168.1.9:8085</code></td>
+          <td>Signature tactile au chevet du patient ou en bloc opératoire.</td>
+        </tr>
+        <tr>
+          <td><b>Synchronisation Calendrier</b></td>
+          <td>Cliquer sur le bouton <code>📅 Calendrier (.ICS)</code> sur le dashboard</td>
+          <td>Importation de tous les rendez-vous dans Outlook, Google ou smartphone avec alarmes à J-10.</td>
+        </tr>
+        <tr>
+          <td><b>Exportation Tableur</b></td>
+          <td>Cliquer sur le bouton <code>📊 Export Excel</code></td>
+          <td>Fichier CSV/Excel complet avec encodage UTF-8 Algérie.</td>
+        </tr>
+        <tr>
+          <td><b>Sauvegarde Externe</b></td>
+          <td>Cliquer sur <code>💾 Sauvegarde SQLite (USB)</code> &gt; Télécharger</td>
+          <td>Copie intégrale sécurisée de la base de données SQLite sur clé USB.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="quick-start-box">
+      <b>📌 Raccourci Bureau :</b> Dans votre fichier <code>c:\Users\Azur Computer\Desktop\FICHE CLIEN\OUVRIR_TECHNICO_COMMERCIAL.bat</code>, collez :<br>
+      <code>@echo off &amp; cd /d "D:\TECHNICO-COMMERCIAL" &amp; call "DEMARRER_PLATEFORME.bat"</code>
+    </div>
+  </div>
+
+  <!-- PIED DE PAGE OFFICIEL -->
+  <div class="doc-footer">
+    <div>
+      <b>ELECTRON MEDICAL ALGÉRIE SARL</b> · Distributeur Officiel Exclusif FUJIFILM Medical Systems<br>
+      Agrément Ministère de la Santé N° MSP/2018/EM · NIF : 001816001234567 · Alger, Algérie
+    </div>
+    <div style="text-align: right;">
+      Service Après-Vente &amp; Support Technique : <b>0550 12 34 56</b><br>
+      Plateforme Technico-Commerciale v2.2 · Document Certifié Conforme
+    </div>
+  </div>
+
+</body>
+</html>
