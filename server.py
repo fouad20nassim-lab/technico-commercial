@@ -487,6 +487,12 @@ def generer_echeances_garantie(installation_id, client_nom, wilaya, date_inst_st
         print(f"[ERREUR GENERATION REVISIONS] {e}")
 
 class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
+    def guess_type(self, path):
+        ctype = super().guess_type(path)
+        if ctype.startswith('text/') or ctype in ('application/javascript', 'application/json', 'image/svg+xml'):
+            if 'charset' not in ctype:
+                ctype += '; charset=utf-8'
+        return ctype
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=BASE_DIR, **kwargs)
 

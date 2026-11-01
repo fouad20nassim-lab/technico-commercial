@@ -2,6 +2,10 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Plateforme Technico-Commercial — Electron Medical Algérie & Fujifilm</title>
   <script>
@@ -22,7 +26,7 @@
       }
     })();
   </script>
-  <script src="js/theme.js"></script>
+  <script src="js/theme.js" charset="utf-8"></script>
   <link rel="stylesheet" href="css/main.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -121,6 +125,39 @@
                   <span>🇩🇿</span> National
                 </span>
               </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recherche Universelle Rapide Omnisearch (Ctrl+K) -->
+        <button type="button" class="btn btn-secondary" onclick="openOmnisearchModal()" title="Recherche universelle rapide (Hôpitaux, SN, Wilayas, Techniciens) — Raccourci : Ctrl + K" style="display:inline-flex; align-items:center; gap:6px; font-weight:700;">
+          <span>🔍</span>
+          <span>Recherche...</span>
+          <kbd style="background:rgba(0,0,0,0.15); padding:2px 6px; border-radius:4px; font-size:10px; font-family:monospace; border:1px solid rgba(255,255,255,0.2); color:#00b87c;">Ctrl K</kbd>
+        </button>
+
+        <!-- Centre de Notifications en Direct (Bell & Badge Pulsant) -->
+        <div class="notif-bell-wrapper" style="position:relative; display:inline-block;">
+          <button type="button" class="btn btn-secondary notif-bell-btn" id="notifBellBtn" onclick="toggleNotifPanel(event)" title="Centre de notifications et alertes SAV en direct">
+            <span style="font-size:15px;">🔔</span>
+            <span class="notif-badge-pill" id="notifBadgeCount" style="display:none;">0</span>
+          </button>
+
+          <!-- Dropdown Panneau de Notifications -->
+          <div class="notif-dropdown-card" id="notifPanel" style="display:none; position:absolute; right:0; top:42px; width:380px; max-width:92vw; background:var(--bg-surface, #0d1e27); border:1px solid #1c3d4e; border-radius:16px; box-shadow:0 20px 50px rgba(0,0,0,0.5); z-index:999999; overflow:hidden;">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid #16323f; background:rgba(0,0,0,0.18);">
+              <div style="font-weight:800; font-size:13px; display:flex; align-items:center; gap:8px;">
+                <span>🔔 Notifications & Alertes SAV</span>
+                <span id="notifTotalBadge" style="background:#ef4444; color:#fff; font-size:10px; padding:2px 7px; border-radius:10px; font-weight:800;">0</span>
+              </div>
+              <button type="button" onclick="closeNotifPanel()" style="background:none; border:none; cursor:pointer; font-size:16px; color:#94a3b8;">✕</button>
+            </div>
+            <div id="notifListContainer" style="max-height:360px; overflow-y:auto; padding:8px 12px;">
+              <!-- Rempli dynamiquement -->
+            </div>
+            <div style="padding:10px 14px; border-top:1px solid #16323f; background:rgba(0,0,0,0.1); display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:11px; color:#94a3b8;">Base SQLite Synchronisée</span>
+              <a href="#sectionRevisions" onclick="closeNotifPanel()" style="font-size:11px; font-weight:700; color:#00b87c; text-decoration:none;">Garanties 2 Ans & Révisions →</a>
             </div>
           </div>
         </div>
@@ -326,6 +363,111 @@
         </div>
       </div>
     </section>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 3 : CARTE INTERACTIVE RÉGIONALE & TERRITOIRE DZ  -->
+    <!-- ======================================================== -->
+    <div class="algeria-territory-card" id="sectionTerritoryMap">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:12px;">
+        <div>
+          <h3 style="margin:0 0 6px 0; font-size:18px; font-weight:800; display:flex; align-items:center; gap:8px;">
+            <span>🗺️</span> <span>Couverture Territoriale Algérie & Découpage Régional (58 Wilayas)</span>
+          </h3>
+          <p style="margin:0; font-size:13px; color:var(--text-muted);">
+            Cliquez sur l'une des 4 régions pour filtrer instantanément l'ensemble du registre et des interventions.
+          </p>
+        </div>
+        <button type="button" class="btn btn-secondary" onclick="resetTerritorySelection()" style="font-size:12px; font-weight:700; padding:6px 14px;">
+          🇩🇿 Voir toute l'Algérie (National)
+        </button>
+      </div>
+
+      <div class="map-grid-layout">
+        <!-- Colonne Gauche : Les 4 Régions Interactives -->
+        <div>
+          <!-- Région Centre -->
+          <div class="region-interactive-box centre" id="cardRegionCentre" onclick="filterByTerritoryCard('Centre')">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span class="region-orb centre" style="width:20px; height:20px;"></span>
+              <div>
+                <div style="font-weight:800; font-size:14px; color:#10b981;">Région Centre</div>
+                <div style="font-size:11px; color:var(--text-muted);">Alger, Blida, Tipaza, Boumerdès, Tizi Ouzou, Médéa, Chlef, Djelfa, Bouira...</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:20px; font-weight:900; color:#10b981;" id="mapCountCentre">0</div>
+              <div style="font-size:10px; font-weight:700; color:var(--text-muted);">rapports</div>
+            </div>
+          </div>
+
+          <!-- Région Est -->
+          <div class="region-interactive-box est" id="cardRegionEst" onclick="filterByTerritoryCard('Est')">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span class="region-orb est" style="width:20px; height:20px;"></span>
+              <div>
+                <div style="font-weight:800; font-size:14px; color:#2563eb;">Région Est</div>
+                <div style="font-size:11px; color:var(--text-muted);">Constantine, Annaba, Sétif, Batna, Skikda, Béjaïa, Tébessa, Guelma, Jijel...</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:20px; font-weight:900; color:#2563eb;" id="mapCountEst">0</div>
+              <div style="font-size:10px; font-weight:700; color:var(--text-muted);">rapports</div>
+            </div>
+          </div>
+
+          <!-- Région Ouest -->
+          <div class="region-interactive-box ouest" id="cardRegionOuest" onclick="filterByTerritoryCard('Ouest')">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span class="region-orb ouest" style="width:20px; height:20px;"></span>
+              <div>
+                <div style="font-weight:800; font-size:14px; color:#f97316;">Région Ouest</div>
+                <div style="font-size:11px; color:var(--text-muted);">Oran, Tlemcen, Mostaganem, Sidi Bel Abbès, Mascara, Tiaret, Saïda, Relizane...</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:20px; font-weight:900; color:#f97316;" id="mapCountOuest">0</div>
+              <div style="font-size:10px; font-weight:700; color:var(--text-muted);">rapports</div>
+            </div>
+          </div>
+
+          <!-- Région Sud -->
+          <div class="region-interactive-box sud" id="cardRegionSud" onclick="filterByTerritoryCard('Sud')">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span class="region-orb sud" style="width:20px; height:20px;"></span>
+              <div>
+                <div style="font-weight:800; font-size:14px; color:#8b5cf6;">Région Sud</div>
+                <div style="font-size:11px; color:var(--text-muted);">Ouargla, Ghardaïa, Biskra, Béchar, Tamanrasset, Adrar, El Oued, Touggourt, Djanet...</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:20px; font-weight:900; color:#8b5cf6;" id="mapCountSud">0</div>
+              <div style="font-size:10px; font-weight:700; color:var(--text-muted);">rapports</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Colonne Droite : Synthèse & Wilayas Clés du Territoire Actif -->
+        <div style="background:rgba(0,0,0,0.12); border:1px solid #16323f; border-radius:14px; padding:18px; min-height:220px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <div style="font-weight:800; font-size:14px; color:#00b87c;" id="territoryPanelTitle">
+                🇩🇿 Synthèse Nationale (58 Wilayas)
+              </div>
+              <span style="font-size:11px; font-weight:800; background:#0f766e; color:#fff; padding:2px 8px; border-radius:10px;" id="territoryActiveBadge">National</span>
+            </div>
+            <div id="territoryDetailStats" style="font-size:12px; color:var(--text-muted); line-height:1.6; margin-bottom:14px;">
+              Sélectionnez une région pour explorer les wilayas actives, les hôpitaux couverts et les équipements sous contrat de garantie.
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; margin-bottom:6px;">Wilayas de la région :</div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap; max-height:110px; overflow-y:auto;" id="territoryWilayasChips">
+              <!-- Rempli dynamiquement -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- NOUVELLE SECTION : SUIVI DES GARANTIES 2 ANS & RÉVISIONS 6 MOIS (RAPPEL J-10) -->
     <section id="sectionRevisions" style="margin-bottom: 36px; scroll-margin-top: 85px;">
@@ -646,6 +788,33 @@
             </button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL : RECHERCHE UNIVERSELLE RAPIDE (OMNISEARCH CTRL+K)  -->
+  <!-- ======================================================== -->
+  <div class="omnisearch-overlay" id="omnisearchModal" onclick="if(event.target === this) closeOmnisearchModal()">
+    <div class="omnisearch-modal">
+      <div class="omnisearch-header">
+        <span class="omnisearch-icon">🔍</span>
+        <input type="text" id="omnisearchInput" class="omnisearch-input" placeholder="Rechercher équipement Fujifilm, SN, hôpital, wilaya, technicien..." autocomplete="off" oninput="handleOmnisearchInput(this.value)">
+        <button type="button" onclick="closeOmnisearchModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer; padding:4px 8px;">✕</button>
+      </div>
+      <div style="display:flex; gap:6px; padding:10px 18px; background:rgba(0,0,0,0.15); border-bottom:1px solid #16323f; overflow-x:auto;">
+        <button type="button" class="btn-omni-filter active" id="omniFilterAll" onclick="setOmniCategory('all', this)" style="background:#0f766e; color:#fff; border:none; padding:5px 12px; border-radius:12px; font-size:11px; font-weight:700; cursor:pointer;">Tout (Tous)</button>
+        <button type="button" class="btn-omni-filter" onclick="setOmniCategory('equipment', this)" style="background:#091720; color:#94a3b8; border:1px solid #1b3542; padding:5px 12px; border-radius:12px; font-size:11px; font-weight:700; cursor:pointer;">🔬 Équipements & SN</button>
+        <button type="button" class="btn-omni-filter" onclick="setOmniCategory('client', this)" style="background:#091720; color:#94a3b8; border:1px solid #1b3542; padding:5px 12px; border-radius:12px; font-size:11px; font-weight:700; cursor:pointer;">🏥 Hôpitaux & CHU</button>
+        <button type="button" class="btn-omni-filter" onclick="setOmniCategory('wilaya', this)" style="background:#091720; color:#94a3b8; border:1px solid #1b3542; padding:5px 12px; border-radius:12px; font-size:11px; font-weight:700; cursor:pointer;">📍 Wilayas & Régions</button>
+        <button type="button" class="btn-omni-filter" onclick="setOmniCategory('rapport', this)" style="background:#091720; color:#94a3b8; border:1px solid #1b3542; padding:5px 12px; border-radius:12px; font-size:11px; font-weight:700; cursor:pointer;">📄 Rapports & Visites</button>
+      </div>
+      <div class="omnisearch-results" id="omnisearchResults" style="max-height:380px; overflow-y:auto; padding:8px 12px;">
+        <!-- Rempli dynamiquement -->
+      </div>
+      <div class="omnisearch-footer" style="padding:10px 18px; border-top:1px solid #16323f; display:flex; justify-content:space-between; align-items:center; font-size:11px; color:#64748b;">
+        <span>Astuce : Tapez le numéro de série d'un endoscope ou le nom d'un CHU</span>
+        <span>Appuyez sur <kbd style="background:rgba(255,255,255,0.08); padding:1px 5px; border-radius:4px; font-family:monospace; color:#38bdf8;">Échap</kbd> pour fermer</span>
       </div>
     </div>
   </div>
@@ -996,9 +1165,9 @@
   </div>
 
   <script src="js/qrcode.min.js"></script>
-  <script src="js/algeria_wilayas.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/api.js"></script>
+  <script src="js/algeria_wilayas.js" charset="utf-8"></script>
+  <script src="js/auth.js" charset="utf-8"></script>
+  <script src="js/api.js" charset="utf-8"></script>
   <script>
     const TYPE_LABELS = {
       'visite_controle': { label: 'Visite de Contrôle', badge: 'badge-vc', url: 'visite_controle.html' },
@@ -1207,6 +1376,7 @@
         }).join('');
 
         const elRegBars = document.getElementById('chartRegionsBars');
+        if (typeof updateTerritoryCardStats === 'function') updateTerritoryCardStats(allRapports, regionCounts);
         if (elRegBars) elRegBars.innerHTML = regHtml;
       }
     }
@@ -1248,6 +1418,7 @@
             if (badgeTot) badgeTot.textContent = `${stats.total_rapports || 0} Rapports`;
           }
           const allReps = await API.getRapports({});
+          window.__allRapports = allReps;
           renderAnalyticsCockpit(stats, allReps);
         }
       } catch (errKpi) {
@@ -1279,6 +1450,7 @@
     async function loadRevisionsData() {
       // Récupérer les alertes urgentes (J-10 et en retard)
       const alertes = await API.getAlertes10Jours();
+      if (typeof updateLiveNotifications === 'function') updateLiveNotifications(alertes, window.__allRapports);
       const banner = document.getElementById('alertBanner10j');
       const countUrgentsPill = document.getElementById('countUrgentsPill');
       if (countUrgentsPill) countUrgentsPill.textContent = alertes.length;
@@ -1529,6 +1701,7 @@
       if (!confirm(`Êtes-vous sûr de vouloir supprimer définitivement le rapport [${id}] ?`)) return;
       await API.deleteRapport(id);
       loadDashboardData();
+      if (typeof resetTerritorySelection === 'function') resetTerritorySelection();
     }
 
     async function openWifiModal() {
@@ -1576,6 +1749,7 @@
           }
         }
         loadDashboardData();
+      if (typeof resetTerritorySelection === 'function') resetTerritorySelection();
       } catch (err) {
         API.toast('Fichier JSON invalide pour la restauration.', 'error');
       }
@@ -1854,6 +2028,7 @@ Notre équipe technique reste à votre entière disposition pour toute intervent
 
     async function openQuickWhatsAppFirstAlert() {
       const alertes = await API.getAlertes10Jours();
+      if (typeof updateLiveNotifications === 'function') updateLiveNotifications(alertes, window.__allRapports);
       if (alertes && alertes.length > 0) {
         openWhatsAppModalForRevision(alertes[0]);
       } else {
@@ -2145,6 +2320,427 @@ Notre équipe technique reste à votre entière disposition pour toute intervent
       });
     }
 
+    // =========================================================================
+    // NOUVEAUTÉ 1 : CENTRE DE NOTIFICATIONS EN DIRECT (FEATURE 2)
+    // =========================================================================
+    let __liveNotifications = [];
+
+    function toggleNotifPanel(e) {
+      if (e) e.stopPropagation();
+      const panel = document.getElementById('notifPanel');
+      if (!panel) return;
+      const isVisible = panel.style.display === 'block';
+      panel.style.display = isVisible ? 'none' : 'block';
+    }
+
+    function closeNotifPanel() {
+      const panel = document.getElementById('notifPanel');
+      if (panel) panel.style.display = 'none';
+    }
+
+    document.addEventListener('click', (e) => {
+      const panel = document.getElementById('notifPanel');
+      const btn = document.getElementById('notifBellBtn');
+      if (panel && panel.style.display === 'block') {
+        if (!panel.contains(e.target) && (!btn || !btn.contains(e.target))) {
+          panel.style.display = 'none';
+        }
+      }
+    });
+
+    function updateLiveNotifications(alertesRevisions, allRapports) {
+      __liveNotifications = [];
+
+      if (Array.isArray(alertesRevisions)) {
+        alertesRevisions.forEach(rev => {
+          const isLate = Boolean(rev.est_en_retard || (rev.jours_restants !== undefined && rev.jours_restants < 0));
+          const days = rev.jours_restants !== undefined ? rev.jours_restants : 0;
+          __liveNotifications.push({
+            type: isLate ? 'late' : 'urgent',
+            category: 'Garantie 2 Ans & Révision',
+            badge: isLate ? '🚨 RETARD' : ('⏰ J-' + Math.max(0, days)),
+            badgeColor: isLate ? '#ef4444' : '#f59e0b',
+            title: (rev.titre_revision || 'Révision Semestrielle') + ' : ' + (rev.client_nom || 'Établissement'),
+            subtitle: (rev.materiel || 'Endoscope Fujifilm') + (rev.numero_serie ? (' (SN: ' + rev.numero_serie + ')') : ''),
+            wilaya: rev.wilaya || 'Algérie',
+            date: rev.date_echeance || '',
+            actionType: 'revision',
+            revId: rev.id,
+            telephone: rev.telephone || ''
+          });
+        });
+      }
+
+      if (Array.isArray(allRapports)) {
+        const todayIso = new Date().toISOString().slice(0, 10);
+        const recents = allRapports.filter(r => (r.date_creation || r.date_intervention || '').startsWith(todayIso)).slice(0, 3);
+        recents.forEach(r => {
+          __liveNotifications.push({
+            type: 'info',
+            category: 'Nouveau Document Enregistré',
+            badge: '✅ AUJOURD\'HUI',
+            badgeColor: '#00b87c',
+            title: (TYPE_LABELS[r.type_document]?.label || r.type_document || 'Intervention') + ' : ' + (r.etablissement || r.client_nom || '-'),
+            subtitle: 'Technicien : ' + (r.technicien || 'Équipe SAV') + ' | Wilaya : ' + (r.wilaya || '-'),
+            wilaya: r.wilaya || '',
+            date: r.date_creation || r.date_intervention || '',
+            actionType: 'rapport',
+            rapportId: r.id,
+            docType: r.type_document
+          });
+        });
+      }
+
+      const totalCount = __liveNotifications.length;
+      const badgePill = document.getElementById('notifBadgeCount');
+      const totalBadge = document.getElementById('notifTotalBadge');
+      if (badgePill) {
+        badgePill.textContent = totalCount;
+        badgePill.style.display = totalCount > 0 ? 'inline-block' : 'none';
+        if (totalCount > 0) {
+          badgePill.classList.add('pulse');
+        } else {
+          badgePill.classList.remove('pulse');
+        }
+      }
+      if (totalBadge) totalBadge.textContent = totalCount;
+
+      renderNotificationsList();
+    }
+
+    function renderNotificationsList() {
+      const listEl = document.getElementById('notifListContainer');
+      if (!listEl) return;
+
+      if (__liveNotifications.length === 0) {
+        listEl.innerHTML = '<div style="text-align:center; padding:24px 12px; color:#94a3b8;">' +
+                           '<div style="font-size:32px; margin-bottom:8px;">👍</div>' +
+                           '<div style="font-weight:700; font-size:13px; color:#cbd5e1;">Aucune alerte urgente</div>' +
+                           '<div style="font-size:11px; margin-top:4px;">Toutes les révisions et visites sont à jour !</div>' +
+                           '</div>';
+        return;
+      }
+
+      listEl.innerHTML = __liveNotifications.map(notif => {
+        let actionBtn = '';
+        if (notif.actionType === 'revision') {
+          actionBtn = '<button type="button" onclick="closeNotifPanel(); scrollToRevisions();" style="background:#0f766e; color:#fff; border:none; padding:4px 9px; border-radius:6px; font-size:11px; font-weight:800; cursor:pointer;">Voir Révision</button>';
+          if (notif.telephone) {
+            actionBtn += ' <button type="button" onclick="partagerWhatsAppRevision(\'' + escapeHtml(notif.revId) + '\')" style="background:#25D366; color:#fff; border:none; padding:4px 9px; border-radius:6px; font-size:11px; font-weight:800; cursor:pointer; margin-left:4px;">WhatsApp</button>';
+          }
+        } else {
+          actionBtn = '<button type="button" onclick="closeNotifPanel(); applyFilters();" style="background:#1e4457; color:#38bdf8; border:none; padding:4px 9px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">Consulter</button>';
+        }
+
+        return '<div style="padding:10px 12px; margin-bottom:8px; background:rgba(0,0,0,0.15); border-left:3px solid ' + notif.badgeColor + '; border-radius:8px; display:flex; flex-direction:column; gap:4px;">' +
+                 '<div style="display:flex; justify-content:space-between; align-items:center;">' +
+                   '<span style="font-size:10px; font-weight:800; text-transform:uppercase; color:#94a3b8;">' + notif.category + '</span>' +
+                   '<span style="font-size:10px; font-weight:800; background:' + notif.badgeColor + '; color:#fff; padding:1px 6px; border-radius:6px;">' + notif.badge + '</span>' +
+                 '</div>' +
+                 '<div style="font-weight:700; font-size:12px; color:#f8fafc; line-height:1.3;">' + escapeHtml(notif.title) + '</div>' +
+                 '<div style="font-size:11px; color:#94a3b8;">' + escapeHtml(notif.subtitle) + '</div>' +
+                 '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">' +
+                   '<span style="font-size:10px; color:#64748b;">📍 ' + escapeHtml(notif.wilaya) + (notif.date ? (' • ' + notif.date) : '') + '</span>' +
+                   '<div>' + actionBtn + '</div>' +
+                 '</div>' +
+               '</div>';
+      }).join('');
+    }
+
+    function partagerWhatsAppRevision(revId) {
+      const rev = (window.__revisionsMap && window.__revisionsMap[revId]) ? window.__revisionsMap[revId] : null;
+      if (!rev) return;
+      const tel = (rev.telephone || '').replace(/[^0-9]/g, '');
+      const msg = encodeURIComponent(
+        'Bonjour,\n' +
+        'Rappel SAV Electron Medical Algérie (Distributeur Officiel Fujifilm) :\n' +
+        'Établissement : ' + (rev.client_nom || 'Client') + '\n' +
+        'Matériel : ' + (rev.materiel || 'Endoscope Fujifilm') + (rev.numero_serie ? (' (SN: ' + rev.numero_serie + ')') : '') + '\n' +
+        'Objet : ' + (rev.titre_revision || 'Révision Semestrielle de Garantie') + '\n' +
+        'Échéance prévue : ' + (rev.date_echeance || '-') + '\n' +
+        'Merci de nous contacter pour planifier l\'intervention.'
+      );
+      const url = tel ? ('https://wa.me/' + tel + '?text=' + msg) : ('https://wa.me/?text=' + msg);
+      window.open(url, '_blank');
+    }
+
+    // =========================================================================
+    // NOUVEAUTÉ 2 : RECHERCHE UNIVERSELLE RAPIDE (OMNISEARCH CTRL + K)
+    // =========================================================================
+    let currentOmniCategory = 'all';
+
+    function openOmnisearchModal() {
+      const modal = document.getElementById('omnisearchModal');
+      const input = document.getElementById('omnisearchInput');
+      if (modal) modal.classList.add('active');
+      if (input) {
+        input.value = '';
+        setTimeout(() => input.focus(), 100);
+      }
+      handleOmnisearchInput('');
+    }
+
+    function closeOmnisearchModal() {
+      const modal = document.getElementById('omnisearchModal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function setOmniCategory(cat, btn) {
+      currentOmniCategory = cat;
+      document.querySelectorAll('.btn-omni-filter').forEach(b => {
+        b.style.background = '#091720';
+        b.style.color = '#94a3b8';
+        b.style.border = '1px solid #1b3542';
+      });
+      if (btn) {
+        btn.style.background = '#0f766e';
+        btn.style.color = '#fff';
+        btn.style.border = 'none';
+      }
+      const val = document.getElementById('omnisearchInput')?.value || '';
+      handleOmnisearchInput(val);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        openOmnisearchModal();
+      }
+    });
+
+    function handleOmnisearchInput(query) {
+      const q = (query || '').trim().toLowerCase();
+      const resultsContainer = document.getElementById('omnisearchResults');
+      if (!resultsContainer) return;
+
+      const items = [];
+
+      const allReps = window.__allRapports || [];
+      allReps.forEach(r => {
+        if (currentOmniCategory === 'equipment') return;
+        const snMatch = (r.numero_serie || '').toLowerCase().includes(q);
+        const etabMatch = (r.etablissement || r.client_nom || '').toLowerCase().includes(q);
+        const wilayaMatch = (r.wilaya || '').toLowerCase().includes(q);
+        const techMatch = (r.technicien || '').toLowerCase().includes(q);
+        const typeMatch = (r.type_document || '').toLowerCase().includes(q);
+        const idMatch = (r.id || '').toLowerCase().includes(q);
+
+        if (q === '' || snMatch || etabMatch || wilayaMatch || techMatch || typeMatch || idMatch) {
+          items.push({
+            kind: 'rapport',
+            icon: '📄',
+            title: (r.etablissement || 'Établissement') + ' • ' + (r.id || ''),
+            desc: (TYPE_LABELS[r.type_document]?.label || r.type_document) + ' | Wilaya: ' + (r.wilaya || '-') + ' | Tech: ' + (r.technicien || '-'),
+            extra: r.numero_serie ? ('SN: ' + r.numero_serie) : (r.date_intervention || r.date_creation || ''),
+            action: () => {
+              closeOmnisearchModal();
+              openQuickView(r);
+            }
+          });
+        }
+      });
+
+      const revsMap = window.__revisionsMap || {};
+      Object.values(revsMap).forEach(rev => {
+        if (currentOmniCategory === 'rapport') return;
+        const snMatch = (rev.numero_serie || '').toLowerCase().includes(q);
+        const matMatch = (rev.materiel || '').toLowerCase().includes(q);
+        const clientMatch = (rev.client_nom || '').toLowerCase().includes(q);
+        const wilayaMatch = (rev.wilaya || '').toLowerCase().includes(q);
+
+        if (q === '' || snMatch || matMatch || clientMatch || wilayaMatch) {
+          items.push({
+            kind: 'equipment',
+            icon: '🔬',
+            title: (rev.materiel || 'Endoscope Fujifilm') + ' — SN: ' + (rev.numero_serie || '-'),
+            desc: 'Hôpital: ' + (rev.client_nom || '-') + ' | Wilaya: ' + (rev.wilaya || '-') + ' | Échéance: ' + (rev.date_echeance || '-'),
+            extra: rev.titre_revision || 'Garantie 2 Ans',
+            action: () => {
+              closeOmnisearchModal();
+              scrollToRevisions();
+            }
+          });
+        }
+      });
+
+      if (typeof ALGERIA_WILAYAS_DATA !== 'undefined' && (currentOmniCategory === 'all' || currentOmniCategory === 'wilaya')) {
+        ALGERIA_WILAYAS_DATA.forEach(w => {
+          if (q !== '' && (w.nom.toLowerCase().includes(q) || w.code.includes(q) || w.region.toLowerCase().includes(q))) {
+            items.push({
+              kind: 'wilaya',
+              icon: '📍',
+              title: w.code + ' - ' + w.nom,
+              desc: 'Territoire : Région ' + w.region + ' (Algérie)',
+              extra: 'Filtrer Registre',
+              action: () => {
+                closeOmnisearchModal();
+                const sel = document.getElementById('filterWilaya');
+                if (sel) {
+                  sel.value = w.code + ' - ' + w.nom;
+                  applyFilters();
+                }
+              }
+            });
+          }
+        });
+      }
+
+      const limited = items.slice(0, 25);
+
+      if (limited.length === 0) {
+        resultsContainer.innerHTML = '<div style="text-align:center; padding:30px 10px; color:#94a3b8;">' +
+                                     '<div style="font-size:24px; margin-bottom:6px;">🔍</div>' +
+                                     '<div style="font-weight:700; font-size:13px; color:#cbd5e1;">Aucun résultat pour "' + escapeHtml(query) + '"</div>' +
+                                     '<div style="font-size:11px; margin-top:4px;">Essayez avec un numéro de série, un nom de CHU ou une wilaya.</div>' +
+                                     '</div>';
+        return;
+      }
+
+      resultsContainer.innerHTML = limited.map((it, idx) => {
+        return '<div class="omnisearch-item" data-idx="' + idx + '" style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; margin-bottom:6px; background:#091720; border:1px solid #1a3947; border-radius:10px; cursor:pointer; transition:all 0.15s ease;">' +
+                 '<div style="display:flex; align-items:center; gap:12px; min-width:0;">' +
+                   '<span style="font-size:18px; flex-shrink:0;">' + it.icon + '</span>' +
+                   '<div style="min-width:0;">' +
+                     '<div style="font-weight:700; font-size:13px; color:#f8fafc; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + escapeHtml(it.title) + '</div>' +
+                     '<div style="font-size:11px; color:#94a3b8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + escapeHtml(it.desc) + '</div>' +
+                   '</div>' +
+                 '</div>' +
+                 '<span style="font-size:10px; font-weight:700; background:rgba(0,184,124,0.15); color:#00b87c; padding:3px 8px; border-radius:8px; flex-shrink:0; margin-left:10px;">' + escapeHtml(it.extra) + '</span>' +
+               '</div>';
+      }).join('');
+
+      resultsContainer.querySelectorAll('.omnisearch-item').forEach(el => {
+        el.addEventListener('click', () => {
+          const idx = parseInt(el.getAttribute('data-idx'), 10);
+          if (limited[idx] && typeof limited[idx].action === 'function') {
+            limited[idx].action();
+          }
+        });
+      });
+    }
+
+    function openQuickView(r) {
+      if (!r) return;
+      const url = TYPE_LABELS[r.type_document]?.url;
+      if (url) {
+        window.location.href = url + '?id=' + encodeURIComponent(r.id);
+      } else {
+        const input = document.getElementById('filterSearch');
+        if (input) {
+          input.value = r.id || r.etablissement || '';
+          applyFilters();
+        }
+        const sec = document.getElementById('sectionCentralRegister');
+        if (sec) sec.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // =========================================================================
+    // NOUVEAUTÉ 3 : CARTE INTERACTIVE RÉGIONALE & TERRITORIALE (FEATURE 3)
+    // =========================================================================
+    let activeTerritoryRegion = '';
+
+    function filterByTerritoryCard(regionKey) {
+      activeTerritoryRegion = regionKey;
+
+      document.querySelectorAll('.region-interactive-box').forEach(b => b.classList.remove('active'));
+
+      const targetBox = document.getElementById('cardRegion' + regionKey);
+      if (targetBox) targetBox.classList.add('active');
+
+      const titleEl = document.getElementById('territoryPanelTitle');
+      const badgeEl = document.getElementById('territoryActiveBadge');
+      const detailEl = document.getElementById('territoryDetailStats');
+      const chipsEl = document.getElementById('territoryWilayasChips');
+
+      const meta = (typeof REGIONS_CONFIG !== 'undefined' && REGIONS_CONFIG[regionKey]) ? REGIONS_CONFIG[regionKey] : { nom: 'Région ' + regionKey };
+
+      if (titleEl) titleEl.innerHTML = '📍 ' + meta.nom;
+      if (badgeEl) {
+        badgeEl.textContent = regionKey;
+        if (regionKey === 'Centre') badgeEl.style.background = '#10b981';
+        else if (regionKey === 'Est') badgeEl.style.background = '#2563eb';
+        else if (regionKey === 'Ouest') badgeEl.style.background = '#f97316';
+        else if (regionKey === 'Sud') badgeEl.style.background = '#8b5cf6';
+      }
+
+      const wilayas = typeof getWilayasByRegion === 'function' ? getWilayasByRegion(regionKey) : [];
+      if (detailEl) {
+        const docCount = (window.__regionCounts && window.__regionCounts[regionKey]) || 0;
+        detailEl.innerHTML = '<b>' + wilayas.length + ' Wilayas rattachées</b> à la ' + meta.nom + '.<br>' +
+                             '<b>' + docCount + ' document(s) & interventions</b> enregistrés sur ce territoire.';
+      }
+
+      if (chipsEl) {
+        chipsEl.innerHTML = wilayas.map(w => {
+          return '<span onclick="filterByWilayaChip(\'' + escapeHtml(w.nom) + '\')" style="font-size:11px; font-weight:700; background:#091720; border:1px solid #1a3947; color:#cbd5e1; padding:3px 8px; border-radius:12px; cursor:pointer; transition:all 0.15s ease;" onmouseover="this.style.borderColor=\'#00b87c\';this.style.color=\'#00b87c\';" onmouseout="this.style.borderColor=\'#1a3947\';this.style.color=\'#cbd5e1\';">' +
+                   escapeHtml(w.code) + ' - ' + escapeHtml(w.nom) +
+                 '</span>';
+        }).join('');
+      }
+
+      const matchingPill = document.querySelector('.region-filter-bar .btn-' + regionKey.toLowerCase());
+      if (typeof setRegionalFilter === 'function') {
+        setRegionalFilter(regionKey, matchingPill);
+      }
+    }
+
+    function resetTerritorySelection() {
+      activeTerritoryRegion = '';
+      document.querySelectorAll('.region-interactive-box').forEach(b => b.classList.remove('active'));
+
+      const titleEl = document.getElementById('territoryPanelTitle');
+      const badgeEl = document.getElementById('territoryActiveBadge');
+      const detailEl = document.getElementById('territoryDetailStats');
+      const chipsEl = document.getElementById('territoryWilayasChips');
+
+      if (titleEl) titleEl.innerHTML = '🇩🇿 Synthèse Nationale (58 Wilayas)';
+      if (badgeEl) {
+        badgeEl.textContent = 'National';
+        badgeEl.style.background = '#0f766e';
+      }
+      if (detailEl) {
+        const totalDocs = (window.__allRapports || []).length;
+        detailEl.innerHTML = 'Couverture des <b>58 Wilayas</b> réparties en 4 Territoires (Centre, Est, Ouest, Sud).<br>' +
+                             'Total national de <b>' + totalDocs + ' interventions et équipements Fujifilm</b> sous contrat.';
+      }
+      if (chipsEl) {
+        chipsEl.innerHTML = '<span style="font-size:11px; color:#94a3b8;">Cliquez sur l\'une des 4 régions à gauche pour afficher ses wilayas et filtrer les rapports.</span>';
+      }
+
+      const allPill = document.querySelector('.region-filter-bar .btn-all-regions');
+      if (typeof setRegionalFilter === 'function') {
+        setRegionalFilter('', allPill);
+      }
+    }
+
+    function filterByWilayaChip(wilayaNom) {
+      const sel = document.getElementById('filterWilaya');
+      if (sel) {
+        for (let i = 0; i < sel.options.length; i++) {
+          if (sel.options[i].text.includes(wilayaNom)) {
+            sel.selectedIndex = i;
+            break;
+          }
+        }
+      }
+      applyFilters();
+      const sec = document.getElementById('sectionCentralRegister');
+      if (sec) sec.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function updateTerritoryCardStats(allRapports, regionCounts) {
+      window.__regionCounts = regionCounts;
+      const setCardCount = (id, count) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = count !== undefined ? count : 0;
+      };
+      setCardCount('mapCountCentre', regionCounts.Centre);
+      setCardCount('mapCountEst', regionCounts.Est);
+      setCardCount('mapCountOuest', regionCounts.Ouest);
+      setCardCount('mapCountSud', regionCounts.Sud);
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       // Affichage immédiat du profil utilisateur depuis le stockage local
       updateUserHeaderPill();
@@ -2159,6 +2755,7 @@ Notre équipe technique reste à votre entière disposition pour toute intervent
       });
 
       loadDashboardData();
+      if (typeof resetTerritorySelection === 'function') resetTerritorySelection();
 
       // Fermeture des modals en cliquant sur le fond ou avec la touche Echap
       document.querySelectorAll('.modal-overlay').forEach(overlay => {
