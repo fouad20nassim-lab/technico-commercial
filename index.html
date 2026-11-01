@@ -198,6 +198,9 @@
         <button type="button" class="btn btn-secondary" onclick="openReliabilityModal()" title="Cockpit de Fiabilité, Taux de Disponibilité & MTBF/MTTR" style="font-weight:700;">
           <span>📈</span> <span>Fiabilité MTBF</span>
         </button>
+        <button type="button" class="btn btn-secondary" onclick="openTourneeModal()" title="Optimiseur de Tournées Techniques & Itinéraires GPS Google Maps / Waze" style="font-weight:700; color:#0284c7; border-color:rgba(2,132,199,0.4);">
+          <span>🗺️</span> <span>Tournées & GPS</span>
+        </button>
 
         <button class="btn btn-secondary admin-only-item" onclick="openWifiModal()" title="Accéder depuis un smartphone ou une tablette sur le réseau local Wi-Fi">
           📱 Accès Wi-Fi
@@ -1603,6 +1606,113 @@
   </div>
 
   <!-- ======================================================== -->
+  <!-- MODAL V6 : OPTIMISEUR DE TOURNÉES SAV & ITINÉRAIRES GPS  -->
+  <!-- ======================================================== -->
+  <div class="modal-overlay" id="tourneeGpsModal" onclick="if(event.target === this) closeTourneeModal()">
+    <div class="modal-box" style="max-width: 950px; width: 100%;">
+      <div class="modal-header no-print">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:24px;">🗺️</span>
+          <div>
+            <h3 style="margin:0; font-size:18px; font-weight:800; color:#0f766e;">Optimiseur de Tournées SAV & Itinéraires GPS</h3>
+            <p style="margin:0; font-size:12px; color:var(--text-muted);">Planification intelligente des déplacements, calcul kilométrique et navigation Google Maps / Waze</p>
+          </div>
+        </div>
+        <button type="button" class="btn-close" onclick="closeTourneeModal()">✕</button>
+      </div>
+
+      <!-- Filtres et Paramètres de la Tournée -->
+      <div class="no-print" style="background:rgba(0,0,0,0.06); padding:12px 16px; border-radius:12px; margin-bottom:14px; display:grid; grid-template-columns: 1.2fr 1fr 1fr auto; gap:10px; align-items:center;">
+        <div>
+          <label style="font-size:11px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:3px;">📍 Territoire d'intervention :</label>
+          <select id="tourRegionSelect" class="form-input" style="font-size:12px; padding:6px 10px;" onchange="loadTourneeCandidates()">
+            <option value="">🇩🇿 Toute l'Algérie (58 Wilayas)</option>
+            <option value="Centre">🟢 Région Centre (Alger, Blida, Médéa, Tipaza...)</option>
+            <option value="Est">🔵 Région Est (Constantine, Sétif, Annaba...)</option>
+            <option value="Ouest">🟠 Région Ouest (Oran, Tlemcen, Mostaganem...)</option>
+            <option value="Sud">🟣 Région Sud (Ouargla, Biskra, Ghardaïa...)</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size:11px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:3px;">👤 Technicien assigné :</label>
+          <select id="tourTechSelect" class="form-input" style="font-size:12px; padding:6px 10px;" onchange="loadTourneeCandidates()">
+            <option value="">Tous les Techniciens SAV</option>
+            <option value="Mustapha B.">Mustapha B. (Technicien SAV)</option>
+            <option value="Karim T.">Karim T. (Commercial / SAV)</option>
+            <option value="Dr. Benali">Dr. Benali (Qualité)</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size:11px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:3px;">📅 Date de mission :</label>
+          <input type="date" id="tourDateInput" class="form-input" style="font-size:12px; padding:5px 8px;">
+        </div>
+
+        <div style="text-align:right;">
+          <button type="button" class="btn btn-secondary" onclick="loadTourneeCandidates()" style="font-size:11px; padding:7px 12px; font-weight:700; margin-top:14px;">
+            🔄 Actualiser
+          </button>
+        </div>
+      </div>
+
+      <!-- Corps : Sélection à gauche & Feuille de Route à droite -->
+      <div class="tour-builder-layout">
+        <!-- Colonne Gauche : Interventions éligibles -->
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h4 style="margin:0; font-size:13px; font-weight:800;">🏥 Interventions & Révisions à Planifier :</h4>
+            <span style="font-size:11px; color:var(--text-muted);">Cochez pour inclure</span>
+          </div>
+          <div id="tourCandidatesList" style="max-height:360px; overflow-y:auto; padding-right:4px;"></div>
+        </div>
+
+        <!-- Colonne Droite : Feuille de Route & Navigation GPS -->
+        <div>
+          <!-- Barre KPI de tournée -->
+          <div class="tour-kpi-bar">
+            <div class="tour-kpi-box">
+              <div style="font-size:10px; font-weight:700; color:var(--text-muted);">Distance Totale</div>
+              <div class="tour-kpi-val" id="tourTotalKm">0 km</div>
+            </div>
+            <div class="tour-kpi-box">
+              <div style="font-size:10px; font-weight:700; color:var(--text-muted);">Temps Estimé</div>
+              <div class="tour-kpi-val" id="tourEstTime" style="color:#0284c7; font-size:14px;">~0h</div>
+            </div>
+            <div class="tour-kpi-box">
+              <div style="font-size:10px; font-weight:700; color:var(--text-muted);">Établissements</div>
+              <div class="tour-kpi-val" id="tourStopsCount" style="color:#8b5cf6;">0</div>
+            </div>
+          </div>
+
+          <h4 style="margin:0 0 10px 0; font-size:13px; font-weight:800; display:flex; justify-content:space-between; align-items:center;">
+            <span>🧭 Ordre de Passage Optimal (GPS) :</span>
+            <span style="font-size:10px; color:#00b87c; font-weight:700;">Boucle intelligente</span>
+          </h4>
+          <div id="tourRoadmapContainer" style="max-height:300px; overflow-y:auto; padding-right:4px; margin-bottom:12px;"></div>
+        </div>
+      </div>
+
+      <!-- Actions : Google Maps, WhatsApp, Impression -->
+      <div class="modal-footer no-print" style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:14px; margin-top:16px; flex-wrap:wrap; gap:8px;">
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="btn btn-primary" onclick="launchFullGoogleMapsRoute()" style="background:#0284c7; border-color:#0284c7; font-weight:800; display:inline-flex; align-items:center; gap:6px;">
+            <span>🚗</span> <span>Lancer Itinéraire Google Maps</span>
+          </button>
+          <button type="button" class="btn" onclick="sendTourneeWhatsApp()" style="background:#25D366; color:#fff; border:none; font-weight:800; display:inline-flex; align-items:center; gap:6px;">
+            <span>💬</span> <span>Envoyer sur WhatsApp</span>
+          </button>
+        </div>
+
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="btn btn-secondary" onclick="closeTourneeModal()">Fermer</button>
+          <button type="button" class="btn btn-primary" onclick="printTourneeMission()">🖨️ Imprimer Ordre de Mission A4</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
   <!-- MODAL V5 : GALERIE PHOTOS AVANT / APRÈS RÉPARATION SAV    -->
   <!-- ======================================================== -->
   <div class="modal-overlay" id="photoGalleryModal" onclick="if(event.target === this) closePhotoGalleryModal()">
@@ -1798,6 +1908,7 @@
   <script src="js/qrcode.min.js"></script>
   <script src="js/features_v4.js" charset="utf-8"></script>
   <script src="js/features_v5.js" charset="utf-8"></script>
+  <script src="js/features_v6_tournees.js" charset="utf-8"></script>
   <script src="js/algeria_wilayas.js" charset="utf-8"></script>
   <script src="js/auth.js" charset="utf-8"></script>
   <script src="js/api.js" charset="utf-8"></script>

@@ -420,3 +420,4 @@ function escapeHtmlAttr(str) {
 document.addEventListener('DOMContentLoaded', () => {
   initPwaService();
 });
+

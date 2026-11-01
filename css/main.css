@@ -3336,3 +3336,141 @@ body {
     page-break-inside: avoid !important;
   }
 }
+
+
+/* ========================================================================= */
+/* FEATURE V6 : OPTIMISEUR DE TOURNÉES SAV & ITINÉRAIRES GPS                */
+/* ========================================================================= */
+
+.tour-builder-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 18px;
+  margin-top: 14px;
+}
+
+@media (max-width: 900px) {
+  .tour-builder-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tour-candidate-card {
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  transition: all 0.15s ease;
+}
+
+.tour-candidate-card:hover {
+  background: rgba(0, 184, 124, 0.06);
+  border-color: rgba(0, 184, 124, 0.3);
+}
+
+.tour-kpi-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.tour-kpi-box {
+  background: rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+.tour-kpi-val {
+  font-size: 18px;
+  font-weight: 900;
+  color: #00b87c;
+  margin-top: 4px;
+}
+
+.roadmap-timeline {
+  position: relative;
+  padding-left: 28px;
+}
+
+.roadmap-timeline::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  background: linear-gradient(180deg, #0f766e 0%, #00b87c 50%, #0284c7 100%);
+}
+
+.roadmap-step {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.step-marker {
+  position: absolute;
+  left: -28px;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #0f766e;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  border: 2px solid var(--bg-surface, #ffffff);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.step-depart .step-marker,
+.step-retour .step-marker {
+  background: #063740;
+  font-size: 12px;
+}
+
+.step-content {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+/* Print Styles pour Ordre de Mission A4 */
+@media print {
+  body.printing-tournee > *:not(#tourneeGpsModal) {
+    display: none !important;
+  }
+  body.printing-tournee #tourneeGpsModal {
+    position: static !important;
+    display: block !important;
+    background: #fff !important;
+    padding: 0 !important;
+  }
+  body.printing-tournee #tourneeGpsModal .modal-box {
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+  body.printing-tournee .no-print {
+    display: none !important;
+  }
+  body.printing-tournee .tour-builder-layout {
+    display: block !important;
+  }
+  body.printing-tournee .roadmap-timeline::before {
+    background: #000 !important;
+  }
+  body.printing-tournee .step-content {
+    border: 1px solid #ccc !important;
+    background: #fafafa !important;
+  }
+}
