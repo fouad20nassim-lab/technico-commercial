@@ -297,6 +297,17 @@
           <div id="chartTopWilayas">
             <!-- Rempli dynamiquement -->
           </div>
+
+        <!-- 4. RÃ©partition par Territoire RÃ©gional (Centre, Est, Ouest, Sud) -->
+        <div class="analytics-card">
+          <div class="card-head-mini">
+            <h4>Territoires RÃ©gionaux (AlgÃ©rie)</h4>
+            <span class="badge-mini">4 RÃ©gions</span>
+          </div>
+          <div id="chartRegionsBars">
+            <!-- Rempli dynamiquement -->
+          </div>
+        </div>
         </div>
       </div>
     </section>
@@ -438,6 +449,35 @@
 
       <!-- Filtres et Recherche -->
             <!-- Badges de Filtres Rapides & Compteur Dynamique -->
+            <!-- BARRE OFFICIELLE DES 4 RÃ‰GIONS (CENTRE, EST, OUEST, SUD) -->
+      <div class="region-filter-bar">
+        <span style="font-size:12px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; margin-right:4px;">Territoires d'AlgÃ©rie :</span>
+        <button type="button" class="region-pill-btn active btn-all-regions" onclick="setRegionalFilter('', this)">
+          <span>ðŸ‡©ðŸ‡¿ National (58 Wilayas)</span>
+          <span class="pill-count" id="countRegionAll">0</span>
+        </button>
+        <button type="button" class="region-pill-btn btn-centre" onclick="setRegionalFilter('Centre', this)">
+          <span class="region-orb centre"></span>
+          <span>RÃ©gion Centre</span>
+          <span class="pill-count" id="countRegionCentre">0</span>
+        </button>
+        <button type="button" class="region-pill-btn btn-est" onclick="setRegionalFilter('Est', this)">
+          <span class="region-orb est"></span>
+          <span>RÃ©gion Est</span>
+          <span class="pill-count" id="countRegionEst">0</span>
+        </button>
+        <button type="button" class="region-pill-btn btn-ouest" onclick="setRegionalFilter('Ouest', this)">
+          <span class="region-orb ouest"></span>
+          <span>RÃ©gion Ouest</span>
+          <span class="pill-count" id="countRegionOuest">0</span>
+        </button>
+        <button type="button" class="region-pill-btn btn-sud" onclick="setRegionalFilter('Sud', this)">
+          <span class="region-orb sud"></span>
+          <span>RÃ©gion Sud</span>
+          <span class="pill-count" id="countRegionSud">0</span>
+        </button>
+      </div>
+
       <div class="filter-pills-container">
         <button type="button" class="quick-filter-pill active" onclick="setQuickTypeFilter('', this)">
           <span>ðŸŒ Tous les documents</span>
@@ -904,6 +944,15 @@
       }
     }
 
+        let currentRegionFilter = '';
+
+    function setRegionalFilter(region, btn) {
+      currentRegionFilter = region;
+      document.querySelectorAll('.region-filter-bar .region-pill-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      applyFilters();
+    }
+
     function setQuickTypeFilter(type, btn) {
       document.querySelectorAll('.filter-pills-container .quick-filter-pill').forEach(p => p.classList.remove('active'));
       if (btn) btn.classList.add('active');
@@ -1025,8 +1074,53 @@
           `;
         }).join('') : '<p style="font-size:12px;color:var(--text-muted);text-align:center;padding:12px 0;">DonnÃ©es wilayas en cours de synchronisation...</p>';
 
-        const elWilayas = document.getElementById('chartTopWilayas');
+                const elWilayas = document.getElementById('chartTopWilayas');
         if (elWilayas) elWilayas.innerHTML = wilayasHtml;
+
+        // 4. RÃ©partition par Territoire RÃ©gional (Centre, Est, Ouest, Sud)
+        const regionCounts = { Centre: 0, Est: 0, Ouest: 0, Sud: 0 };
+        allRapports.forEach(r => {
+          const reg = getRegionByWilaya(r.wilaya);
+          if (reg && regionCounts[reg.code] !== undefined) {
+            regionCounts[reg.code]++;
+          }
+        });
+
+        const totalRe = allRapports.length;
+        const setRegPill = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+        setRegPill('countRegionAll', totalRe);
+        setRegPill('countRegionCentre', regionCounts.Centre);
+        setRegPill('countRegionEst', regionCounts.Est);
+        setRegPill('countRegionOuest', regionCounts.Ouest);
+        setRegPill('countRegionSud', regionCounts.Sud);
+
+        const regConfig = [
+          { key: 'Centre', nom: 'RÃ©gion Centre', orb: 'centre', color: '#10b981', count: regionCounts.Centre },
+          { key: 'Est',    nom: 'RÃ©gion Est',    orb: 'est',    color: '#2563eb', count: regionCounts.Est },
+          { key: 'Ouest',  nom: 'RÃ©gion Ouest',  orb: 'ouest',  color: '#f97316', count: regionCounts.Ouest },
+          { key: 'Sud',    nom: 'RÃ©gion Sud',    orb: 'sud',    color: '#8b5cf6', count: regionCounts.Sud }
+        ];
+
+        const regHtml = regConfig.map(rg => {
+          const rPct = totalRe > 0 ? Math.round((rg.count / totalRe) * 100) : 0;
+          return `
+            <div class="stat-bar-row">
+              <div class="stat-bar-header">
+                <span style="display:inline-flex;align-items:center;gap:6px;">
+                  <span class="region-orb ${rg.orb}"></span>
+                  <b>${rg.nom}</b>
+                </span>
+                <span style="color:${rg.color};font-weight:800;">${rg.count} (${rPct}%)</span>
+              </div>
+              <div class="stat-bar-track">
+                <div class="stat-bar-fill" style="width:${rPct}%;background:${rg.color};"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        const elRegBars = document.getElementById('chartRegionsBars');
+        if (elRegBars) elRegBars.innerHTML = regHtml;
       }
     }
 
@@ -1200,7 +1294,7 @@
               <b>${escapeHtml(r.materiel)}</b>
               ${r.numero_serie ? `<br><small style="color:var(--text-muted);font-family:monospace;font-weight:700;">SN : ${escapeHtml(r.numero_serie)}</small>` : ''}
             </td>
-            <td>${escapeHtml(r.wilaya || '-')}</td>
+            <td><div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;"><span>${escapeHtml(r.wilaya || '-')}</span>${getRegionBadgeHtml(r.wilaya)}</div></td>
             <td>${escapeHtml(r.date_installation || '-')}</td>
             <td><b>${escapeHtml(r.titre_revision)}</b></td>
             <td><b>${escapeHtml(r.date_echeance)}</b></td>
@@ -1278,7 +1372,13 @@
       const status = document.getElementById('filterStatus')?.value || '';
 
       try {
-        const rapports = await API.getRapports({ q, type, wilaya, status });
+        let rapports = await API.getRapports({ q, type, wilaya, status });
+        if (currentRegionFilter && Array.isArray(rapports)) {
+          rapports = rapports.filter(r => {
+            const reg = getRegionByWilaya(r.wilaya);
+            return reg && reg.code === currentRegionFilter;
+          });
+        }
         renderRapportsTable(rapports);
       } catch (err) {
         console.error('Erreur getRapports:', err);
@@ -1318,7 +1418,7 @@
             <td><b>${escapeHtml(r.ref_number || r.id)}</b></td>
             <td><span class="doc-type-tag ${typeInfo.badge}">${typeInfo.label}</span></td>
             <td><strong>${escapeHtml(r.client_nom || 'Non spécifié')}</strong></td>
-            <td>${escapeHtml(r.wilaya || '-')}</td>
+            <td><div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;"><span>${escapeHtml(r.wilaya || '-')}</span>${getRegionBadgeHtml(r.wilaya)}</div></td>
             <td>${escapeHtml(r.date_intervention || '-')}</td>
             <td>${escapeHtml(r.technicien || '-')}</td>
             <td>

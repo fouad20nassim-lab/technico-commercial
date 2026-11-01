@@ -67,10 +67,38 @@ function populateWilayaSelect(selectElement, defaultVal = "") {
   WILAYAS_ALGERIE.forEach(w => {
     const opt = document.createElement("option");
     opt.value = w.nom;
-    opt.textContent = w.nom;
+    opt.textContent = `${w.nom} (${w.region})`;
     if (currentVal && (currentVal === w.nom || currentVal.includes(w.code))) {
       opt.selected = true;
     }
     selectElement.appendChild(opt);
   });
+}
+
+// 4 Grandes Régions Officielles (Centre, Est, Ouest, Sud)
+const REGIONS_ALGERIE = {
+  Centre: { code: 'Centre', nom: 'Région Centre', color: '#10b981', class: 'centre', dot: '🟢' },
+  Est:    { code: 'Est',    nom: 'Région Est',    color: '#2563eb', class: 'est',    dot: '🔵' },
+  Ouest:  { code: 'Ouest',  nom: 'Région Ouest',  color: '#f97316', class: 'ouest',  dot: '🟠' },
+  Sud:    { code: 'Sud',    nom: 'Région Sud',    color: '#8b5cf6', class: 'sud',    dot: '🟣' }
+};
+
+function getRegionByWilaya(wilayaStr) {
+  if (!wilayaStr) return null;
+  const str = wilayaStr.trim().toLowerCase();
+  const w = WILAYAS_ALGERIE.find(x => {
+    const xNom = x.nom.toLowerCase();
+    const xRaw = xNom.replace(/^[0-9]+\s*-\s*/, '').trim();
+    return str.includes(xRaw) || xNom.includes(str) || str.startsWith(x.code);
+  });
+  if (w && REGIONS_ALGERIE[w.region]) {
+    return REGIONS_ALGERIE[w.region];
+  }
+  return null;
+}
+
+function getRegionBadgeHtml(wilayaStr) {
+  const reg = getRegionByWilaya(wilayaStr);
+  if (!reg) return '';
+  return `<span class="badge-region badge-region-${reg.class}" title="${reg.nom}"><span class="region-orb ${reg.class}" style="width:10px;height:10px;"></span> ${reg.nom}</span>`;
 }
