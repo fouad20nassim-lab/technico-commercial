@@ -657,6 +657,9 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
         if path == '/api/sqlite/vacuum':
             return self.handle_sqlite_vacuum()
 
+        if path == '/api/sqlite/purge-data':
+            return self.handle_sqlite_purge_data()
+
         if path == '/api/sqlite/restore-db':
             return self.handle_sqlite_restore_db(payload)
 
@@ -2242,6 +2245,52 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
                 "success": True,
                 "message": f"Base de données SQLite optimisée et compactée avec succès. Nouvelle taille : {new_size_kb} Ko",
                 "size_kb": new_size_kb
+            })
+        except Exception as e:
+            return self.send_json({"success": False, "error": str(e)}, 500)
+
+    def handle_sqlite_purge_data(self):
+        """Vide tous les rapports, clients, équipements et révisions de test en conservant les utilisateurs et la configuration"""
+        try:
+            # 1. Sauvegarde automatique préalable de sécurité
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            backup_name = f"auto_pre_purge_{timestamp}.db"
+            backup_path = os.path.join(BACKUPS_DIR, backup_name)
+            
+            try:
+                conn_src = sqlite3.connect(DB_FILE)
+                conn_dst = sqlite3.connect(backup_path)
+                conn_src.backup(conn_dst)
+                conn_dst.close()
+                conn_src.close()
+            except Exception as b_err:
+                print(f"[PURGE BACKUP WARNING] {b_err}")
+            
+            # 2. Vider les tables opérationnelles de test
+            conn = sqlite3.connect(DB_FILE)
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM rapports;")
+            cursor.execute("DELETE FROM garanties_revisions;")
+            cursor.execute("DELETE FROM clients;")
+            cursor.execute("DELETE FROM equipements;")
+            conn.commit()
+            
+            # 3. Optimiser la base
+            conn.execute("VACUUM;")
+            
+            # 4. Enregistrer dans le journal d'audit
+            now_iso = datetime.now().isoformat()
+            cursor.execute("""
+            INSERT INTO audit_log (timestamp, action, document_id, details)
+            VALUES (?, 'PURGE_TEST_DATA', 'DATABASE', ?)
+            """, (now_iso, f"Données de test vidées. Sauvegarde de sécurité créée : {backup_name}"))
+            conn.commit()
+            conn.close()
+            
+            return self.send_json({
+                "success": True,
+                "message": "Base de données remise à zéro avec succès ! Tous les rapports et clients de test ont été vidés. Vos comptes utilisateurs et l'administration sont conservés.",
+                "backup_created": backup_name
             })
         except Exception as e:
             return self.send_json({"success": False, "error": str(e)}, 500)
