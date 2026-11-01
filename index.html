@@ -579,37 +579,37 @@
 
   <!-- MODAL : DÉCLARATION NOUVEL ÉQUIPEMENT SOUS GARANTIE 2 ANS -->
     <!-- MODAL NOUVEL UTILISATEUR AVEC SÉLECTION DE RÉGION -->
-  <div class="modal-overlay" id="newUserModal" style="display:none; align-items:center; justify-content:center;">
-    <div class="modal-card" style="max-width:520px; width:100%; background:#ffffff; border-radius:18px; box-shadow:0 25px 60px rgba(0,0,0,0.3); overflow:hidden;">
-      <div class="modal-header" style="background:linear-gradient(135deg, #092c2a 0%, #0f766e 100%); color:#ffffff; padding:18px 24px; display:flex; justify-content:space-between; align-items:center;">
+  <div class="modal-overlay" id="newUserModal">
+    <div class="modal-box" style="max-width:540px; width:100%;">
+      <div class="modal-header">
         <div style="display:flex; align-items:center; gap:10px;">
           <span style="font-size:24px;">👤</span>
           <div>
-            <h3 style="margin:0; font-size:17px; font-weight:800; color:#ffffff;">＋ Nouvel Utilisateur</h3>
-            <p style="margin:0; font-size:11px; opacity:0.85;">Création de compte avec affectation régionale (Algérie)</p>
+            <h3 style="margin:0; font-size:18px; font-weight:800; color:#0f766e;">＋ Nouvel Utilisateur</h3>
+            <p style="margin:0; font-size:12px; color:var(--text-muted);">Création de compte avec affectation régionale (Algérie)</p>
           </div>
         </div>
-        <button type="button" class="close-btn" onclick="closeNewUserModal()" style="background:rgba(255,255,255,0.2); border:none; color:#ffffff; width:30px; height:30px; border-radius:50%; font-size:16px; cursor:pointer;">✕</button>
+        <button type="button" class="close-btn" onclick="closeNewUserModal()">✕</button>
       </div>
 
-      <div style="padding:22px;">
+      <div>
         <div id="newUserAlert" style="display:none; background:#fee2e2; border:1px solid #f87171; color:#991b1b; padding:10px 14px; border-radius:8px; font-size:13px; font-weight:700; margin-bottom:14px;"></div>
 
         <form id="newUserForm" onsubmit="submitNewUser(event)">
-          <div style="margin-bottom:12px;">
-            <label style="display:block; font-size:13px; font-weight:700; color:#0f172a; margin-bottom:5px;">Nom complet & Prénom *</label>
-            <input type="text" id="nuNomComplet" required placeholder="ex: Karim Benali" style="width:100%; height:42px; border:1.5px solid #cbd5e1; border-radius:8px; padding:0 12px; font-size:13px; box-sizing:border-box;">
+          <div style="margin-bottom:12px; text-align:left;">
+            <label style="display:block; font-size:12px; font-weight:700; color:var(--navy-dark); margin-bottom:5px;">Nom complet & Prénom *</label>
+            <input type="text" id="nuNomComplet" required placeholder="ex: Karim Benali" style="width:100%; height:42px; border:1.5px solid var(--border); border-radius:8px; padding:0 12px; font-size:13px; box-sizing:border-box;">
           </div>
 
-          <div style="margin-bottom:12px;">
-            <label style="display:block; font-size:13px; font-weight:700; color:#0f172a; margin-bottom:5px;">Identifiant de connexion (Username) *</label>
-            <input type="text" id="nuUsername" required placeholder="ex: k.benali" style="width:100%; height:42px; border:1.5px solid #cbd5e1; border-radius:8px; padding:0 12px; font-size:13px; box-sizing:border-box;">
+          <div style="margin-bottom:12px; text-align:left;">
+            <label style="display:block; font-size:12px; font-weight:700; color:var(--navy-dark); margin-bottom:5px;">Identifiant de connexion (Username) *</label>
+            <input type="text" id="nuUsername" required placeholder="ex: k.benali" style="width:100%; height:42px; border:1.5px solid var(--border); border-radius:8px; padding:0 12px; font-size:13px; box-sizing:border-box;">
           </div>
 
           <!-- RÉGION D'AFFECTATION -->
-          <div style="margin-bottom:12px; background:#f0fdf4; border:1.5px solid #86efac; padding:12px; border-radius:10px;">
-            <label style="display:block; font-size:13px; font-weight:800; color:#166534; margin-bottom:6px;">📍 Région d'Affectation (Algérie) *</label>
-            <select id="nuRegion" required style="width:100%; height:42px; border:1.5px solid #16a34a; border-radius:8px; padding:0 12px; font-size:13px; font-weight:700; color:#14532d; background:#ffffff; box-sizing:border-box; cursor:pointer;">
+          <div style="margin-bottom:14px; text-align:left; background:rgba(16,185,129,0.08); border:1.5px solid #10b981; padding:12px; border-radius:10px;">
+            <label style="display:block; font-size:13px; font-weight:800; color:#065f46; margin-bottom:6px;">📍 Région d'Affectation (Algérie) *</label>
+            <select id="nuRegion" required style="width:100%; height:44px; border:1.5px solid #10b981; border-radius:8px; padding:0 12px; font-size:13px; font-weight:700; color:#065f46; background:#ffffff; box-sizing:border-box; cursor:pointer;">
               <option value="Centre">🟢 Région Centre (Alger, Blida, Tipaza, Boumerdès, Tizi Ouzou, Médéa...)</option>
               <option value="Est">🔵 Région Est (Constantine, Annaba, Sétif, Batna, Skikda, Béjaïa...)</option>
               <option value="Ouest">🟠 Région Ouest (Oran, Tlemcen, Mostaganem, Sidi Bel Abbès...)</option>
@@ -618,9 +618,9 @@
             </select>
           </div>
 
-          <div style="margin-bottom:12px;">
-            <label style="display:block; font-size:13px; font-weight:700; color:#0f172a; margin-bottom:5px;">Rôle & Fonction *</label>
-            <select id="nuRole" required style="width:100%; height:42px; border:1.5px solid #cbd5e1; border-radius:8px; padding:0 12px; font-size:13px; font-weight:600; box-sizing:border-box; cursor:pointer;">
+          <div style="margin-bottom:12px; text-align:left;">
+            <label style="display:block; font-size:12px; font-weight:700; color:var(--navy-dark); margin-bottom:5px;">Rôle & Fonction *</label>
+            <select id="nuRole" required style="width:100%; height:42px; border:1.5px solid var(--border); border-radius:8px; padding:0 12px; font-size:13px; font-weight:600; box-sizing:border-box; cursor:pointer;">
               <option value="technicien">🛠️ Technicien SAV / Ingénieur Biomédical</option>
               <option value="commercial">💼 Technico-Commercial / ADV</option>
               <option value="qualite">🔬 Responsable Clinique & Qualité</option>
@@ -628,20 +628,20 @@
             </select>
           </div>
 
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; text-align:left;">
             <div>
-              <label style="display:block; font-size:12px; font-weight:700; color:#0f172a; margin-bottom:5px;">Mot de passe PC *</label>
-              <input type="password" id="nuPassword" required placeholder="Mot de passe" style="width:100%; height:40px; border:1.5px solid #cbd5e1; border-radius:8px; padding:0 12px; font-size:13px; box-sizing:border-box;">
+              <label style="display:block; font-size:12px; font-weight:700; color:var(--navy-dark); margin-bottom:5px;">Mot de passe PC *</label>
+              <input type="password" id="nuPassword" required placeholder="Mot de passe" style="width:100%; height:40px; border:1.5px solid var(--border); border-radius:8px; padding:0 12px; font-size:13px; box-sizing:border-box;">
             </div>
             <div>
-              <label style="display:block; font-size:12px; font-weight:700; color:#0f172a; margin-bottom:5px;">Code PIN Tablette (4 chiffres) *</label>
-              <input type="text" id="nuPin" maxlength="6" pattern="[0-9]*" required placeholder="ex: 1234" style="width:100%; height:40px; border:1.5px solid #cbd5e1; border-radius:8px; padding:0 12px; font-size:13px; font-weight:800; letter-spacing:3px; text-align:center; box-sizing:border-box;">
+              <label style="display:block; font-size:12px; font-weight:700; color:var(--navy-dark); margin-bottom:5px;">Code PIN Tablette (4 chiffres) *</label>
+              <input type="text" id="nuPin" maxlength="6" pattern="[0-9]*" required placeholder="ex: 1234" style="width:100%; height:40px; border:1.5px solid var(--border); border-radius:8px; padding:0 12px; font-size:13px; font-weight:800; letter-spacing:3px; text-align:center; box-sizing:border-box;">
             </div>
           </div>
 
-          <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid #e2e8f0; padding-top:14px;">
+          <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid var(--line); padding-top:14px;">
             <button type="button" class="btn btn-secondary" onclick="closeNewUserModal()">Annuler</button>
-            <button type="submit" class="btn btn-primary" style="background:#00b87c; border-color:#00a36d; font-weight:800;">
+            <button type="submit" class="btn btn-primary" style="background:#00b87c; border-color:#00a36d; font-weight:800; padding:9px 20px;">
               <span>✓ Créer l'Utilisateur</span>
             </button>
           </div>
@@ -1059,7 +1059,7 @@
       // 1. Barres de répartition par type d'intervention
       const typeConfig = [
         { key: 'visite_controle', label: 'Visites de Contrôle', color: '#0f766e', count: byType.visite_controle || 0 },
-        { key: 'feuille_inspection', label: 'Feuilles d'Inspection', color: '#00b87c', count: byType.feuille_inspection || 0 },
+        { key: "feuille_inspection", label: "Feuilles d'Inspection", color: "#00b87c", count: byType.feuille_inspection || 0 },
         { key: 'rapport_installation', label: 'Installations Client', color: '#0284c7', count: byType.rapport_installation || 0 },
         { key: 'rapport_formation', label: 'Formations Certifiées', color: '#6366f1', count: byType.rapport_formation || 0 },
         { key: 'rapport_mise_en_service', label: 'Mises en Service', color: '#10b981', count: byType.rapport_mise_en_service || 0 }
@@ -1534,17 +1534,19 @@
     async function openWifiModal() {
       const modal = document.getElementById('wifiModal');
       const box = document.getElementById('networkUrlDisplay');
-      modal.classList.add('active');
+      if (modal) modal.classList.add('active');
+      const host = window.location.hostname || 'localhost';
+      const apiBase = (typeof window !== 'undefined' && window.location && window.location.origin.startsWith('http')) ? '' : 'http://localhost:8085';
       try {
-        const res = await fetch(`${API_BASE}/api/network-ip`);
+        const res = await fetch(`${apiBase}/api/network-ip`);
         if (res.ok) {
           const d = await res.json();
-          box.textContent = d.url;
+          if (box) box.textContent = d.url;
         } else {
-          box.textContent = `http://${window.location.hostname}:8085`;
+          if (box) box.textContent = `http://${host}:8085`;
         }
       } catch (e) {
-        box.textContent = `http://${window.location.hostname}:8085`;
+        if (box) box.textContent = `http://${host}:8085`;
       }
     }
 
@@ -2018,13 +2020,10 @@ Notre équipe technique reste à votre entière disposition pour toute intervent
         localStorage.removeItem('technico_auth_token_v1');
         localStorage.removeItem('technico_auth_user_v1');
       } catch (e) {}
-      if (typeof Auth !== 'undefined' && Auth.logout) {
-        Auth.logout(function() {
-          window.location.href = 'login.html';
-        });
-      } else {
-        window.location.href = 'login.html';
+      if (typeof Auth !== 'undefined' && Auth.clearAuth) {
+        Auth.clearAuth();
       }
+      window.location.href = 'login.html';
     }
 
     function updateUserHeaderPill(user) {
@@ -2068,7 +2067,6 @@ Notre équipe technique reste à votre entière disposition pour toute intervent
       const modal = document.getElementById('newUserModal');
       if (!modal) return;
       modal.classList.add('active');
-      modal.style.setProperty('display', 'flex', 'important');
       const alertBox = document.getElementById('newUserAlert');
       if (alertBox) alertBox.style.display = 'none';
       const form = document.getElementById('newUserForm');
@@ -2083,7 +2081,6 @@ Notre équipe technique reste à votre entière disposition pour toute intervent
       const modal = document.getElementById('newUserModal');
       if (!modal) return;
       modal.classList.remove('active');
-      modal.style.setProperty('display', 'none', 'important');
     }
 
     function submitNewUser(e) {
