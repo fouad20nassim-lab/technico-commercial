@@ -1709,3 +1709,296 @@ body {
 
 
 
+
+/* ========================================================================== */
+/* MODULE PROFESSIONNEL : COCKPIT ANALYTICS, RECHERCHE & ATTESTATIONS         */
+/* ========================================================================== */
+
+.analytics-cockpit {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.25s ease;
+}
+
+.analytics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+}
+
+.analytics-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.card-head-mini {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.card-head-mini h4 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--navy);
+}
+.badge-mini {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--text-muted);
+}
+
+/* Barres de progression statistiques */
+.stat-bar-row {
+  margin-bottom: 10px;
+}
+.stat-bar-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--text-dark);
+}
+.stat-bar-track {
+  width: 100%;
+  height: 8px;
+  background: var(--bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.stat-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Badges rapides de filtrage */
+.filter-pills-container {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.quick-filter-pill {
+  background: #ffffff;
+  border: 1.5px solid var(--border);
+  color: var(--navy);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+.quick-filter-pill:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+.quick-filter-pill.active {
+  background: #0f766e !important;
+  color: #ffffff !important;
+  border-color: #0f766e !important;
+  box-shadow: 0 3px 10px rgba(15, 118, 110, 0.3);
+}
+.quick-filter-pill .pill-count {
+  background: rgba(0, 0, 0, 0.08);
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+.quick-filter-pill.active .pill-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.results-counter-pill {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0f766e;
+  background: #e6f4f1;
+  padding: 5px 12px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+/* Boutons d'action rapides sur chaque ligne */
+.btn-action-wa {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+.btn-action-wa:hover {
+  background: #22c55e;
+  color: #ffffff;
+  border-color: #22c55e;
+}
+
+/* Styles Attestation Officielle de Formation (Certificat A4) */
+.certificate-sheet {
+  background: #ffffff;
+  border: 8px double #0f766e;
+  border-radius: 12px;
+  padding: 34px 40px;
+  color: #0f172a;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  font-family: 'Inter', serif;
+}
+.certificate-sheet::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid #d4af37;
+  pointer-events: none;
+}
+.cert-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.cert-header h2 {
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #64748b;
+  margin: 0 0 4px 0;
+}
+.cert-header h1 {
+  font-size: 24px;
+  color: #0f766e;
+  font-weight: 900;
+  letter-spacing: 1px;
+  margin: 6px 0;
+  text-transform: uppercase;
+}
+.cert-title-badge {
+  display: inline-block;
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  color: #166534;
+  font-weight: 800;
+  font-size: 12px;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-top: 4px;
+}
+.cert-body-text {
+  font-size: 15px;
+  line-height: 1.7;
+  text-align: center;
+  margin: 22px 0;
+}
+.cert-trainee-name {
+  font-size: 22px;
+  font-weight: 900;
+  color: #0f2c38;
+  display: block;
+  margin: 10px 0;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-color: #00b87c;
+}
+.cert-topics-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px 18px;
+  margin: 20px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  font-size: 12px;
+}
+.cert-signatures {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  padding-top: 15px;
+}
+.cert-sig-block {
+  text-align: center;
+  width: 200px;
+}
+.cert-sig-line {
+  border-top: 1.5px dashed #94a3b8;
+  margin-top: 45px;
+  padding-top: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #475569;
+}
+
+/* Support Dark Mode pour ces nouveautés */
+[data-theme="dark"] .analytics-cockpit {
+  background: #09171f !important;
+  border-color: #1c3d4e !important;
+}
+[data-theme="dark"] .analytics-card {
+  background: #0d202b !important;
+  border-color: #1c3d4e !important;
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .card-head-mini h4 {
+  color: #38bdf8 !important;
+}
+[data-theme="dark"] .stat-bar-header {
+  color: #e2e8f0 !important;
+}
+[data-theme="dark"] .stat-bar-track {
+  background: #142a37 !important;
+}
+[data-theme="dark"] .quick-filter-pill {
+  background: #0d202b !important;
+  border-color: #1c3d4e !important;
+  color: #cbd5e1 !important;
+}
+[data-theme="dark"] .quick-filter-pill:hover {
+  background: #132e3d !important;
+  color: #ffffff !important;
+}
+[data-theme="dark"] .certificate-sheet {
+  background: #ffffff !important; /* L'attestation reste sur fond blanc pour impression propre */
+  color: #0f172a !important;
+}

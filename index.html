@@ -250,6 +250,57 @@
       </div>
     </div>
 
+        <!-- COCKPIT ANALYTIQUE & GRAPHIQUES VISUELS EN DIRECT -->
+    <section class="analytics-cockpit" id="analyticsCockpit" style="margin-bottom: 30px;">
+      <div class="analytics-header">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:38px;height:38px;border-radius:10px;background:#e6f4f1;color:#0f766e;display:flex;align-items:center;justify-content:center;font-size:18px;">ðŸ“Š</div>
+          <div>
+            <h3 style="margin:0;font-size:16px;font-weight:800;color:var(--navy);">Cockpit Analytique & Performance SAV</h3>
+            <p style="margin:2px 0 0 0;font-size:12px;color:var(--text-muted);">RÃ©partition des interventions, taux d'exÃ©cution des rÃ©visions et couverture gÃ©ographique</p>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary" onclick="toggleAnalyticsView()" id="btnToggleAnalytics" style="font-size:12px;padding:6px 14px;">
+          <span id="toggleAnalyticsIcon">ðŸ“Š</span> <span id="toggleAnalyticsText">Masquer les Graphiques</span>
+        </button>
+      </div>
+
+      <div class="analytics-grid" id="analyticsGridContent">
+        <!-- 1. RÃ©partition des Types de Rapports -->
+        <div class="analytics-card">
+          <div class="card-head-mini">
+            <h4>RÃ©partition des Interventions</h4>
+            <span class="badge-mini" id="badgeTotalRapportsAnalytic">0 Rapports</span>
+          </div>
+          <div id="chartTypeBars">
+            <!-- Rempli dynamiquement -->
+          </div>
+        </div>
+
+        <!-- 2. Statut des Garanties & RÃ©visions 6 Mois -->
+        <div class="analytics-card">
+          <div class="card-head-mini">
+            <h4>Statut des RÃ©visions 6 Mois</h4>
+            <span class="badge-mini" style="background:#e6f4f1;color:#0f766e;">Cycle 2 Ans</span>
+          </div>
+          <div id="chartWarrantyStatus">
+            <!-- Rempli dynamiquement -->
+          </div>
+        </div>
+
+        <!-- 3. Top Wilayas Actives -->
+        <div class="analytics-card">
+          <div class="card-head-mini">
+            <h4>Top Wilayas Actives</h4>
+            <span class="badge-mini">ðŸ‡©ðŸ‡¿ AlgÃ©rie</span>
+          </div>
+          <div id="chartTopWilayas">
+            <!-- Rempli dynamiquement -->
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- NOUVELLE SECTION : SUIVI DES GARANTIES 2 ANS & RÉVISIONS 6 MOIS (RAPPEL J-10) -->
     <section id="sectionRevisions" style="margin-bottom: 36px; scroll-margin-top: 85px;">
       <div class="section-title">
@@ -386,6 +437,38 @@
       </div>
 
       <!-- Filtres et Recherche -->
+            <!-- Badges de Filtres Rapides & Compteur Dynamique -->
+      <div class="filter-pills-container">
+        <button type="button" class="quick-filter-pill active" onclick="setQuickTypeFilter('', this)">
+          <span>ðŸŒ Tous les documents</span>
+          <span class="pill-count" id="pillCountAll">0</span>
+        </button>
+        <button type="button" class="quick-filter-pill" onclick="setQuickTypeFilter('visite_controle', this)">
+          <span>ðŸ“‹ Visites de ContrÃ´le</span>
+          <span class="pill-count" id="pillCountVC">0</span>
+        </button>
+        <button type="button" class="quick-filter-pill" onclick="setQuickTypeFilter('feuille_inspection', this)">
+          <span>ðŸ”¬ Feuilles d'Inspection</span>
+          <span class="pill-count" id="pillCountINSP">0</span>
+        </button>
+        <button type="button" class="quick-filter-pill" onclick="setQuickTypeFilter('rapport_installation', this)">
+          <span>âš™ï¸ Installations</span>
+          <span class="pill-count" id="pillCountINS">0</span>
+        </button>
+        <button type="button" class="quick-filter-pill" onclick="setQuickTypeFilter('rapport_formation', this)">
+          <span>ðŸŽ“ Formations</span>
+          <span class="pill-count" id="pillCountFOR">0</span>
+        </button>
+        <button type="button" class="quick-filter-pill" onclick="setQuickTypeFilter('rapport_mise_en_service', this)">
+          <span>âœ… Mises en Service</span>
+          <span class="pill-count" id="pillCountMES">0</span>
+        </button>
+
+        <div class="results-counter-pill" id="resultsCounterBadge">
+          <span>ðŸ”</span> <span id="resultsCounterText">0 rapport(s) affichÃ©(s)</span>
+        </div>
+      </div>
+
       <div class="filter-toolbar">
         <div class="search-input-group">
           <span class="search-icon">🔍</span>
@@ -801,6 +884,152 @@
 
     let currentRevisionFilter = '';
 
+    
+    // =========================================================================
+    // NOUVEAUTÃ‰ PROFESSIONNELLE : COCKPIT ANALYTICS & STATISTIQUES EN DIRECT
+    // =========================================================================
+
+    function toggleAnalyticsView() {
+      const grid = document.getElementById('analyticsGridContent');
+      const text = document.getElementById('toggleAnalyticsText');
+      const icon = document.getElementById('toggleAnalyticsIcon');
+      if (grid.style.display === 'none') {
+        grid.style.display = 'grid';
+        text.textContent = 'Masquer les Graphiques';
+        icon.textContent = 'ðŸ“Š';
+      } else {
+        grid.style.display = 'none';
+        text.textContent = 'Afficher les Graphiques';
+        icon.textContent = 'ðŸ“ˆ';
+      }
+    }
+
+    function setQuickTypeFilter(type, btn) {
+      document.querySelectorAll('.filter-pills-container .quick-filter-pill').forEach(p => p.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      const select = document.getElementById('filterType');
+      if (select) {
+        select.value = type;
+        applyFilters();
+      }
+    }
+
+    function renderAnalyticsCockpit(stats, allRapports, revisionsStats) {
+      if (!stats) return;
+
+      const total = stats.total_rapports || 0;
+      const byType = stats.by_type || {};
+
+      // 1. Barres de rÃ©partition par type d'intervention
+      const typeConfig = [
+        { key: 'visite_controle', label: 'Visites de ContrÃ´le', color: '#0f766e', count: byType.visite_controle || 0 },
+        { key: 'feuille_inspection', label: 'Feuilles dâ€™Inspection', color: '#00b87c', count: byType.feuille_inspection || 0 },
+        { key: 'rapport_installation', label: 'Installations Client', color: '#0284c7', count: byType.rapport_installation || 0 },
+        { key: 'rapport_formation', label: 'Formations CertifiÃ©es', color: '#6366f1', count: byType.rapport_formation || 0 },
+        { key: 'rapport_mise_en_service', label: 'Mises en Service', color: '#10b981', count: byType.rapport_mise_en_service || 0 }
+      ];
+
+      const typeBarsHtml = typeConfig.map(tc => {
+        const pct = total > 0 ? Math.round((tc.count / total) * 100) : 0;
+        return `
+          <div class="stat-bar-row">
+            <div class="stat-bar-header">
+              <span>${tc.label}</span>
+              <span style="font-weight:800;color:${tc.color};">${tc.count} (${pct}%)</span>
+            </div>
+            <div class="stat-bar-track">
+              <div class="stat-bar-fill" style="width:${pct}%;background:${tc.color};"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      const elTypeBars = document.getElementById('chartTypeBars');
+      if (elTypeBars) elTypeBars.innerHTML = typeBarsHtml;
+
+      // 2. Statut des Garanties & RÃ©visions 6 Mois
+      const revs = stats.revisions_stats || {};
+      const revTotal = (revs.total || 0);
+      const revDone = (revs.effectue || 0);
+      const revUrgent = (revs.alertes_10j || 0);
+      const revLate = (revs.en_retard || 0);
+      const revPending = Math.max(0, revTotal - revDone - revLate);
+
+      const warrantyHtml = `
+        <div class="stat-bar-row">
+          <div class="stat-bar-header">
+            <span>âœ“ RÃ©visions EffectuÃ©es</span>
+            <span style="color:#00b87c;font-weight:800;">${revDone}</span>
+          </div>
+          <div class="stat-bar-track">
+            <div class="stat-bar-fill" style="width:${revTotal > 0 ? (revDone/revTotal)*100 : 0}%;background:#00b87c;"></div>
+          </div>
+        </div>
+        <div class="stat-bar-row">
+          <div class="stat-bar-header">
+            <span>â³ Ã€ Venir (Sous 6 Mois)</span>
+            <span style="color:#0284c7;font-weight:800;">${revPending}</span>
+          </div>
+          <div class="stat-bar-track">
+            <div class="stat-bar-fill" style="width:${revTotal > 0 ? (revPending/revTotal)*100 : 0}%;background:#0284c7;"></div>
+          </div>
+        </div>
+        <div class="stat-bar-row">
+          <div class="stat-bar-header">
+            <span>ðŸ”” Alertes J-10 Imminentes</span>
+            <span style="color:#f59e0b;font-weight:800;">${revUrgent}</span>
+          </div>
+          <div class="stat-bar-track">
+            <div class="stat-bar-fill" style="width:${revTotal > 0 ? (revUrgent/revTotal)*100 : 0}%;background:#f59e0b;"></div>
+          </div>
+        </div>
+        ${revLate > 0 ? `
+          <div class="stat-bar-row">
+            <div class="stat-bar-header">
+              <span>ðŸš¨ RÃ©visions en Retard</span>
+              <span style="color:#ef4444;font-weight:800;">${revLate}</span>
+            </div>
+            <div class="stat-bar-track">
+              <div class="stat-bar-fill" style="width:${(revLate/revTotal)*100}%;background:#ef4444;"></div>
+            </div>
+          </div>
+        ` : ''}
+      `;
+      const elWarranty = document.getElementById('chartWarrantyStatus');
+      if (elWarranty) elWarranty.innerHTML = warrantyHtml;
+
+      // 3. Top Wilayas Actives en AlgÃ©rie
+      if (Array.isArray(allRapports)) {
+        const countsByWilaya = {};
+        allRapports.forEach(r => {
+          if (r.wilaya && r.wilaya !== '-' && r.wilaya.trim() !== '') {
+            countsByWilaya[r.wilaya] = (countsByWilaya[r.wilaya] || 0) + 1;
+          }
+        });
+        const sortedWilayas = Object.entries(countsByWilaya)
+          .sort((a,b) => b[1] - a[1])
+          .slice(0, 5);
+
+        const maxCount = sortedWilayas[0] ? sortedWilayas[0][1] : 1;
+        const wilayasHtml = sortedWilayas.length > 0 ? sortedWilayas.map(([w, c]) => {
+          const wPct = Math.round((c / maxCount) * 100);
+          return `
+            <div class="stat-bar-row">
+              <div class="stat-bar-header">
+                <span>ðŸ“ ${w}</span>
+                <span style="font-weight:800;color:#0f766e;">${c} doc(s)</span>
+              </div>
+              <div class="stat-bar-track">
+                <div class="stat-bar-fill" style="width:${wPct}%;background:linear-gradient(90deg, #0f766e, #00b87c);"></div>
+              </div>
+            </div>
+          `;
+        }).join('') : '<p style="font-size:12px;color:var(--text-muted);text-align:center;padding:12px 0;">DonnÃ©es wilayas en cours de synchronisation...</p>';
+
+        const elWilayas = document.getElementById('chartTopWilayas');
+        if (elWilayas) elWilayas.innerHTML = wilayasHtml;
+      }
+    }
+
     async function loadDashboardData() {
       // 0. Vérifier la connexion avec la base SQLite
       await API.ensureConnection();
@@ -826,6 +1055,19 @@
           setKpi('kpiFOR', stats.by_type?.rapport_formation);
           setKpi('kpiMES', stats.by_type?.rapport_mise_en_service);
           setKpi('kpiAlertes10j', stats.revisions_stats?.alertes_10j);
+          if (stats.by_type) {
+            const setPill = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || 0; };
+            setPill('pillCountAll', stats.total_rapports);
+            setPill('pillCountVC', stats.by_type.visite_controle);
+            setPill('pillCountINSP', stats.by_type.feuille_inspection);
+            setPill('pillCountINS', stats.by_type.rapport_installation);
+            setPill('pillCountFOR', stats.by_type.rapport_formation);
+            setPill('pillCountMES', stats.by_type.rapport_mise_en_service);
+            const badgeTot = document.getElementById('badgeTotalRapportsAnalytic');
+            if (badgeTot) badgeTot.textContent = `${stats.total_rapports || 0} Rapports`;
+          }
+          const allReps = await API.getRapports({});
+          renderAnalyticsCockpit(stats, allReps);
         }
       } catch (errKpi) {
         console.warn('Erreur chargement KPIs:', errKpi);

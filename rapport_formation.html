@@ -406,5 +406,182 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (params.get('print') === '1') setTimeout(() => window.print(), 500);
 });
 </script>
+<!-- ======================================================== -->
+<!-- MODAL : ATTESTATION OFFICIELLE DE FORMATION CLINIQUE     -->
+<!-- ======================================================== -->
+<div class="modal-overlay" id="certificateModal" style="display:none; position:fixed; inset:0; background:rgba(4,13,18,0.85); backdrop-filter:blur(6px); z-index:99999; align-items:center; justify-content:center; padding:20px; overflow-y:auto;" onclick="if(event.target === this) closeCertificateModal()">
+  <div style="background:#fff; max-width:920px; width:100%; border-radius:16px; box-shadow:0 25px 60px rgba(0,0,0,0.4); overflow:hidden; display:flex; flex-direction:column; max-height:92vh;">
+    
+    <div style="padding:14px 20px; background:#0f766e; color:#fff; display:flex; justify-content:space-between; align-items:center;">
+      <h3 style="margin:0; font-size:16px; font-weight:800; display:flex; align-items:center; gap:8px;">
+        <span>🎓</span> Attestation Officielle de Formation — FUJIFILM Medical Systems
+      </h3>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <button type="button" class="btn btn-secondary" style="background:#fff; color:#0f766e; font-weight:800; padding:6px 14px; font-size:12px; border-radius:8px;" onclick="printCertificate()">
+          🖨️ Imprimer l'Attestation (Format A4)
+        </button>
+        <button type="button" onclick="closeCertificateModal()" style="background:transparent; border:none; color:#fff; font-size:22px; cursor:pointer; line-height:1;">✕</button>
+      </div>
+    </div>
+    
+    <!-- Sélecteur de Participant -->
+    <div style="padding:10px 20px; background:#f1f5f9; border-bottom:1px solid #cbd5e1; display:flex; align-items:center; gap:12px; font-size:13px;" class="no-print">
+      <label style="font-weight:700; color:#0f172a;">Délivrer au nom de :</label>
+      <select id="certParticipantSelect" onchange="updateCertificatePreview()" style="padding:6px 12px; border-radius:6px; border:1px solid #cbd5e1; font-weight:600; flex:1; max-width:340px;">
+        <!-- Rempli dynamiquement -->
+      </select>
+      <span style="font-size:11px; color:#64748b;">(Générez une attestation nominative ou pour toute l'équipe)</span>
+    </div>
+
+    <!-- Zone Imprimable de l'Attestation -->
+    <div style="padding:24px; overflow-y:auto;" id="printableCertArea">
+      <div class="certificate-sheet" id="certSheet">
+        <div class="cert-header">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <img src="assets/electron-medical-logo.png" alt="Electron Medical" style="height:48px; object-fit:contain;">
+            <div style="text-align:center;">
+              <h2 style="font-size:12px; letter-spacing:2px; margin:0; color:#64748b;">RÉPUBLIQUE ALGÉRIENNE DÉMOCRATIQUE ET POPULAIRE</h2>
+              <div style="font-size:11px; font-weight:800; color:#0f766e; margin-top:2px;">MINISTÈRE DE LA SANTÉ · AGRÉMENT OFFICIEL N° 23/MSPRH</div>
+            </div>
+            <img src="assets/fujifilm-logo.svg" alt="FUJIFILM" style="height:28px; object-fit:contain;" onerror="this.style.display='none'">
+          </div>
+          <div style="height:2px; background:linear-gradient(90deg, transparent, #0f766e, transparent); margin:12px 0;"></div>
+          <h1 style="font-size:22px; color:#0f766e; font-weight:900; letter-spacing:1px; margin:6px 0; text-transform:uppercase;">ATTESTATION OFFICIELLE DE FORMATION</h1>
+          <div class="cert-title-badge">HABILITATION TECHNIQUE & CLINIQUE AUX ÉQUIPEMENTS FUJIFILM</div>
+        </div>
+
+        <div class="cert-body-text">
+          Il est formellement certifié et attesté par la présente que :
+          <span class="cert-trainee-name" id="certTraineeName">Dr. / Pr. Nom du Praticien</span>
+          <div style="font-size:14px; font-weight:700; color:#0f766e; margin-bottom:10px;" id="certTraineeRole">Médecin Gastro-entérologue / Chef de Service</div>
+          en exercice au sein de l'établissement de santé :
+          <div style="font-size:18px; font-weight:900; color:#0f2c38; margin:6px 0;" id="certHospitalName">Hôpital Central d'Alger</div>
+          <div style="font-size:13px; color:#64748b;" id="certWilayaName">Wilaya d'Alger</div>
+          
+          <p style="margin:16px auto; max-width:700px; font-size:13px; color:#334155; line-height:1.6;">
+            a suivi avec succès le programme complet de formation théorique et pratique aux systèmes d'endoscopie haute-définition <b>FUJIFILM Medical Systems</b>, et dispose des compétences requises pour l'utilisation, la sécurité et la manipulation des équipements conformément aux directives internationales.
+          </p>
+        </div>
+
+        <div class="cert-topics-box">
+          <div><b>✓ Module 01 :</b> Raccordement et mise sous tension colonne vidéo EP-8000 / Eluxeo</div>
+          <div><b>✓ Module 02 :</b> Maniement sécurisé des manettes de béquillage (Up/Down/Left/Right)</div>
+          <div><b>✓ Module 03 :</b> Protocole strict de test d'étanchéité constructeur ante / post examen</div>
+          <div><b>✓ Module 04 :</b> Précautions d'emploi des canaux opérateurs et accessoires</div>
+          <div><b>✓ Module 05 :</b> Optimisation du rendu muqueux (Modes avancés LCI & BLI)</div>
+          <div><b>✓ Module 06 :</b> Procédure d'écouvillonnage et désinfection conforme (LDE)</div>
+        </div>
+
+        <div class="cert-signatures">
+          <div class="cert-sig-block">
+            <div style="font-size:12px; font-weight:800; color:#0f766e;">Le Formateur Agréé</div>
+            <div style="font-size:11px; color:#64748b;">Electron Medical Algérie</div>
+            <div class="cert-sig-line" id="certTrainerSignature">Ingénieur Formateur</div>
+          </div>
+
+          <div style="text-align:center;">
+            <div style="width:72px; height:72px; border-radius:50%; border:2px dashed #0f766e; margin:auto; display:flex; align-items:center; justify-content:center; color:#0f766e; font-size:10px; font-weight:900; line-height:1.2; text-align:center;">
+              ELECTRON<br>MEDICAL<br>AGRÉÉ
+            </div>
+            <div style="font-size:10px; color:#64748b; margin-top:4px;" id="certDateDisplay">Date : 01/11/2026</div>
+          </div>
+
+          <div class="cert-sig-block">
+            <div style="font-size:12px; font-weight:800; color:#0f766e;">Le Responsable Médical</div>
+            <div style="font-size:11px; color:#64748b;">Établissement de Santé</div>
+            <div class="cert-sig-line">Signature & Cachet</div>
+          </div>
+        </div>
+
+        <div style="margin-top:22px; font-size:10px; color:#94a3b8; text-align:center; border-top:1px solid #e2e8f0; padding-top:8px;">
+          Document officiel délivré par Electron Medical Algérie · Distributeur Exclusif Fujifilm Medical Systems · Réf Certificat : <span id="certRefCode" style="font-weight:800; color:#0f766e;">FOR-CERT-2026</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openCertificateModal() {
+  const modal = document.getElementById('certificateModal');
+  const sel = document.getElementById('certParticipantSelect');
+  sel.innerHTML = '';
+
+  const optAll = document.createElement('option');
+  optAll.value = '__ALL__';
+  optAll.textContent = "👥 Toute l'Équipe Médicale & Soignante Formée";
+  sel.appendChild(optAll);
+
+  const rows = document.querySelectorAll('#teamBody tr');
+  rows.forEach((tr, idx) => {
+    const nom = tr.querySelector('[name=t_nom]')?.value?.trim();
+    const role = tr.querySelector('[name=t_role]')?.value?.trim() || 'Praticien / Soignant';
+    if (nom) {
+      const opt = document.createElement('option');
+      opt.value = JSON.stringify({ nom, role });
+      opt.textContent = `👤 ${nom} (${role})`;
+      sel.appendChild(opt);
+    }
+  });
+
+  updateCertificatePreview();
+  modal.style.display = 'flex';
+}
+
+function closeCertificateModal() {
+  document.getElementById('certificateModal').style.display = 'none';
+}
+
+function updateCertificatePreview() {
+  const hospital = document.getElementById('hospitalInput')?.value?.trim() || 'Établissement Hospitalier';
+  const wilaya = document.getElementById('wilayaSelect')?.value || 'Algérie';
+  const trainer = document.getElementById('technicianInput')?.value?.trim() || 'Ingénieur Formateur Electron Medical';
+  const ref = document.getElementById('interventionInput')?.value?.trim() || 'FOR-2026-001';
+  const dateVal = document.getElementById('trainingDateInput')?.value || new Date().toISOString().slice(0, 10);
+
+  document.getElementById('certHospitalName').textContent = hospital;
+  document.getElementById('certWilayaName').textContent = 'Wilaya : ' + wilaya;
+  document.getElementById('certTrainerSignature').textContent = trainer;
+  document.getElementById('certRefCode').textContent = ref + '-CERT';
+  document.getElementById('certDateDisplay').textContent = 'Fait le : ' + dateVal;
+
+  const selVal = document.getElementById('certParticipantSelect')?.value;
+  if (selVal && selVal !== '__ALL__') {
+    try {
+      const p = JSON.parse(selVal);
+      document.getElementById('certTraineeName').textContent = p.nom;
+      document.getElementById('certTraineeRole').textContent = p.role;
+    } catch(e) {}
+  } else {
+    document.getElementById('certTraineeName').textContent = "L'Équipe Médicale & Soignante du Service";
+    document.getElementById('certTraineeRole').textContent = "Praticiens, Cadres de Santé & Techniciens Biomédicaux";
+  }
+}
+
+function printCertificate() {
+  const content = document.getElementById('printableCertArea').innerHTML;
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <title>Attestation Officielle de Formation — Electron Medical & Fujifilm</title>
+      <link rel="stylesheet" href="css/main.css">
+      <style>
+        @page { size: A4 landscape; margin: 10mm; }
+        body { background: #fff !important; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+        .certificate-sheet { border: 6px double #0f766e !important; box-shadow: none !important; width: 100% !important; box-sizing: border-box; }
+      </style>
+    </head>
+    <body onload="window.print(); window.close();">
+      ${content}
+    </body>
+    </html>
+  `);
+  printWindow.document.close();
+}
+</script>
+
 </body>
 </html>
