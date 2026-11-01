@@ -12,7 +12,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Electron SAV">
-  <link rel="apple-touch-icon" href="assets/electron-medical-logo.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
   <title>Plateforme Technico-Commercial — Electron Medical Algérie & Fujifilm</title>
   <script>
     // VÉRIFICATION DE SÉCURITÉ IMMÉDIATE : CONNEXION OBLIGATOIRE
@@ -1125,9 +1127,9 @@
             </div>
           </div>
 
-          <div class="label-footer">
-            <span>SAV & Support : 0550 12 34 56</span>
-            <span>Distributeur Agréé Algérie</span>
+          <div class="label-footer" style="display:flex; flex-direction:column; gap:2px; font-size:8px; line-height:1.2; text-align:center;">
+            <div><strong>SAV Direct :</strong> 028 17 94 84 / 06-61.71.51.51 • <strong>Commercial :</strong> 028 17 97 97 / 028 17 92 94</div>
+            <div><strong>Email :</strong> electron.technologie@gmail.com • <strong>Site Web :</strong> www.electron-medical-dz.com • Birkhadem, ALGER</div>
           </div>
         </div>
 
@@ -1409,6 +1411,23 @@
 
       <!-- Feuille A4 Officielle Imprimable -->
       <div class="bilan-sheet" id="printableBilanSheet">
+        <!-- En-tête officiel S.A.R.L ELECTRON MEDICAL ALGERIE -->
+        <div class="official-company-header" style="margin-bottom: 12px;">
+          <div class="company-brand">
+            <div class="company-name">S.A.R.L ELECTRON MEDICAL ALGERIE</div>
+            <div class="company-subtitle">Importation - Vente - Service Après-Vente de Matériel Médical</div>
+            <div class="company-address">Siège Social : Villa N°21 Coopérative Immobilière El Baraka (Ex Takharbouchet) - Section 01 Lot N°435 Commune De Birkhadem ALGER-ALGERIE</div>
+            <div class="company-contacts">
+              <span><strong>Service Commercial :</strong> 028 17 97 97 / 06-61.71.51.51 / 028 17 92 94</span>
+              <span><strong>Service Après-Vente :</strong> 028 17 94 84</span>
+              <span><strong>Email :</strong> electron.technologie@gmail.com</span>
+              <span><strong>Site Web :</strong> www.electron-medical-dz.com</span>
+            </div>
+          </div>
+          <div class="company-logo-box">
+            <img src="assets/electron-medical-logo.png" alt="Electron Medical Algérie" class="company-logo-img">
+          </div>
+        </div>
         <div class="bilan-head-band">
           <div>
             <img src="assets/electron-medical-logo.png" alt="Electron Medical Algérie" style="height: 44px; object-fit: contain;">
@@ -1574,8 +1593,11 @@
       <div class="fuji-sticker-card" id="fujiStickerContainer">
         <div class="fuji-sticker-header">
           <div style="display:flex; align-items:center; gap:8px;">
-            <img src="assets/electron-medical-logo.png" alt="Electron Medical">
-            <span style="font-size:9px; font-weight:800; color:#0f766e; text-transform:uppercase;">Distributeur Fujifilm DZ</span>
+            <img src="assets/electron-medical-logo.png" alt="Electron Medical" style="height:32px; object-fit:contain;">
+            <div>
+              <div style="font-size:10px; font-weight:900; color:#063740; line-height:1.1; letter-spacing:0.3px;">S.A.R.L ELECTRON MEDICAL ALGERIE</div>
+              <div style="font-size:8px; font-weight:700; color:#0f766e; text-transform:uppercase;">Distributeur Agréé Matériel Médical Fujifilm</div>
+            </div>
           </div>
           <span class="fuji-sticker-badge">GARANTIE 2 ANS</span>
         </div>
@@ -1597,16 +1619,26 @@
         </div>
 
         <div class="fuji-sticker-footer">
-          <span>Hotline SAV Urgence : +213 (0) 23 45 67 89</span>
-          <span>electron-medical.dz</span>
+          <div style="display:flex; flex-direction:column; gap:2px; width:100%; text-align:center;">
+            <div style="font-size:8.5px; font-weight:700; color:#063740;">
+              📞 <strong>SAV Direct :</strong> 028 17 94 84 / 06-61.71.51.51 • <strong>Commercial :</strong> 028 17 97 97 / 028 17 92 94
+            </div>
+            <div style="font-size:7.5px; font-weight:600; color:#64748b;">
+              ✉️ electron.technologie@gmail.com • 🌐 www.electron-medical-dz.com • 📍 Birkhadem, ALGER
+            </div>
+          </div>
         </div>
       </div>
 
+      <!-- Container pour planche A4 (8 étiquettes) invisible à l'écran, actif uniquement lors de l'impression planche -->
+      <div id="stickerSheetPrintContainer" style="display:none;"></div>
+
       <div class="modal-footer no-print" style="margin-top: 18px; display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
         <button type="button" class="btn btn-secondary" onclick="downloadStickerQrImage()">📥 Télécharger Image QR</button>
-        <div style="display: flex; gap: 8px;">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
           <button type="button" class="btn btn-secondary" onclick="closeQuickStickerModal()">Fermer</button>
-          <button type="button" class="btn btn-primary" onclick="printFujiSticker()">🖨️ Imprimer Étiquette Autocollante</button>
+          <button type="button" class="btn btn-primary" onclick="printFujiSticker()">🖨️ Imprimer 1 Étiquette (100x60mm)</button>
+          <button type="button" class="btn" style="background:#0f766e; color:#fff;" onclick="printFujiStickerSheet()">📑 Planche A4 (8 Étiquettes)</button>
         </div>
       </div>
     </div>
@@ -3084,7 +3116,11 @@ Notre équipe technique reste à votre entière disposition pour toute intervent
     }
 
     function printOfficialPv() {
+      document.body.classList.add('printing-pv');
       window.print();
+      setTimeout(() => {
+        document.body.classList.remove('printing-pv');
+      }, 1000);
     }
 
     function handleUserLogout() {

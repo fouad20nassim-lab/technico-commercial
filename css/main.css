@@ -3582,3 +3582,167 @@ body {
     max-height: 48px !important;
   }
 }
+
+
+/* ========================================================================= */
+/* STANDARD DE PAGINATION OFFICIELLE A4 : STRICT 1, 2 OU 3 PAGES MAXIMUM    */
+/* ========================================================================= */
+@page {
+  size: A4 portrait;
+  margin: 8mm 10mm 8mm 10mm;
+}
+
+@media print {
+  html, body {
+    width: 100% !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 10px !important;
+    line-height: 1.3 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Classes utilitaires de pagination */
+  .page-break-before {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+  .page-break-after {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+  .page-break-inside-avoid, .card, .section {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* 1. PROCÈS-VERBAL DE RÉVISION (STRICT 1 PAGE A4) */
+  body.printing-pv > *:not(#pvModal) {
+    display: none !important;
+  }
+  body.printing-pv #pvModal {
+    position: static !important;
+    display: block !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  body.printing-pv #pvModal .modal-box {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+    background: #fff !important;
+  }
+  body.printing-pv #printablePvDocument {
+    width: 100% !important;
+    max-width: 190mm !important;
+    height: auto !important;
+    max-height: 275mm !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    overflow: hidden !important;
+  }
+
+  /* 2. BILAN EXÉCUTIF DIRECTION (STRICT 1 PAGE A4) */
+  body.printing-bilan > *:not(#bilanExecutifModal) {
+    display: none !important;
+  }
+  body.printing-bilan #bilanExecutifModal {
+    position: static !important;
+    display: block !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  body.printing-bilan #bilanExecutifModal .modal-box {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+    background: #fff !important;
+  }
+  body.printing-bilan .bilan-sheet {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    max-width: 190mm !important;
+    max-height: 275mm !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    overflow: hidden !important;
+  }
+
+  /* Masquer boutons, barres et éléments d'interface sur tous les formulaires */
+  .no-print,
+  .main-header,
+  .app-control-bar,
+  .excel-sheets-tabbar,
+  .actions,
+  .bottom-actions,
+  .tablebtn,
+  .smallbtn,
+  .sig-actions button,
+  button,
+  .modal-backdrop,
+  input[type="file"] {
+    display: none !important;
+  }
+}
+
+/* Impression en Planche A4 de 8 Étiquettes Hospitalières */
+@media print {
+  body.printing-sticker-sheet > *:not(#quickStickerModal) {
+    display: none !important;
+  }
+  body.printing-sticker-sheet #quickStickerModal {
+    position: static !important;
+    display: block !important;
+    background: transparent !important;
+    padding: 0 !important;
+  }
+  body.printing-sticker-sheet #quickStickerModal .modal-box {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    background: transparent !important;
+  }
+  body.printing-sticker-sheet .no-print {
+    display: none !important;
+  }
+  body.printing-sticker-sheet #fujiStickerContainer {
+    display: none !important;
+  }
+  body.printing-sticker-sheet #stickerSheetPrintContainer {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-rows: repeat(4, auto) !important;
+    gap: 4mm !important;
+    width: 100% !important;
+    page-break-inside: avoid !important;
+    page-break-after: avoid !important;
+  }
+  body.printing-sticker-sheet #stickerSheetPrintContainer .fuji-sticker-card {
+    display: block !important;
+    visibility: visible !important;
+    width: 90mm !important;
+    padding: 6px 8px !important;
+    margin: 0 auto !important;
+    border: 1.5px solid #063740 !important;
+    border-radius: 8px !important;
+    page-break-inside: avoid !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+  }
+  body.printing-sticker-sheet #stickerSheetPrintContainer .fuji-sticker-card * {
+    visibility: visible !important;
+  }
+}

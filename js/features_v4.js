@@ -416,7 +416,11 @@ function updateBilanContent() {
 }
 
 function printOfficialBilan() {
+  document.body.classList.add('printing-bilan');
   window.print();
+  setTimeout(() => {
+    document.body.classList.remove('printing-bilan');
+  }, 1000);
 }
 
 function exportBilanCsv() {
@@ -499,8 +503,9 @@ function updateStickerDisplay(data) {
   const targetBox = document.getElementById('stickerQrTarget');
   if (targetBox) {
     targetBox.innerHTML = '';
-    const host = window.location.host || 'localhost:8085';
-    const qrUrl = `http://${host}/?sn=${encodeURIComponent(data.numero_serie || '')}&client=${encodeURIComponent(data.client_nom || '')}`;
+    const host = window.location.host || 'technico-commercial.onrender.com';
+    const origin = window.location.origin || `https://${host}`;
+    const qrUrl = `${origin}/?sn=${encodeURIComponent(data.numero_serie || '')}&client=${encodeURIComponent(data.client_nom || data.etablissement || '')}`;
 
     if (typeof QRCode !== 'undefined') {
       currentStickerQrInstance = new QRCode(targetBox, {
@@ -520,6 +525,28 @@ function printFujiSticker() {
   window.print();
   setTimeout(() => {
     document.body.classList.remove('printing-sticker');
+  }, 1000);
+}
+
+function printFujiStickerSheet() {
+  const container = document.getElementById('stickerSheetPrintContainer');
+  const source = document.getElementById('fujiStickerContainer');
+  if (!container || !source) {
+    printFujiSticker();
+    return;
+  }
+  container.innerHTML = '';
+  // Générer une planche de 8 étiquettes hospitalières (2 colonnes x 4 rangées)
+  for (let i = 0; i < 8; i++) {
+    const clone = source.cloneNode(true);
+    clone.id = `fujiStickerClone_${i}`;
+    container.appendChild(clone);
+  }
+  document.body.classList.add('printing-sticker-sheet');
+  window.print();
+  setTimeout(() => {
+    document.body.classList.remove('printing-sticker-sheet');
+    container.innerHTML = '';
   }, 1000);
 }
 
