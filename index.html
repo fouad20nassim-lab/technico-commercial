@@ -2471,22 +2471,27 @@
       const qrContainer = document.getElementById('wifiModalQrContainer');
       if (modal) modal.classList.add('active');
       const host = window.location.hostname || 'localhost';
-      const apiBase = (typeof window !== 'undefined' && window.location && window.location.origin.startsWith('http')) ? '' : 'http://localhost:8085';
-      let wifiUrl = `http://${host}:8085`;
-      try {
-        const res = await fetch(`${apiBase}/api/network-ip`);
-        if (res.ok) {
-          const d = await res.json();
-          if (d.url) wifiUrl = d.url;
-        }
-      } catch (e) {}
+      const isOnlineUrl = window.location.origin && (window.location.origin.includes('onrender.com') || window.location.origin.startsWith('https://'));
+      let wifiUrl = isOnlineUrl ? window.location.origin : `http://${host}:8085`;
+
+      if (!isOnlineUrl) {
+        const apiBase = (typeof window !== 'undefined' && window.location && window.location.origin.startsWith('http')) ? '' : 'http://localhost:8085';
+        try {
+          const res = await fetch(`${apiBase}/api/network-ip`);
+          if (res.ok) {
+            const d = await res.json();
+            if (d.url) wifiUrl = d.url;
+          }
+        } catch (e) {}
+      }
+
       if (box) box.textContent = wifiUrl;
       if (qrContainer && typeof QRCode !== 'undefined') {
         qrContainer.innerHTML = '';
         new QRCode(qrContainer, {
           text: wifiUrl,
-          width: 140,
-          height: 140,
+          width: 150,
+          height: 150,
           colorDark: "#063740",
           colorLight: "#ffffff"
         });
