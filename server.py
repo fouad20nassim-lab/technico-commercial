@@ -1143,8 +1143,40 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             return self.send_json({"success": False, "error": str(e)}, 500)
 
     def handle_create_revision_schedule(self, payload):
-        """Permet de créer manuellement un calendrier de garantie 2 ans / révisions 6 mois pour un équipement"""
+        """Permet de créer un calendrier de garantie 2 ans pour un ou plusieurs équipements (support en lot / bulk)"""
         try:
+            # Cas 1 : Support en Lot (Liste d'équipements)
+            items = []
+            if isinstance(payload, list):
+                items = payload
+            elif isinstance(payload, dict) and 'items' in payload and isinstance(payload['items'], list):
+                items = payload['items']
+
+            if items:
+                count_created = 0
+                for idx, item in enumerate(items):
+                    cn = item.get('client_nom')
+                    if not cn:
+                        continue
+                    w = item.get('wilaya', '')
+                    d_inst = item.get('date_installation') or str(date.today())
+                    mat = item.get('materiel') or 'FUJIFILM ELUXEO EP-8000'
+                    sn = item.get('numero_serie') or ''
+                    tech = item.get('technicien') or ''
+                    tel = item.get('telephone') or ''
+                    em = item.get('email') or ''
+                    cid = item.get('installation_id') or f"INST-LOT-{datetime.now().strftime('%Y%m%d%H%M%S')}-{idx+1}"
+                    generer_echeances_garantie(cid, cn, w, d_inst, mat, sn, tech, tel, em)
+                    count_created += 1
+
+                backup_database()
+                return self.send_json({
+                    "success": True,
+                    "count": count_created,
+                    "message": f"Succès : {count_created} équipement(s) et révisions enregistrés avec succès dans SQLite !"
+                })
+
+            # Cas 2 : Matériel Individuel
             client_nom = payload.get('client_nom')
             if not client_nom:
                 return self.send_json({"success": False, "error": "Nom du client requis"}, 400)

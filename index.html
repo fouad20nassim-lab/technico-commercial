@@ -902,15 +902,28 @@
   </div>
 
   <div class="modal-overlay" id="addWarrantyModal">
-    <div class="modal-box" style="max-width: 620px;">
+    <div class="modal-box" style="max-width: 680px;">
       <div class="modal-header">
-        <h3>🛡️ Déclarer un Équipement sous Garantie 2 Ans</h3>
+        <h3>🛡️ Déclarer des Équipements sous Garantie 2 Ans</h3>
         <button class="btn-close" onclick="closeAddWarrantyModal()">×</button>
       </div>
-      <form id="addWarrantyForm" onsubmit="handleCreateWarrantySubmit(event)">
-        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
-          Génération automatique des <b>4 révisions semestrielles (6 mois, 12 mois, 18 mois, 24 mois)</b> avec <b>rappel automatique 10 jours à l'avance</b>.
-        </p>
+
+      <!-- Onglets : Individuel vs Lot Multi-Matériels -->
+      <div style="display:flex; gap:8px; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px;">
+        <button type="button" id="tabBtnWarrantySingle" onclick="switchWarrantyTab('single')" class="btn btn-primary" style="font-size:12px; font-weight:800; padding:6px 14px;">
+          ➕ Saisie Individuelle (1 Matériel)
+        </button>
+        <button type="button" id="tabBtnWarrantyBulk" onclick="switchWarrantyTab('bulk')" class="btn btn-secondary" style="font-size:12px; font-weight:800; padding:6px 14px; background:rgba(0,184,124,0.1); color:#00b87c; border:1px solid #00b87c;">
+          📋 Ajout en Lot (Multi-Matériels / Excel)
+        </button>
+      </div>
+
+      <!-- CONTENU 1 : Saisie Individuelle -->
+      <div id="warrantySingleContent">
+        <form id="addWarrantyForm" onsubmit="handleCreateWarrantySubmit(event)">
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
+            Génération automatique des <b>4 révisions semestrielles (6, 12, 18, 24 mois)</b> avec <b>rappel J-10</b>.
+          </p>
         <div class="grid" style="gap: 12px; margin-bottom: 16px;">
           <div class="field span2">
             <label>Nom de l’Hôpital / Établissement *</label>
@@ -950,6 +963,39 @@
           <button type="submit" class="btn btn-primary">✓ Créer l'Échéancier & Activer les Rappels</button>
         </div>
       </form>
+      </div>
+
+      <!-- CONTENU 2 : Ajout en Lot / Multi-Matériels -->
+      <div id="warrantyBulkContent" style="display:none;">
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
+          Collez votre liste depuis <b>Excel</b> ou saisissez plusieurs lignes. Chaque ligne représente un matériel.<br>
+          <b style="color:var(--text-main);">Format par ligne :</b> <code style="background:rgba(0,0,0,0.15); padding:2px 6px; border-radius:4px; color:#00b87c; font-size:11px;">Hôpital | Wilaya | Modèle | N° Série (SN) | Date Installation</code>
+        </p>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <label style="font-size:11px; font-weight:700; color:var(--text-muted);">Liste des matériels à déclarer :</label>
+          <div style="display:flex; gap:6px;">
+            <button type="button" class="btn btn-secondary" onclick="fillWarrantyBulkExample()" style="padding:3px 8px; font-size:11px;">📝 Charger Exemple</button>
+            <label class="btn btn-secondary" style="padding:3px 8px; font-size:11px; cursor:pointer; margin:0;">
+              📂 Importer CSV <input type="file" accept=".csv,.txt" onchange="handleWarrantyCsvImport(event)" style="display:none;">
+            </label>
+          </div>
+        </div>
+
+        <textarea id="warrantyBulkTextarea" rows="7" class="form-input" placeholder="CHU Mustapha Pacha | Alger | FUJIFILM ELUXEO EP-8000 | SN-260810 | 2026-10-15&#10;CHU Bab El Oued | Alger | Vidéocoloscope EC-760R | SN-771920 | 2026-10-20&#10;Clinique El Azhar | Alger | Vidéogastroscope EG-760Z | SN-661040 | 2026-10-22" style="font-family:monospace; font-size:12px; width:100%; box-sizing:border-box; margin-bottom:10px;" oninput="updateBulkItemsPreview()"></textarea>
+
+        <div id="bulkPreviewAlert" style="font-size:12px; font-weight:700; color:#0f766e; margin-bottom:12px; background:rgba(15,118,110,0.08); padding:8px 12px; border-radius:8px;">
+          ⚡ Prêt : <span id="bulkItemsCount">0</span> matériel(s) détecté(s)
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px;">
+          <button type="button" class="btn btn-secondary" onclick="closeAddWarrantyModal()">Annuler</button>
+          <button type="button" class="btn btn-primary" onclick="submitWarrantyBulk()" style="background:#00b87c; border-color:#00a36d; font-weight:800;">
+            🚀 Enregistrer tout le Lot dans SQLite
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -1987,6 +2033,124 @@
 
     function closeAddWarrantyModal() {
       document.getElementById('addWarrantyModal').classList.remove('active');
+    }
+
+    function switchWarrantyTab(tab) {
+      const btnSingle = document.getElementById('tabBtnWarrantySingle');
+      const btnBulk = document.getElementById('tabBtnWarrantyBulk');
+      const singleContent = document.getElementById('warrantySingleContent');
+      const bulkContent = document.getElementById('warrantyBulkContent');
+
+      if (tab === 'bulk') {
+        if (btnSingle) { btnSingle.className = 'btn btn-secondary'; btnSingle.style.background = ''; btnSingle.style.color = ''; }
+        if (btnBulk) { btnBulk.className = 'btn btn-primary'; btnBulk.style.background = '#00b87c'; btnBulk.style.color = '#fff'; }
+        if (singleContent) singleContent.style.display = 'none';
+        if (bulkContent) bulkContent.style.display = 'block';
+        updateBulkItemsPreview();
+      } else {
+        if (btnSingle) { btnSingle.className = 'btn btn-primary'; btnSingle.style.background = ''; btnSingle.style.color = ''; }
+        if (btnBulk) { btnBulk.className = 'btn btn-secondary'; btnBulk.style.background = 'rgba(0,184,124,0.1)'; btnBulk.style.color = '#00b87c'; }
+        if (singleContent) singleContent.style.display = 'block';
+        if (bulkContent) bulkContent.style.display = 'none';
+      }
+    }
+
+    function fillWarrantyBulkExample() {
+      const ta = document.getElementById('warrantyBulkTextarea');
+      if (!ta) return;
+      ta.value =
+        "CHU Mustapha Pacha | Alger | FUJIFILM ELUXEO EP-8000 | SN-260810 | 2026-10-15\n" +
+        "CHU Bab El Oued | Alger | Vidéocoloscope EC-760R-V/L | SN-771920 | 2026-10-20\n" +
+        "Clinique El Azhar | Alger | Vidéogastroscope EG-760Z | SN-661040 | 2026-10-22\n" +
+        "CHU Benbadis | Constantine | Processeur EP-8000 | SN-994120 | 2026-09-10\n" +
+        "EPH Oran | Oran | Processeur Vidéo EP-8000 | SN-883210 | 2026-10-05";
+      updateBulkItemsPreview();
+    }
+
+    function parseBulkLines(raw) {
+      const lines = raw.split('\n').map(l => l.trim()).filter(l => l.length > 0 && !l.startsWith('#'));
+      const items = [];
+      lines.forEach(l => {
+        // Détection séparateur : pipe |, tabulatrice 	, point-virgule ;, virgule ,
+        let parts = [];
+        if (l.includes('|')) parts = l.split('|');
+        else if (l.includes('\t')) parts = l.split('\t');
+        else if (l.includes(';')) parts = l.split(';');
+        else if (l.includes(',')) parts = l.split(',');
+        else parts = [l];
+
+        parts = parts.map(p => p.trim());
+        if (parts.length >= 1 && parts[0]) {
+          const client = parts[0];
+          const wilaya = parts[1] || 'Alger';
+          const materiel = parts[2] || 'FUJIFILM ELUXEO EP-8000';
+          const sn = parts[3] || '';
+          const dateInst = parts[4] || new Date().toISOString().slice(0, 10);
+          items.push({
+            client_nom: client,
+            wilaya: wilaya,
+            materiel: materiel,
+            numero_serie: sn,
+            date_installation: dateInst
+          });
+        }
+      });
+      return items;
+    }
+
+    function updateBulkItemsPreview() {
+      const ta = document.getElementById('warrantyBulkTextarea');
+      const counter = document.getElementById('bulkItemsCount');
+      if (!ta || !counter) return;
+      const items = parseBulkLines(ta.value);
+      counter.textContent = items.length;
+    }
+
+    function handleWarrantyCsvImport(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const text = evt.target.result;
+        const ta = document.getElementById('warrantyBulkTextarea');
+        if (ta) {
+          ta.value = text;
+          updateBulkItemsPreview();
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    async function submitWarrantyBulk() {
+      const ta = document.getElementById('warrantyBulkTextarea');
+      if (!ta) return;
+      const items = parseBulkLines(ta.value);
+      if (items.length === 0) {
+        alert("Veuillez saisir ou coller au moins un équipement.");
+        return;
+      }
+
+      const API_BASE = (window.location && window.location.origin.startsWith('http')) ? '' : 'http://localhost:8085';
+      try {
+        const res = await fetch(API_BASE + '/api/revisions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: items })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert("🎉 SUCCÈS : " + (data.count || items.length) + " équipement(s) et révisions enregistrés dans SQLite !\n\nToutes les garanties 2 ans et révisions semestrielles sont prêtes.");
+          closeAddWarrantyModal();
+          ta.value = '';
+          if (typeof loadRevisionsData === 'function') loadRevisionsData();
+          if (typeof loadDashboardData === 'function') loadDashboardData();
+        } else {
+          alert("Erreur lors de l'enregistrement : " + (data.error || 'Erreur inconnue'));
+        }
+      } catch (err) {
+        console.error('Erreur bulk:', err);
+        alert("Erreur réseau ou serveur lors de l'enregistrement du lot.");
+      }
     }
 
     async function handleCreateWarrantySubmit(e) {
