@@ -1172,8 +1172,8 @@
           <button type="button" class="btn btn-secondary" onclick="document.getElementById('uploadDbFileInput').click()">
             📥 Importer / Remplacer (.db)
           </button>
-                    <button type="button" class="btn" onclick="purgeTestDataPrompt()" style="background:#dc2626; border-color:#dc2626; color:#ffffff; font-weight:800;" title="Vider tous les rapports et clients de test pour remettre l'application Ã  neuf pour les technico-commerciaux">
-            ðŸ§¹ Vider DonnÃ©es de Test (Remise Ã  ZÃ©ro)
+                    <button type="button" class="btn" onclick="purgeTestDataPrompt()" style="background:#dc2626; border-color:#dc2626; color:#ffffff; font-weight:800;" title="Vider tous les rapports et clients de test pour remettre l'application à neuf pour les technico-commerciaux">
+            🧹 Vider Données de Test (Remise à Zéro)
           </button>
           <input type="file" id="uploadDbFileInput" accept=".db,application/x-sqlite3" style="display:none;" onchange="handleUploadSqliteDb(event)">
         </div>
@@ -3088,17 +3088,17 @@
     
     async function purgeTestDataPrompt() {
       const confirm1 = confirm(
-        "âš ï¸ ATTENTION : REMISE Ã€ ZÃ‰RO DE L'APPLICATION\n\n" +
-        "Cette action va effacer TOUS les rapports de test, les clients, les Ã©quipements et les rÃ©visions.\n\n" +
-        "âœ… Vos comptes utilisateurs (admin, techniciens) et vos rÃ©glages seront CONSERVÃ‰S intacts.\n" +
-        "âœ… Une sauvegarde automatique de sÃ©curitÃ© (.db) sera crÃ©Ã©e avant la suppression.\n\n" +
+        "⚠️ ATTENTION : REMISE À ZÉRO DE L'APPLICATION\n\n" +
+        "Cette action va effacer TOUS les rapports de test, les clients, les équipements et les révisions.\n\n" +
+        "✅ Vos comptes utilisateurs (admin, techniciens) et vos réglages seront CONSERVÉS intacts.\n" +
+        "✅ Une sauvegarde automatique de sécurité (.db) sera créée avant la suppression.\n\n" +
         "Voulez-vous continuer ?"
       );
       if (!confirm1) return;
 
-      const confirm2 = prompt("Pour confirmer dÃ©finitivement, tapez EXACTEMENT en majuscules : VIDER");
+      const confirm2 = prompt("Pour confirmer définitivement, tapez EXACTEMENT en majuscules : VIDER");
       if (confirm2 !== "VIDER") {
-        alert("OpÃ©ration annulÃ©e. Aucune donnÃ©e n'a Ã©tÃ© modifiÃ©e.");
+        alert("Opération annulée. Aucune donnée n'a été modifiée.");
         return;
       }
 
@@ -3113,7 +3113,7 @@
         });
         const data = await res.json();
         if (data.success) {
-          // Vider Ã©galement le cache local navigateur
+          // Vider également le cache local navigateur
           try {
             localStorage.removeItem('technico_rapports_db_v1');
             localStorage.removeItem('technico_revisions_v1');
@@ -3121,7 +3121,7 @@
             sessionStorage.removeItem('technico_rapports_db_v1');
           } catch(e) {}
 
-          alert("âœ… " + data.message + (data.backup_created ? "\n\nUne sauvegarde de secours a Ã©tÃ© crÃ©Ã©e : " + data.backup_created : ""));
+          alert("✅ " + data.message + (data.backup_created ? "\n\nUne sauvegarde de secours a été créée : " + data.backup_created : ""));
           window.location.reload();
         } else {
           alert("âŒ Erreur : " + (data.error || "Impossible de vider la base"));
@@ -3133,10 +3133,10 @@
           localStorage.removeItem('technico_revisions_v1');
           localStorage.removeItem('technico_clients_v1');
           sessionStorage.removeItem('technico_rapports_db_v1');
-          alert("âœ… DonnÃ©es locales du navigateur vidÃ©es avec succÃ¨s !");
+          alert("✅ Données locales du navigateur vidées avec succès !");
           window.location.reload();
         } catch(e) {
-          alert("Erreur lors de la remise Ã  zÃ©ro : " + err.message);
+          alert("Erreur lors de la remise à zéro : " + err.message);
         }
       }
     }

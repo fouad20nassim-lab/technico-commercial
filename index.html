@@ -254,22 +254,22 @@
     <section class="analytics-cockpit" id="analyticsCockpit" style="margin-bottom: 30px;">
       <div class="analytics-header">
         <div style="display:flex;align-items:center;gap:12px;">
-          <div style="width:38px;height:38px;border-radius:10px;background:#e6f4f1;color:#0f766e;display:flex;align-items:center;justify-content:center;font-size:18px;">ðŸ“Š</div>
+          <div style="width:38px;height:38px;border-radius:10px;background:#e6f4f1;color:#0f766e;display:flex;align-items:center;justify-content:center;font-size:18px;">📊</div>
           <div>
             <h3 style="margin:0;font-size:16px;font-weight:800;color:var(--navy);">Cockpit Analytique & Performance SAV</h3>
-            <p style="margin:2px 0 0 0;font-size:12px;color:var(--text-muted);">RÃ©partition des interventions, taux d'exÃ©cution des rÃ©visions et couverture gÃ©ographique</p>
+            <p style="margin:2px 0 0 0;font-size:12px;color:var(--text-muted);">Répartition des interventions, taux d'exécution des révisions et couverture géographique</p>
           </div>
         </div>
         <button type="button" class="btn btn-secondary" onclick="toggleAnalyticsView()" id="btnToggleAnalytics" style="font-size:12px;padding:6px 14px;">
-          <span id="toggleAnalyticsIcon">ðŸ“Š</span> <span id="toggleAnalyticsText">Masquer les Graphiques</span>
+          <span id="toggleAnalyticsIcon">📊</span> <span id="toggleAnalyticsText">Masquer les Graphiques</span>
         </button>
       </div>
 
       <div class="analytics-grid" id="analyticsGridContent">
-        <!-- 1. RÃ©partition des Types de Rapports -->
+        <!-- 1. Répartition des Types de Rapports -->
         <div class="analytics-card">
           <div class="card-head-mini">
-            <h4>RÃ©partition des Interventions</h4>
+            <h4>Répartition des Interventions</h4>
             <span class="badge-mini" id="badgeTotalRapportsAnalytic">0 Rapports</span>
           </div>
           <div id="chartTypeBars">
@@ -277,10 +277,10 @@
           </div>
         </div>
 
-        <!-- 2. Statut des Garanties & RÃ©visions 6 Mois -->
+        <!-- 2. Statut des Garanties & Révisions 6 Mois -->
         <div class="analytics-card">
           <div class="card-head-mini">
-            <h4>Statut des RÃ©visions 6 Mois</h4>
+            <h4>Statut des Révisions 6 Mois</h4>
             <span class="badge-mini" style="background:#e6f4f1;color:#0f766e;">Cycle 2 Ans</span>
           </div>
           <div id="chartWarrantyStatus">
@@ -292,17 +292,17 @@
         <div class="analytics-card">
           <div class="card-head-mini">
             <h4>Top Wilayas Actives</h4>
-            <span class="badge-mini">ðŸ‡©ðŸ‡¿ AlgÃ©rie</span>
+            <span class="badge-mini">🇩🇿 Algérie</span>
           </div>
           <div id="chartTopWilayas">
             <!-- Rempli dynamiquement -->
           </div>
 
-        <!-- 4. RÃ©partition par Territoire RÃ©gional (Centre, Est, Ouest, Sud) -->
+        <!-- 4. Répartition par Territoire Régional (Centre, Est, Ouest, Sud) -->
         <div class="analytics-card">
           <div class="card-head-mini">
-            <h4>Territoires RÃ©gionaux (AlgÃ©rie)</h4>
-            <span class="badge-mini">4 RÃ©gions</span>
+            <h4>Territoires Régionaux (Algérie)</h4>
+            <span class="badge-mini">4 Régions</span>
           </div>
           <div id="chartRegionsBars">
             <!-- Rempli dynamiquement -->
@@ -449,63 +449,63 @@
 
       <!-- Filtres et Recherche -->
             <!-- Badges de Filtres Rapides & Compteur Dynamique -->
-            <!-- BARRE OFFICIELLE DES 4 RÃ‰GIONS (CENTRE, EST, OUEST, SUD) -->
+            <!-- BARRE OFFICIELLE DES 4 RÉGIONS (CENTRE, EST, OUEST, SUD) -->
       <div class="region-filter-bar">
-        <span style="font-size:12px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; margin-right:4px;">Territoires d'AlgÃ©rie :</span>
+        <span style="font-size:12px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; margin-right:4px;">Territoires d'Algérie :</span>
         <button type="button" class="region-pill-btn active btn-all-regions" onclick="setRegionalFilter('', this)">
-          <span>ðŸ‡©ðŸ‡¿ National (58 Wilayas)</span>
+          <span>🇩🇿 National (58 Wilayas)</span>
           <span class="pill-count" id="countRegionAll">0</span>
         </button>
         <button type="button" class="region-pill-btn btn-centre" onclick="setRegionalFilter('Centre', this)">
           <span class="region-orb centre"></span>
-          <span>RÃ©gion Centre</span>
+          <span>Région Centre</span>
           <span class="pill-count" id="countRegionCentre">0</span>
         </button>
         <button type="button" class="region-pill-btn btn-est" onclick="setRegionalFilter('Est', this)">
           <span class="region-orb est"></span>
-          <span>RÃ©gion Est</span>
+          <span>Région Est</span>
           <span class="pill-count" id="countRegionEst">0</span>
         </button>
         <button type="button" class="region-pill-btn btn-ouest" onclick="setRegionalFilter('Ouest', this)">
           <span class="region-orb ouest"></span>
-          <span>RÃ©gion Ouest</span>
+          <span>Région Ouest</span>
           <span class="pill-count" id="countRegionOuest">0</span>
         </button>
         <button type="button" class="region-pill-btn btn-sud" onclick="setRegionalFilter('Sud', this)">
           <span class="region-orb sud"></span>
-          <span>RÃ©gion Sud</span>
+          <span>Région Sud</span>
           <span class="pill-count" id="countRegionSud">0</span>
         </button>
       </div>
 
       <div class="filter-pills-container">
         <button type="button" class="quick-filter-pill active" onclick="setQuickTypeFilter('', this)">
-          <span>ðŸŒ Tous les documents</span>
+          <span>🌐 Tous les documents</span>
           <span class="pill-count" id="pillCountAll">0</span>
         </button>
         <button type="button" class="quick-filter-pill" onclick="setQuickTypeFilter('visite_controle', this)">
-          <span>ðŸ“‹ Visites de ContrÃ´le</span>
+          <span>📋 Visites de Contrôle</span>
           <span class="pill-count" id="pillCountVC">0</span>
         </button>
         <button type="button" class="quick-filter-pill" onclick="setQuickTypeFilter('feuille_inspection', this)">
-          <span>ðŸ”¬ Feuilles d'Inspection</span>
+          <span>🔬 Feuilles d'Inspection</span>
           <span class="pill-count" id="pillCountINSP">0</span>
         </button>
         <button type="button" class="quick-filter-pill" onclick="setQuickTypeFilter('rapport_installation', this)">
-          <span>âš™ï¸ Installations</span>
+          <span>⚙️ Installations</span>
           <span class="pill-count" id="pillCountINS">0</span>
         </button>
         <button type="button" class="quick-filter-pill" onclick="setQuickTypeFilter('rapport_formation', this)">
-          <span>ðŸŽ“ Formations</span>
+          <span>🎓 Formations</span>
           <span class="pill-count" id="pillCountFOR">0</span>
         </button>
         <button type="button" class="quick-filter-pill" onclick="setQuickTypeFilter('rapport_mise_en_service', this)">
-          <span>âœ… Mises en Service</span>
+          <span>✅ Mises en Service</span>
           <span class="pill-count" id="pillCountMES">0</span>
         </button>
 
         <div class="results-counter-pill" id="resultsCounterBadge">
-          <span>ðŸ”</span> <span id="resultsCounterText">0 rapport(s) affichÃ©(s)</span>
+          <span>📍</span> <span id="resultsCounterText">0 rapport(s) affiché(s)</span>
         </div>
       </div>
 
@@ -926,7 +926,7 @@
 
     
     // =========================================================================
-    // NOUVEAUTÃ‰ PROFESSIONNELLE : COCKPIT ANALYTICS & STATISTIQUES EN DIRECT
+    // NOUVEAUTÉ PROFESSIONNELLE : COCKPIT ANALYTICS & STATISTIQUES EN DIRECT
     // =========================================================================
 
     function toggleAnalyticsView() {
@@ -936,11 +936,11 @@
       if (grid.style.display === 'none') {
         grid.style.display = 'grid';
         text.textContent = 'Masquer les Graphiques';
-        icon.textContent = 'ðŸ“Š';
+        icon.textContent = '📊';
       } else {
         grid.style.display = 'none';
         text.textContent = 'Afficher les Graphiques';
-        icon.textContent = 'ðŸ“ˆ';
+        icon.textContent = '📍ˆ';
       }
     }
 
@@ -969,12 +969,12 @@
       const total = stats.total_rapports || 0;
       const byType = stats.by_type || {};
 
-      // 1. Barres de rÃ©partition par type d'intervention
+      // 1. Barres de répartition par type d'intervention
       const typeConfig = [
-        { key: 'visite_controle', label: 'Visites de ContrÃ´le', color: '#0f766e', count: byType.visite_controle || 0 },
-        { key: 'feuille_inspection', label: 'Feuilles dâ€™Inspection', color: '#00b87c', count: byType.feuille_inspection || 0 },
+        { key: 'visite_controle', label: 'Visites de Contrôle', color: '#0f766e', count: byType.visite_controle || 0 },
+        { key: 'feuille_inspection', label: 'Feuilles d'Inspection', color: '#00b87c', count: byType.feuille_inspection || 0 },
         { key: 'rapport_installation', label: 'Installations Client', color: '#0284c7', count: byType.rapport_installation || 0 },
-        { key: 'rapport_formation', label: 'Formations CertifiÃ©es', color: '#6366f1', count: byType.rapport_formation || 0 },
+        { key: 'rapport_formation', label: 'Formations Certifiées', color: '#6366f1', count: byType.rapport_formation || 0 },
         { key: 'rapport_mise_en_service', label: 'Mises en Service', color: '#10b981', count: byType.rapport_mise_en_service || 0 }
       ];
 
@@ -995,7 +995,7 @@
       const elTypeBars = document.getElementById('chartTypeBars');
       if (elTypeBars) elTypeBars.innerHTML = typeBarsHtml;
 
-      // 2. Statut des Garanties & RÃ©visions 6 Mois
+      // 2. Statut des Garanties & Révisions 6 Mois
       const revs = stats.revisions_stats || {};
       const revTotal = (revs.total || 0);
       const revDone = (revs.effectue || 0);
@@ -1006,7 +1006,7 @@
       const warrantyHtml = `
         <div class="stat-bar-row">
           <div class="stat-bar-header">
-            <span>âœ“ RÃ©visions EffectuÃ©es</span>
+            <span>✓ Révisions Effectuées</span>
             <span style="color:#00b87c;font-weight:800;">${revDone}</span>
           </div>
           <div class="stat-bar-track">
@@ -1015,7 +1015,7 @@
         </div>
         <div class="stat-bar-row">
           <div class="stat-bar-header">
-            <span>â³ Ã€ Venir (Sous 6 Mois)</span>
+            <span>â³ À Venir (Sous 6 Mois)</span>
             <span style="color:#0284c7;font-weight:800;">${revPending}</span>
           </div>
           <div class="stat-bar-track">
@@ -1024,7 +1024,7 @@
         </div>
         <div class="stat-bar-row">
           <div class="stat-bar-header">
-            <span>ðŸ”” Alertes J-10 Imminentes</span>
+            <span>📍” Alertes J-10 Imminentes</span>
             <span style="color:#f59e0b;font-weight:800;">${revUrgent}</span>
           </div>
           <div class="stat-bar-track">
@@ -1034,7 +1034,7 @@
         ${revLate > 0 ? `
           <div class="stat-bar-row">
             <div class="stat-bar-header">
-              <span>ðŸš¨ RÃ©visions en Retard</span>
+              <span>🚨 Révisions en Retard</span>
               <span style="color:#ef4444;font-weight:800;">${revLate}</span>
             </div>
             <div class="stat-bar-track">
@@ -1046,7 +1046,7 @@
       const elWarranty = document.getElementById('chartWarrantyStatus');
       if (elWarranty) elWarranty.innerHTML = warrantyHtml;
 
-      // 3. Top Wilayas Actives en AlgÃ©rie
+      // 3. Top Wilayas Actives en Algérie
       if (Array.isArray(allRapports)) {
         const countsByWilaya = {};
         allRapports.forEach(r => {
@@ -1064,7 +1064,7 @@
           return `
             <div class="stat-bar-row">
               <div class="stat-bar-header">
-                <span>ðŸ“ ${w}</span>
+                <span>📍 ${w}</span>
                 <span style="font-weight:800;color:#0f766e;">${c} doc(s)</span>
               </div>
               <div class="stat-bar-track">
@@ -1072,12 +1072,12 @@
               </div>
             </div>
           `;
-        }).join('') : '<p style="font-size:12px;color:var(--text-muted);text-align:center;padding:12px 0;">DonnÃ©es wilayas en cours de synchronisation...</p>';
+        }).join('') : '<p style="font-size:12px;color:var(--text-muted);text-align:center;padding:12px 0;">Données wilayas en cours de synchronisation...</p>';
 
                 const elWilayas = document.getElementById('chartTopWilayas');
         if (elWilayas) elWilayas.innerHTML = wilayasHtml;
 
-        // 4. RÃ©partition par Territoire RÃ©gional (Centre, Est, Ouest, Sud)
+        // 4. Répartition par Territoire Régional (Centre, Est, Ouest, Sud)
         const regionCounts = { Centre: 0, Est: 0, Ouest: 0, Sud: 0 };
         allRapports.forEach(r => {
           const reg = getRegionByWilaya(r.wilaya);
@@ -1095,10 +1095,10 @@
         setRegPill('countRegionSud', regionCounts.Sud);
 
         const regConfig = [
-          { key: 'Centre', nom: 'RÃ©gion Centre', orb: 'centre', color: '#10b981', count: regionCounts.Centre },
-          { key: 'Est',    nom: 'RÃ©gion Est',    orb: 'est',    color: '#2563eb', count: regionCounts.Est },
-          { key: 'Ouest',  nom: 'RÃ©gion Ouest',  orb: 'ouest',  color: '#f97316', count: regionCounts.Ouest },
-          { key: 'Sud',    nom: 'RÃ©gion Sud',    orb: 'sud',    color: '#8b5cf6', count: regionCounts.Sud }
+          { key: 'Centre', nom: 'Région Centre', orb: 'centre', color: '#10b981', count: regionCounts.Centre },
+          { key: 'Est',    nom: 'Région Est',    orb: 'est',    color: '#2563eb', count: regionCounts.Est },
+          { key: 'Ouest',  nom: 'Région Ouest',  orb: 'ouest',  color: '#f97316', count: regionCounts.Ouest },
+          { key: 'Sud',    nom: 'Région Sud',    orb: 'sud',    color: '#8b5cf6', count: regionCounts.Sud }
         ];
 
         const regHtml = regConfig.map(rg => {
