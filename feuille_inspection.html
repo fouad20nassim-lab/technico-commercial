@@ -112,13 +112,9 @@
   .btn-toggle-panel { background: #0f766e; color: #fff; }
   .btn-toggle-panel:hover { background: #115e59; }
 
-  /* Cadre supérieur officiel (Cellule titre Excel) */
+  /* Cadre supérieur officiel (Masqué selon demande utilisateur) */
   .fuji-top-excel-bar {
-    width: 68%;
-    height: 16px;
-    border: 1px solid #000;
-    margin: 0 auto 10px auto;
-    box-sizing: border-box;
+    display: none !important;
   }
 
   /* Feuille A4 / Document centré */
@@ -189,9 +185,12 @@
     accent-color: #0075ff;
   }
   .appareil-filled-cell {
-    background-color: #000000 !important;
-    background: #000000 !important;
+    background-color: #ffffff !important;
+    background: #ffffff !important;
     color: #000000 !important;
+    font-weight: 900 !important;
+    font-size: 13px !important;
+    text-align: center !important;
     user-select: none;
   }
 
@@ -918,14 +917,9 @@
       white-space: nowrap !important;
     }
 
-    /* Cadre supérieur d'en-tête officiel Excel */
+    /* Cadre supérieur d'en-tête officiel Excel (Supprimé) */
     .fuji-top-excel-bar {
-      display: block !important;
-      width: 60% !important;
-      height: 7px !important;
-      margin: 2px auto 2px auto !important;
-      border: 1px solid #000 !important;
-      box-sizing: border-box !important;
+      display: none !important;
     }
 
     /* En-tête officiel FUJIFILM (Inspection d'entrée) */
@@ -994,11 +988,14 @@
       outline: none !important;
     }
 
-    /* CUS / LOA / DEM noir plein */
+    /* CUS / LOA / DEM coche nette sans carré noir */
     .appareil-filled-cell {
-      background-color: #000000 !important;
-      background: #000000 !important;
+      background-color: #ffffff !important;
+      background: #ffffff !important;
       color: #000000 !important;
+      font-size: 11px !important;
+      font-weight: 900 !important;
+      text-align: center !important;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
     }
@@ -1358,8 +1355,6 @@
       <p><b>Site Web :</b> www.electron-medical-dz.com</p>
     </div>
   </div>
-
-  <div class="fuji-top-excel-bar"></div>
 
   <!-- 2. EN-TÊTE DU RAPPORT ELECTRON MEDICAL -->
   <div class="fuji-header-block">
@@ -2263,15 +2258,15 @@
     let cellDem = $('val_dem');
 
     if (cellCus) {
-      cellCus.innerText = '';
+      cellCus.innerText = isCus ? '✓' : '';
       cellCus.classList.toggle('appareil-filled-cell', isCus);
     }
     if (cellLoa) {
-      cellLoa.innerText = '';
+      cellLoa.innerText = isLoa ? '✓' : '';
       cellLoa.classList.toggle('appareil-filled-cell', isLoa);
     }
     if (cellDem) {
-      cellDem.innerText = '';
+      cellDem.innerText = isDem ? '✓' : '';
       cellDem.classList.toggle('appareil-filled-cell', isDem);
     }
   }
