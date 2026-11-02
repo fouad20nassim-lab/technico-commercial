@@ -37,6 +37,13 @@ try:
 except Exception:
     pass
 
+def get_db_connection():
+    """Crée une connexion SQLite standardisée avec WAL et Foreign Keys activées"""
+    conn = sqlite3.connect(DB_FILE, timeout=20.0)
+    conn.execute("PRAGMA foreign_keys = ON;")
+    conn.execute("PRAGMA journal_mode = WAL;")
+    return conn
+
 def get_local_ip():
     """Détecte l'adresse IP locale sur le réseau Wi-Fi / Ethernet"""
     try:
@@ -167,7 +174,7 @@ def get_session_user(token):
     if not token:
         return None
     try:
-        conn = sqlite3.connect(DB_FILE)
+        conn = sqlite3.connect(DB_FILE, timeout=20.0)
         cursor = conn.cursor()
         now_iso = datetime.now().isoformat()
         cursor.execute("""
@@ -217,7 +224,7 @@ def get_session_user(token):
 
 def init_db():
     """Initialise les tables de la base de données SQLite si elles n'existent pas"""
-    conn = sqlite3.connect(DB_FILE)
+    conn = get_db_connection()
     cursor = conn.cursor()
     
     # Activer WAL (Write-Ahead Logging) pour meilleure concurrence et fiabilité
@@ -431,7 +438,7 @@ def generer_echeances_garantie(installation_id, client_nom, wilaya, date_inst_st
         except Exception:
             d_inst = date.today()
 
-        conn = sqlite3.connect(DB_FILE)
+        conn = get_db_connection()
         cursor = conn.cursor()
 
         # Vérifier si les 4 révisions existent déjà pour cette installation
@@ -743,7 +750,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
 
     def handle_get_stats(self):
         try:
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
 
             # Nombre total de rapports
@@ -844,7 +851,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             sql += " ORDER BY updated_at DESC LIMIT ?"
             params.append(limit)
 
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute(sql, params)
             rows = cursor.fetchall()
@@ -871,7 +878,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
 
     def handle_get_rapport_by_id(self, doc_id):
         try:
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("SELECT id, type, ref_number, client_nom, wilaya, date_intervention, technicien, status, data_json, created_at, updated_at FROM rapports WHERE id = ?", (doc_id,))
             row = cursor.fetchone()
@@ -934,7 +941,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
 
             data_str = json.dumps(payload, ensure_ascii=False)
 
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
 
             cursor.execute("SELECT id, created_at FROM rapports WHERE id = ?", (doc_id,))
@@ -995,7 +1002,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
 
     def handle_delete_rapport(self, doc_id):
         try:
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("DELETE FROM rapports WHERE id = ?", (doc_id,))
             cursor.execute("DELETE FROM garanties_revisions WHERE installation_id = ?", (doc_id,))
@@ -1017,7 +1024,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             search = query.get('q', [None])[0]
             wilaya = query.get('wilaya', [None])[0]
 
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("""
             SELECT id, installation_id, client_nom, wilaya, materiel, numero_serie,
@@ -1100,7 +1107,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             today = date.today()
             in_10_days = today + timedelta(days=10)
 
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("""
             SELECT id, installation_id, client_nom, wilaya, materiel, numero_serie,
@@ -1208,7 +1215,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             notes = payload.get('notes') or ''
             now_iso = datetime.now().isoformat()
 
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("""
             UPDATE garanties_revisions SET
@@ -1236,7 +1243,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
     def handle_export_ical(self, rev_id):
         """Exporte un événement iCalendar (.ics) avec rappel automatique 10 jours avant pour Outlook/Google Calendar/Smartphones"""
         try:
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
             if rev_id:
                 cursor.execute("SELECT id, client_nom, wilaya, materiel, date_echeance, titre_revision, technicien, telephone FROM garanties_revisions WHERE id = ?", (rev_id,))
@@ -1298,7 +1305,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
 
     def handle_get_clients(self, query):
         try:
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("SELECT id, raison_sociale, wilaya, ville, telephone, email, created_at FROM clients ORDER BY raison_sociale ASC")
             rows = cursor.fetchall()
@@ -1331,7 +1338,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             contact = payload.get('contact_nom', '')
             now_iso = datetime.now().isoformat()
 
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("""
             INSERT INTO clients (raison_sociale, wilaya, ville, adresse, telephone, email, contact_nom, created_at)
@@ -1348,7 +1355,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
 
     def handle_export_excel(self):
         try:
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("""
             SELECT id, type, ref_number, client_nom, wilaya, date_intervention, technicien, status, updated_at
@@ -1396,7 +1403,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
 
     def handle_export_backup(self):
         try:
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
             
             cursor.execute("SELECT id, type, ref_number, client_nom, wilaya, date_intervention, technicien, status, notes, data_json, created_at, updated_at FROM rapports")
@@ -1408,15 +1415,24 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             cursor.execute("SELECT id, installation_id, client_nom, wilaya, materiel, numero_serie, date_installation, numero_revision, titre_revision, date_echeance, date_rappel_10j, technicien, telephone, email, statut, date_effectuee, visite_rapport_id, notes, created_at, updated_at FROM garanties_revisions")
             revisions = cursor.fetchall()
 
-            conn.close()
+            cursor.execute("SELECT id, client_nom, type_equipement, modele, numero_serie, version_logicielle, emplacement, date_installation, created_at FROM equipements")
+            equipements = cursor.fetchall()
 
-            # Paramètres globaux
+            # Paramètres globaux (AVANT de fermer la connexion !)
             cursor.execute("SELECT value_json FROM app_settings WHERE key = 'global'")
             settings_row = cursor.fetchone()
             app_settings_data = json.loads(settings_row[0]) if (settings_row and settings_row[0]) else None
 
+            # Métadonnées des utilisateurs (sécurisées sans mot de passe ni hash)
+            cursor.execute("SELECT id, username, nom_complet, role, email, telephone, statut, permissions, region, created_at FROM users")
+            users_list = cursor.fetchall()
+
+            conn.close()
+
             backup = {
-                "version": "2.1",
+                "version": "2.2",
+                "app": "TECHNICO-COMMERCIAL V2",
+                "company": "S.A.R.L ELECTRON MEDICAL ALGERIE",
                 "settings": app_settings_data,
                 "export_date": datetime.now().isoformat(),
                 "rapports": [
@@ -1441,8 +1457,23 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
                         "numero_revision": rev[7], "titre_revision": rev[8], "date_echeance": rev[9],
                         "date_rappel_10j": rev[10], "technicien": rev[11], "telephone": rev[12],
                         "email": rev[13], "statut": rev[14], "date_effectuee": rev[15],
-                        "visite_rapport_id": rev[16], "notes": rev[17]
+                        "visite_rapport_id": rev[16], "notes": rev[17],
+                        "created_at": rev[18] if len(rev) > 18 else "", "updated_at": rev[19] if len(rev) > 19 else ""
                     } for rev in revisions
+                ],
+                "equipements": [
+                    {
+                        "id": eq[0], "client_nom": eq[1], "type_equipement": eq[2],
+                        "modele": eq[3], "numero_serie": eq[4], "version_logicielle": eq[5],
+                        "emplacement": eq[6], "date_installation": eq[7], "created_at": eq[8]
+                    } for eq in equipements
+                ],
+                "users_metadata": [
+                    {
+                        "id": u[0], "username": u[1], "nom_complet": u[2], "role": u[3],
+                        "email": u[4], "telephone": u[5], "statut": u[6],
+                        "permissions": json.loads(u[7]) if u[7] else [], "region": u[8], "created_at": u[9]
+                    } for u in users_list
                 ]
             }
             return self.send_json({"success": True, "backup": backup})
@@ -1455,8 +1486,16 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             rapports = backup.get('rapports', [])
             clients = backup.get('clients', [])
             revisions = backup.get('revisions', [])
+            equipements = backup.get('equipements', [])
 
-            conn = sqlite3.connect(DB_FILE)
+            # Pré-sauvegarde automatique de sécurité avant restauration
+            if not os.path.exists(BACKUPS_DIR):
+                os.makedirs(BACKUPS_DIR, exist_ok=True)
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            pre_restore_backup = os.path.join(BACKUPS_DIR, f"auto_prerestore_json_{timestamp}.db")
+            shutil.copy2(DB_FILE, pre_restore_backup)
+
+            conn = get_db_connection()
             cursor = conn.cursor()
 
             inserted_rapports = 0
@@ -1530,7 +1569,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
     def handle_get_settings(self):
         """Récupère les paramètres globaux (techniciens, modèles, grilles, entreprise)"""
         try:
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("SELECT value_json FROM app_settings WHERE key = 'global'")
             row = cursor.fetchone()
@@ -1548,7 +1587,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             settings_data = payload.get('settings') if ('settings' in payload) else payload
             now_iso = datetime.now().isoformat()
             val_str = json.dumps(settings_data, ensure_ascii=False)
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("""
             INSERT INTO app_settings (key, value_json, updated_at)
@@ -1573,7 +1612,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             client_filter = query.get('client', [None])[0]
             wilaya_filter = query.get('wilaya', [None])[0]
 
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
 
             # 1. Récupérer les clients enregistrés
@@ -1788,7 +1827,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
     def handle_download_sqlite(self):
         """Téléchargement direct du fichier SQLite technico_commercial.db"""
         try:
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             conn.execute("PRAGMA wal_checkpoint(TRUNCATE);")
             conn.close()
 
@@ -1814,7 +1853,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             if not os.path.exists(dest_dir):
                 os.makedirs(dest_dir, exist_ok=True)
 
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             conn.execute("PRAGMA wal_checkpoint(TRUNCATE);")
             conn.close()
 
@@ -1877,7 +1916,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             if not username and not pin:
                 return self.send_json({"success": False, "error": "Identifiant ou Code PIN requis"}, 400)
 
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
 
             if username:
@@ -1958,7 +1997,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             if not pin:
                 return self.send_json({"success": False, "error": "Code PIN requis"}, 400)
 
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
 
             if username:
@@ -2018,7 +2057,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
         token = self.get_auth_token()
         if token:
             try:
-                conn = sqlite3.connect(DB_FILE)
+                conn = get_db_connection()
                 conn.execute("DELETE FROM sessions WHERE token = ?", (token,))
                 conn.commit()
                 conn.close()
@@ -2031,7 +2070,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
     def handle_get_users(self, query):
         """Liste tous les comptes utilisateurs avec leurs rôles et permissions"""
         try:
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("""
             SELECT id, username, nom_complet, role, email, telephone, pin_code, statut, permissions, last_login, created_at, region
@@ -2086,7 +2125,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             if not username or not nom_complet:
                 return self.send_json({"success": False, "error": "Identifiant et Nom complet obligatoires"}, 400)
 
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
 
             # Vérifier unicité du nom d'utilisateur
@@ -2145,7 +2184,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             if not target_id:
                 return self.send_json({"success": False, "error": "ID utilisateur manquant"}, 400)
 
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
 
             cursor.execute("SELECT username, role FROM users WHERE id = ?", (target_id,))
@@ -2193,7 +2232,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
                     return self.send_json({"success": False, "error": "Session invalide ou expirée"}, 401)
                 user_id = session_user['id']
 
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
 
             now_iso = datetime.now().isoformat()
@@ -2224,7 +2263,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             size_kb = round(size_bytes / 1024, 1)
             size_mb = round(size_bytes / (1024 * 1024), 2)
 
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
 
             cursor.execute("PRAGMA journal_mode;")
@@ -2283,7 +2322,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
     def handle_sqlite_vacuum(self):
         """Optimise, compacte et reconstruit les index de la base SQLite"""
         try:
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             conn.execute("PRAGMA wal_checkpoint(TRUNCATE);")
             conn.execute("VACUUM;")
             conn.close()
@@ -2291,7 +2330,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             new_size_kb = round(os.path.getsize(DB_FILE) / 1024, 1)
 
             now_iso = datetime.now().isoformat()
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("""
             INSERT INTO audit_log (timestamp, action, document_id, details)
@@ -2317,7 +2356,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
             backup_path = os.path.join(BACKUPS_DIR, backup_name)
             
             try:
-                conn_src = sqlite3.connect(DB_FILE)
+                conn_src = get_db_connection()
                 conn_dst = sqlite3.connect(backup_path)
                 conn_src.backup(conn_dst)
                 conn_dst.close()
@@ -2326,7 +2365,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
                 print(f"[PURGE BACKUP WARNING] {b_err}")
             
             # 2. Vider les tables opérationnelles de test
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("DELETE FROM rapports;")
             cursor.execute("DELETE FROM garanties_revisions;")
@@ -2367,7 +2406,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
 
             # 1. Checkpoint WAL
             try:
-                conn = sqlite3.connect(DB_FILE)
+                conn = get_db_connection()
                 conn.execute("PRAGMA wal_checkpoint(TRUNCATE);")
                 conn.close()
             except Exception:
@@ -2391,7 +2430,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
                         pass
 
             # 5. Vérification d'intégrité immédiate
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("PRAGMA quick_check;")
             check = cursor.fetchone()[0]
@@ -2444,7 +2483,7 @@ class TechnicoCommercialHandler(http.server.SimpleHTTPRequestHandler):
         """Historique d'audit des actions administratives et de sécurité"""
         try:
             limit = int(query.get('limit', [100])[0])
-            conn = sqlite3.connect(DB_FILE)
+            conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("""
             SELECT id, timestamp, action, document_id, details
