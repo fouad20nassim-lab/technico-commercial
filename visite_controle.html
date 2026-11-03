@@ -17,746 +17,688 @@
     })();
   </script>
 
-<meta charset="utf-8"/>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0f766e">
-<title>Electron Medical Algérie | Visite de contrôle technique</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f766e">
+<title>Visite de contrôle — Electron Medical Algérie</title>
 <script src="js/theme.js"></script>
-  <script src="js/auth.js"></script>
-<link rel="stylesheet" href="css/main.css">
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
 <style>
-:root{--navy:#132b3a;--navy2:#1d4050;--green:#078d78;--mint:#eaf3ed;--paper:#fff;--bg:#f1f5f3;--ink:#1d2e35;--muted:#6d7d82;--line:#d9e3df;--red:#a44242;--amber:#9b6b1f;--shadow:0 8px 30px #183b3010}
-.shell{display:grid;grid-template-columns:230px minmax(0,1fr);max-width:1560px;margin:auto;min-height:calc(100vh - 72px)}
-.sidebar{background:#fff;border-right:1px solid var(--line);padding:22px 14px}
-.side-label{font-size:10px;color:#83918d;font-weight:800;letter-spacing:.13em;padding:0 10px;margin:12px 0 8px}
-.navitem{width:100%;display:flex;gap:10px;align-items:center;text-align:left;border:0;background:transparent;padding:11px 12px;border-radius:9px;color:#52645f;cursor:pointer;font-weight:650;margin:3px 0}
-.navitem.active,.navitem:hover{background:var(--mint);color:var(--navy)}
-.navitem .num{font-size:11px;border:1px solid #d2ded6;border-radius:6px;padding:3px 6px}
-main{padding:20px clamp(14px,2.6vw,36px) 60px;min-width:0}
-.pagehead{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:20px}
-.eyebrow{color:var(--green);font-size:11px;font-weight:800;letter-spacing:.15em;text-transform:uppercase}
-.pagehead h2{margin:5px 0;font-size:27px;letter-spacing:-.04em;color:var(--navy)}
-.pagehead p{margin:0;color:var(--muted)}
-.actions{display:flex;gap:8px;flex-wrap:wrap}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:18px}
-.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px 17px;box-shadow:var(--shadow)}
-.stat span{font-size:11px;color:var(--muted);font-weight:700}
-.stat strong{display:block;font-size:20px;margin-top:5px;color:var(--navy)}
-.stat small{font-size:11px;color:var(--muted)}
-.section{background:#fff;border:1px solid var(--line);border-radius:12px;margin:14px 0;box-shadow:var(--shadow);overflow:hidden;scroll-margin-top:75px}
-.section-head{display:flex;align-items:center;gap:11px;padding:14px 17px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,#f7faf7,#fff)}
-.section-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:9px;background:var(--mint);color:var(--green);font-weight:900}
-.section-head h3{font-size:14px;margin:0;color:var(--navy)}
-.section-head p{font-size:11px;margin:2px 0 0;color:var(--muted)}
-.section-body{padding:17px}
-.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
-.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
-.field{display:flex;flex-direction:column;gap:6px;min-width:0}
-.field label{font-size:11px;font-weight:750;color:#50625d}
-.field input,.field select,.field textarea{width:100%;min-width:0;border:1px solid #d5e0db;border-radius:7px;padding:9px 11px;background:#fff;color:var(--ink);font:inherit;outline:none}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px #078d7820}
-.field textarea{min-height:85px;resize:vertical}
-.span2{grid-column:span 2}
-.span4{grid-column:1/-1}
-.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:8px}
-.data-table{width:100%;border-collapse:collapse;min-width:640px}
-.data-table th{background:#f2f6f3;color:#50625d;font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:9px;text-align:left}
-.data-table td{border-bottom:1px solid var(--line);padding:9px;text-align:left}
-.data-table tr:last-child td{border-bottom:0}
-.data-table input{width:100%;min-width:90px;padding:8px;border:1px solid #dce5e0;border-radius:6px;font:inherit}
-.smallbtn{border:1px solid var(--line);background:#fff;color:var(--navy);padding:7px 11px;border-radius:7px;cursor:pointer;font-weight:650;font-size:12px}
-.smallbtn:hover{background:var(--mint)}
-.addrow{margin-top:10px}
-.test-list{width:100%;border-collapse:collapse}
-.test-list th{background:#f2f6f3;color:#50625d;text-transform:uppercase;letter-spacing:.04em;font-size:10px;padding:8px;border:1px solid var(--line)}
-.test-list td{border:1px solid var(--line);padding:8px;font-size:12px}
-.test-list .category{background:#f7faf7;font-weight:800;color:var(--navy);min-width:120px}
-.test-list .comment{min-width:150px}
-.test-list input[type=text]{width:100%;min-width:100px;border:1px solid #dce5e0;border-radius:5px;padding:7px}
-.status{display:flex;gap:10px;flex-wrap:wrap}
-.status label{display:flex;align-items:center;gap:4px;font-size:11px;white-space:nowrap;cursor:pointer}
-.status input{accent-color:var(--green)}
-.photo-grid,.sig-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
-.photo-card,.sigbox{border:1px dashed #c6d5cc;border-radius:10px;padding:13px;background:#fcfdfc}
-.sigbox canvas{width:100%;height:120px;display:block;border:1px solid #dce5e0;border-radius:7px;touch-action:none;background:#fff;margin-top:10px}
-.sig-actions{display:flex;justify-content:space-between;align-items:center;margin:8px 0;font-size:11px;color:var(--muted)}
-.bottom-actions{position:sticky;bottom:0;z-index:90;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;padding:12px 20px;background:#ffffffed;border-top:1px solid var(--line);margin:20px -36px -60px;backdrop-filter:blur(8px)}
-.sidebar-brand-card{margin-top:20px;padding:14px;border:1px solid #d4e4e0;border-radius:12px;background:#f8fcfb;text-align:center}
-.sidebar-3d-logo{max-height:80px;max-width:100%;object-fit:contain}
-@media print {
+:root{--green:#dfeeda;--green2:#c7dfb8;--line:#222;--teal:#65aaa7;--ink:#202b30}
+*{box-sizing:border-box}
+body{margin:0;background:#eef1ef;color:var(--ink);font:14px Arial,sans-serif}
+
+/* En-tête officiel S.A.R.L ELECTRON MEDICAL ALGÉRIE */
+.official-company-header {
+  display: block;
+  background: #ffffff;
+  color: #000000;
+  padding: 0 0 10px 0;
+  margin-bottom: 16px;
+  border-bottom: 1.5px solid #000000;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  text-align: left;
+}
+.company-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.company-header-titles { flex: 1; }
+.company-legal-name {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  margin: 0;
+  color: #000000;
+}
+.company-activity-desc {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #000000;
+  margin: 3px 0 0 0;
+}
+.company-header-logo img {
+  max-height: 48px;
+  width: auto;
+  object-fit: contain;
+}
+.company-header-divider { display: none; }
+.company-header-details {
+  font-size: 9px;
+  line-height: 1.35;
+  color: #000000;
+  margin-top: 6px;
+}
+.company-header-details p {
+  margin: 1px 0;
+}
+
+.toolbar{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #ccd4ce;padding:10px 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;box-shadow:0 2px 8px #0001}
+button,.filebtn{border:0;border-radius:7px;padding:9px 13px;background:#1e6d68;color:white;font-weight:700;cursor:pointer;font-size:13px;display:inline-flex;align-items:center;gap:5px;transition:background .15s}
+button:hover{background:#155c57}
+button.secondary{background:#52616a}button.secondary:hover{background:#3e4c54}
+button.danger{background:#a63d3d}button.danger:hover{background:#8a2f2f}
+.btn-nav-dashboard{background:#2a4351;color:#fff;text-decoration:none;border-radius:7px;padding:9px 13px;font-weight:700;font-size:13px;display:inline-flex;align-items:center;gap:5px}
+.btn-nav-dashboard:hover{background:#3b5768}
+.toolbar small{margin-left:auto;color:#52616a}
+
+/* Mode sombre de la barre d'outils */
+[data-theme="dark"] body { background: #07151c; color: #f1f5f9; }
+[data-theme="dark"] .toolbar { background: #0e242c; border-bottom-color: #183a47; color: #f1f5f9; }
+[data-theme="dark"] .toolbar small { color: #94a3b8; }
+[data-theme="dark"] .sheet { background: #ffffff; color: #1d2e35; }
+
+.sheet{max-width:1100px;margin:22px auto;background:white;padding:34px 38px;box-shadow:0 3px 18px #0001}
+.brand{display:flex;justify-content:space-between;align-items:center;border-bottom:5px solid #a9c49b;padding:0 6px 12px;margin-bottom:24px}
+.logo{font-size:26px;font-weight:800;color:#65aaa7;letter-spacing:-1.5px}.logo small{display:block;font-size:9px;letter-spacing:1px;text-align:right;color:#5d8582}
+.brand h1{font-size:22px;color:#777;margin:0;letter-spacing:.4px}
+.section{margin:22px 0 28px;break-inside:avoid}.section-title{background:var(--green);border:1px solid var(--line);font-weight:800;text-align:center;padding:8px;text-transform:uppercase}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid var(--line);border-top:1px solid var(--line)}
+.field{border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-width:0}
+.field label{display:block;background:var(--green);font-weight:700;text-decoration:underline;padding:6px 7px;min-height:29px}
+.field input,.field select,.field textarea{width:100%;border:0;padding:8px;background:#fff;min-height:34px;font:inherit;color:#222;outline-color:#6aa49a}
+.span2{grid-column:span 2}.span3{grid-column:span 3}.span4{grid-column:span 4}
+.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid var(--line);padding:5px;text-align:left}th{background:var(--green);text-decoration:underline}td input,td select,td textarea{width:100%;border:0;padding:6px;min-width:65px;font:inherit;background:transparent}
+.select-add-wrap{display:flex;align-items:stretch;gap:4px;width:100%;min-width:0}.select-add-wrap>select{flex:1;min-width:0;width:100%}.select-add-btn{flex:0 0 auto;padding:3px 9px!important;font-size:17px!important;line-height:1;background:#1e6d68!important;border-radius:5px!important}.select-add-btn:hover{background:#175a56!important}.row-actions{display:flex;gap:6px;margin:8px 0}.row-actions button{padding:8px 13px;font-size:13px}.add-controls button{background:#1e6d68;border:1px solid #155c57;box-shadow:0 1px 2px #0002}.add-controls button:hover{background:#175a56}
+.result-head{background:var(--green2);text-align:center;font-weight:800;font-size:17px;padding:10px;border:1px solid var(--line)}
+.signature-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line)}.signature{padding:8px;border-right:1px solid var(--line)}.signature:last-child{border:0}.signature b{display:block;text-align:center;background:var(--green);padding:7px;margin:-8px -8px 8px}.signature canvas{width:100%;height:145px;touch-action:none;border:1px dashed #aaa;background:#fff}.signature button{margin-top:5px;padding:6px 10px;font-size:12px}
+.test-card{border:1px solid var(--line);margin:14px 0 22px;break-inside:avoid}.test-card h3{margin:0;background:var(--green);text-align:center;padding:8px;text-decoration:underline;font-size:15px}
+.test-meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;background:#f7faf6;border-bottom:1px solid var(--line)}.test-meta label{padding:6px;border-right:1px solid #aaa;font-weight:bold}.test-meta input,.test-meta select{display:block;width:100%;padding:7px;border:1px solid #ccc;margin-top:4px}
+.test-table{width:100%;table-layout:fixed}.test-table th:nth-child(1),.test-table td:nth-child(1){width:18%;font-weight:600}.test-table th:nth-child(2),.test-table td:nth-child(2){width:27%}.test-table th:nth-child(3),.test-table td:nth-child(3){width:22%;white-space:nowrap}.test-table th:nth-child(4),.test-table td:nth-child(4){width:33%}.test-table input[type=text]{min-width:0;width:100%}.choice{display:flex;flex-wrap:nowrap;gap:7px;align-items:center;white-space:nowrap;min-width:0}.choice label{display:inline-flex;align-items:center;gap:3px;white-space:nowrap;font-size:13px;font-weight:normal;text-decoration:none;background:none;padding:0;min-height:0}.choice input{width:14px;height:14px;min-width:14px;margin:0;flex:0 0 14px}
+.test-comment{width:100%;min-height:32px;border:0;padding:5px}.conclusion{width:100%;min-height:80px;border:1px solid #aaa;padding:8px;font:inherit}
+.notice{color:#b32626;font-weight:700;font-size:12px;margin:12px 0}.photos{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.photo{border:1px solid #aaa;min-height:140px;padding:8px}.photo img{max-width:100%;max-height:230px;display:block;margin:8px auto}.photo-actions{display:flex;justify-content:flex-end;margin-top:6px}.photo-delete{background:#b33b3b!important;color:#fff!important;border:0;border-radius:5px;padding:6px 11px;cursor:pointer}.photo-delete:hover{background:#922d2d!important}.footer{border-top:1px solid #aaa;color:#777;font-size:10px;padding-top:8px;margin-top:30px}
+
+/* Bouton Pill Thème Sombre / Clair */
+.theme-toggle-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  color: #1e293b;
+  border: 1px solid #cbd5e1;
+  border-radius: 9999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.theme-toggle-pill:hover {
+  background: #e2e8f0;
+}
+[data-theme="dark"] .theme-toggle-pill {
+  background: #183a47;
+  color: #f8fafc;
+  border-color: #335d6d;
+}
+
+@media(max-width:700px){.sheet{margin:0;padding:18px 12px}.brand h1{font-size:15px}.logo{font-size:21px}.grid{grid-template-columns:repeat(2,1fr)}.span3,.span4{grid-column:span 2}.test-meta{grid-template-columns:1fr}.signature-grid{grid-template-columns:1fr}.signature{border-right:0;border-bottom:1px solid #aaa}.photos{grid-template-columns:1fr}}
+
+@media print{
   @page {
     size: A4 portrait;
-    margin: 8mm 10mm 8mm 10mm;
+    margin: 6mm 8mm 6mm 8mm;
   }
-  html, body {
-    width: 100% !important;
-    background: #ffffff !important;
-    color: #000000 !important;
-    font-size: 9.5px !important;
-    line-height: 1.25 !important;
-  }
-  .main-header, .sidebar, .actions, .bottom-actions, .addrow, .smallbtn, input[type=file], .sig-actions button, button {
-    display: none !important;
-  }
-  .shell { display: block !important; width: 100% !important; max-width: 100% !important; }
-  main { padding: 0 !important; margin: 0 !important; width: 100% !important; }
-  
-  /* STRICT 2 PAGES A4 */
-  .section {
-    box-shadow: none !important;
-    border: 1px solid #cbd5e1 !important;
-    margin: 4px 0 !important;
-    padding: 6px 10px !important;
-    border-radius: 6px !important;
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-  }
-  .section-head { margin-bottom: 4px !important; padding-bottom: 2px !important; }
-  .section-head h3 { font-size: 11px !important; margin: 0 !important; }
-  .field { margin-bottom: 3px !important; }
-  .field label { font-size: 9px !important; margin-bottom: 1px !important; }
-  .field input, .field select, .field textarea {
-    font-size: 9px !important;
-    padding: 2px 4px !important;
-    height: auto !important;
-    border: 1px solid #94a3b8 !important;
-    background: #fff !important;
-    color: #000 !important;
-  }
-  .stats { margin-bottom: 6px !important; gap: 6px !important; }
-  .stat { padding: 4px 8px !important; }
-  .stat strong { font-size: 12px !important; }
-  .pagehead { margin-bottom: 6px !important; }
-  .pagehead h2 { font-size: 15px !important; margin: 2px 0 !important; }
-
-  /* SAUT DE PAGE OBLIGATOIRE : DÉBUT DE LA PAGE 2 */
-  #secTests {
-    page-break-before: always !important;
-    break-before: page !important;
-    margin-top: 0 !important;
-  }
-
-  /* Cachets et Signatures en bas de page 2 */
-  #secSignatures {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
+  .select-add-btn{display:none!important}
+  .select-add-wrap{display:block}
+  body, html, [data-theme="dark"] body{background:white !important; color:#000 !important;}
+  .toolbar,.no-print{display:none!important}
+  .sheet{max-width:none;margin:0;padding:6mm 8mm;box-shadow:none;border:none !important}
+  .section,.test-card{break-inside:avoid;page-break-inside:avoid}
+  .field input,.field select,.field textarea,td input,td select{color:#000}
+  input,select,textarea{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .photo{min-height:100px}
 }
 </style>
 </head>
 <body>
-
-<header class="main-header">
-  <div class="header-container">
-    <div class="brand-section">
-      <div class="brand-logos">
-        <a href="index.html"><img src="assets/electron-medical-logo.png" alt="Electron Medical Algérie" class="logo-em"></a>
-      </div>
-      <div class="brand-text">
-        <h1>VISITE DE CONTRÔLE TECHNIQUE</h1>
-        <p>Service Après-Vente · Contrôle Préventif Endoscopie FUJIFILM</p>
-      </div>
-    </div>
-    <div class="header-actions">
-      <button type="button" class="btn btn-logout-danger" onclick="if(confirm('Voulez-vous vraiment vous déconnecter de la plateforme ?')){if(typeof Auth!=='undefined'&&Auth.logout){Auth.logout(function(){window.location.href='login.html';});}else{sessionStorage.clear();localStorage.clear();window.location.href='login.html';}}" title="Se déconnecter de la plateforme" style="background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; font-size:12px; font-weight:800; padding:6px 12px; border-radius:18px; cursor:pointer; display:inline-flex; align-items:center; gap:5px;">
-        <span>🚪</span>
-        <span>Déconnexion</span>
-      </button>
-
-      <!-- Bouton Pill Mode Sombre / Clair [☀️ Mode] -->
-      <button type="button" class="theme-toggle-pill" id="themeToggleBtn" onclick="toggleAppTheme()" title="Basculer entre Mode Sombre et Mode Clair">
-        <span class="theme-icon" id="themeToggleIcon">☀️</span>
-        <span class="theme-label" id="themeToggleText">Mode</span>
-      </button>
-      <div id="connectionBadge" class="status-pill offline" style="display:none;"><span class="dot"></span> <b>Connexion...</b></div>
-      <a href="parametres_admin.html" class="btn btn-secondary" title="Accéder aux Paramètres & Administration">⚙️ Paramètres</a>
-      <a href="index.html" class="btn btn-secondary">⌂ Tableau de Bord</a>
-      <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer / PDF</button>
-      <button class="btn btn-primary" id="saveTopBtn">💾 Enregistrer</button>
-    </div>
-  </div>
-</header>
-
-<div class="shell">
-  <aside class="sidebar">
-    <div class="side-label">NAVIGATION DU RAPPORT</div>
-    <button class="navitem active" data-target="secClient"><span class="num">01</span> Client & Établissement</button>
-    <button class="navitem" data-target="secVisit"><span class="num">02</span> Visite & Trajet</button>
-    <button class="navitem" data-target="secEquipment"><span class="num">03</span> Équipements</button>
-    <button class="navitem" data-target="secPeripherals"><span class="num">04</span> Périphériques</button>
-    <button class="navitem" data-target="secTests"><span class="num">05</span> Contrôle Endoscope</button>
-    <button class="navitem" data-target="secConclusion"><span class="num">06</span> Conclusion SAV</button>
-    <button class="navitem" data-target="secSignatures"><span class="num">07</span> Photos & Signatures</button>
-
-    <div class="sidebar-brand-card">
-      <img src="assets/electron-medical-logo-3d.png" alt="Electron Medical Algérie" class="sidebar-3d-logo">
-      <div style="font-size:12px;font-weight:800;color:var(--navy);margin-top:8px;">Electron Medical Algérie</div>
-      <div style="font-size:11px;color:var(--muted);">Service Après-Vente & Maintenance</div>
-    </div>
-  </aside>
-
-  <main>
-  <!-- EN-TÊTE OFFICIEL S.A.R.L ELECTRON MEDICAL ALGERIE -->
-  <div class="official-company-header">
-    <div class="company-header-top">
-      <div class="company-header-titles">
-        <h1 class="company-legal-name">S.A.R.L ELECTRON MEDICAL ALGERIE</h1>
-        <h2 class="company-activity-desc">Importation - Vente - Service Après-Vente de Matériel Médical</h2>
-      </div>
-      <div class="company-header-logo">
-        <img src="assets/electron-medical-logo.png" alt="Electron Medical Algérie">
-      </div>
-    </div>
-    <div class="company-header-divider"></div>
-    <div class="company-header-details">
-      <p><b>Siège Social :</b> Villa N°21 Coopérative Immobilière El Baraka (Ex Takharbouchet)</p>
-      <p>Section 01 Lot N°435 Commune De Birkhadem ALGER-ALGERIE</p>
-      <p><b>Service Commercial :</b> 028 17 97 97 / 06-61.71.51.51 / 028 17 92 94</p>
-      <p><b>Service Après-Vente :</b> 028 17 94 84</p>
-      <p><b>Email :</b> electron.technologie@gmail.com</p>
-      <p><b>Site Web :</b> www.electron-medical-dz.com</p>
-    </div>
-  </div>
-
-    <div class="pagehead">
-      <div>
-        <div class="eyebrow">RAPPORT TECHNIQUE OFFICIEL</div>
-        <h2>Visite de Contrôle & Maintenance</h2>
-        <p>Enregistrement direct dans la base de données SQLite centrale.</p>
-      </div>
-      <div class="actions">
-        <button class="btn btn-secondary" id="newDocBtn">Nouveau Rapport</button>
-        <button class="btn btn-secondary" onclick="window.print()" title="Imprimer ou exporter en PDF officiel">🖨️ Imprimer / PDF</button>
-        <button class="btn btn-whatsapp" onclick="sendVisitWhatsApp()" title="Envoyer le compte-rendu par WhatsApp">💬 WhatsApp</button>
-        <button class="btn btn-primary" id="saveBtn">Enregistrer</button>
-      </div>
-    </div>
-
-    <div class="stats">
-      <div class="stat">
-        <span>RÉFÉRENCE RAPPORT</span>
-        <strong id="refDisplay">À générer</strong>
-        <small>Numéro unique d'intervention</small>
-      </div>
-      <div class="stat">
-        <span>STATUT BASE SQLITE</span>
-        <strong id="statusDisplay">Brouillon</strong>
-        <small>Synchronisation en temps réel</small>
-      </div>
-      <div class="stat">
-        <span>TYPE DE DOCUMENT</span>
-        <strong>Visite de Contrôle</strong>
-        <small>Formulaire Technique SAV</small>
-      </div>
-    </div>
-
-    <form id="reportForm">
-      <input type="hidden" id="reportId" name="id">
-
-      <!-- 01 : Informations Client -->
-      <section class="section" id="secClient">
-        <div class="section-head">
-          <div class="section-icon">01</div>
-          <div><h3>Informations Client & Établissement</h3><p>Hôpital, clinique, service et interlocuteurs</p></div>
-        </div>
-        <div class="section-body grid">
-          <div class="field span2"><label>Nom de l’Hôpital / Clinique *</label><input name="hospital" id="clientNomInput" required placeholder="Ex. EPH Rouiba, CHU Mustapha..."></div>
-          <div class="field span2"><label>Wilaya (58) *</label><select name="wilaya" id="wilayaSelect" required></select></div>
-          <div class="field span2"><label>Adresse</label><input name="address" placeholder="Rue, quartier..."></div>
-          <div class="field"><label>Ville</label><input name="city"></div>
-          <div class="field"><label>Code Postal</label><input name="postal"></div>
-          <div class="field"><label>Service Médical</label><select name="service"><option value="">Sélectionner...</option><option>Gastro-entérologie</option><option>Biomédical</option><option>Endoscopie Digestive</option><option>Chirurgie</option><option>Cadre de Santé</option><option>Autre</option></select></div>
-          <div class="field"><label>Contact / Médecin référent</label><input name="contact" placeholder="Dr. ..."></div>
-          <div class="field"><label>Téléphone</label><input name="phone" type="tel" placeholder="05 / 06 / 07 ..."></div>
-          <div class="field"><label>E-mail</label><input name="email" type="email"></div>
-        </div>
-      </section>
-
-      <!-- 02 : Visite -->
-      <section class="section" id="secVisit">
-        <div class="section-head">
-          <div class="section-icon">02</div>
-          <div><h3>Informations de la Visite & Déplacement</h3><p>Horaires, temps de trajet et technicien</p></div>
-        </div>
-        <div class="section-body grid">
-          <div class="field"><label>Date de la Visite *</label><input name="visitDate" id="visitDateInput" type="date" required></div>
-          <div class="field"><label>Heure d’arrivée</label><input name="arrival" type="time"></div>
-          <div class="field"><label>Heure de départ</label><input name="departure" type="time"></div>
-          <div class="field"><label>Temps de trajet A/R</label><input name="travel" placeholder="Ex. 02:00"></div>
-          <div class="field span2"><label>Technicien Responsable Electron Medical *</label><input name="technician" id="technicianInput" required placeholder="Nom et prénom"></div>
-          <div class="field span2"><label>Référence Interne</label><input name="reportRef" id="reportRefInput" placeholder="Ex. VC-2026-001"></div>
-        </div>
-      </section>
-
-      <!-- 03 : Equipements -->
-      <section class="section" id="secEquipment">
-        <div class="section-head">
-          <div class="section-icon">03</div>
-          <div><h3>Équipements Client (Colonne & Processeurs)</h3><p>Processeur FUJIFILM, source de lumière, moniteur...</p></div>
-        </div>
-        <div class="section-body">
-          <div class="tablewrap">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Produit</th>
-                  <th>Numéro de Série (SN)</th>
-                  <th>Version Logicielle</th>
-                  <th>Emplacement</th>
-                  <th style="width:40px;"></th>
-                </tr>
-              </thead>
-              <tbody id="equipmentRows"></tbody>
-            </table>
-          </div>
-          <button class="smallbtn addrow" type="button" onclick="addRow('equipmentRows', ['Produit', 'Numéro de série', 'Version logicielle', 'Emplacement'])">＋ Ajouter un équipement</button>
-        </div>
-      </section>
-
-      <!-- 04 : Peripheriques -->
-      <section class="section" id="secPeripherals">
-        <div class="section-head">
-          <div class="section-icon">04</div>
-          <div><h3>Périphériques Associés</h3><p>Pompe à eau, insufflateur CO₂, moniteur médical, chariot...</p></div>
-        </div>
-        <div class="section-body">
-          <div class="tablewrap">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Produit</th>
-                  <th>Modèle</th>
-                  <th>Numéro de Série</th>
-                  <th>Version</th>
-                  <th>Emplacement</th>
-                  <th style="width:40px;"></th>
-                </tr>
-              </thead>
-              <tbody id="peripheralRows"></tbody>
-            </table>
-          </div>
-          <button class="smallbtn addrow" type="button" onclick="addRow('peripheralRows', ['Produit', 'Modèle', 'Numéro de série', 'Version logicielle', 'Emplacement'])">＋ Ajouter un périphérique</button>
-        </div>
-      </section>
-
-      <!-- 05 : Tests Endoscope -->
-      <section class="section" id="secTests">
-        <div class="section-head">
-          <div class="section-icon">05</div>
-          <div><h3>Contrôle Technique Détaillé de l'Endoscope</h3><p>Points de contrôle normatifs Fujifilm Medical Systems</p></div>
-        </div>
-        <div class="section-body grid two">
-          <div class="field"><label>Modèle de l'Endoscope</label><input name="scopeModel" placeholder="Ex. EG-760R, EC-760ZP..."></div>
-          <div class="field"><label>Numéro de Série (SN)</label><input name="scopeSN"></div>
-          <div class="field"><label>Nombre d’utilisations estimé</label><input name="usageCount" type="number" min="0"></div>
-          <div class="field"><label>Béquillage — valeur mesurée (tolérance ±5 %)</label><input name="angulation" placeholder="Haut / Bas / Gauche / Droite"></div>
-        </div>
-        <div class="section-body" style="padding-top:0;">
-          <div class="tablewrap">
-            <table class="test-list">
-              <thead>
-                <tr>
-                  <th>Rubrique</th>
-                  <th>Points de Contrôle & Tests</th>
-                  <th>Résultat</th>
-                  <th class="comment">Commentaires / Mesures</th>
-                </tr>
-              </thead>
-              <tbody id="testsBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- 06 : Conclusion -->
-      <section class="section" id="secConclusion">
-        <div class="section-head">
-          <div class="section-icon">06</div>
-          <div><h3>Conclusion Technique SAV & Préconisations</h3><p>Synthèse de la visite, recommandations et conformité</p></div>
-        </div>
-        <div class="section-body grid">
-          <div class="field span4"><label>Conclusion Technique Globale</label><textarea name="conclusion" placeholder="État fonctionnel des dispositifs, actions correctives préconisées..." rows="3"></textarea></div>
-          <div class="field span4"><label>Remarques Complémentaires</label><textarea name="remarks" placeholder="Observations spécifiques au site..." rows="2"></textarea></div>
-          <div class="field span4" style="background:#fff3cd;padding:12px;border-radius:8px;border:1px solid #ffeeba;font-size:12px;color:#856404;font-weight:700;">
-            ⚠️ Consigne d'Hygiène & Sécurité : Toute manipulation d'un fibroscope ou endoscope nécessite obligatoirement un cycle de désinfection/lavage après l'intervention technique.
-          </div>
-        </div>
-      </section>
-
-      <!-- 07 : Photos & Signatures -->
-      <section class="section" id="secSignatures">
-        <div class="section-head">
-          <div class="section-icon">07</div>
-          <div><h3>Pièces Jointes & Signatures Électroniques</h3><p>Validation conjointe du technicien et du représentant client</p></div>
-        </div>
-        <div class="section-body">
-          <div class="photo-grid" style="margin-bottom:16px;">
-            <div class="photo-card">
-              <strong>Photo de l'intervention / État de l'équipement</strong>
-              <input type="file" id="photoInput0" accept="image/*">
-              <img id="photoPreview0" style="display:none;max-height:160px;margin-top:10px;object-fit:contain;" alt="Photo 1">
-            </div>
-            <div class="photo-card">
-              <strong>Photo complémentaire</strong>
-              <input type="file" id="photoInput1" accept="image/*">
-              <img id="photoPreview1" style="display:none;max-height:160px;margin-top:10px;object-fit:contain;" alt="Photo 2">
-            </div>
-          </div>
-
-          <div class="sig-grid">
-            <div class="sigbox">
-              <strong>Signature du Technicien Electron Medical</strong>
-              <canvas id="sigTech"></canvas>
-              <div class="sig-actions">
-                <span>Signer avec le doigt ou la souris</span>
-                <button type="button" class="smallbtn" onclick="clearSignature('sigTech')">Effacer</button>
-              </div>
-              <div class="field"><label>Nom du Signataire Technicien</label><input name="technicianSigner"></div>
-            </div>
-
-            <div class="sigbox">
-              <strong>Signature & Cachet du Client / Hôpital</strong>
-              <canvas id="sigClient"></canvas>
-              <div class="sig-actions">
-                <span>Signer avec le doigt ou la souris</span>
-                <button type="button" class="smallbtn" onclick="clearSignature('sigClient')">Effacer</button>
-              </div>
-              <div class="field"><label>Nom & Fonction du Signataire Client</label><input name="clientSigner"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div class="bottom-actions">
-        <a href="index.html" class="btn btn-secondary">✕ Annuler & Retour</a>
-        <button type="button" class="btn btn-secondary" onclick="window.print()">🖨️ Exporter PDF / Imprimer</button>
-        <button type="submit" class="btn btn-primary">✓ Enregistrer dans la Base SQLite</button>
-      </div>
-    </form>
-  </main>
+<div class="toolbar no-print">
+ <button onclick="saveAll()">💾 Enregistrer</button>
+ <button class="secondary" onclick="loadLocal()">📂 Charger la dernière saisie</button>
+ <button class="secondary" onclick="exportJSON()">📤 Exporter les données</button>
+ <button class="secondary" onclick="document.getElementById('importFile').click()">📥 Importer</button>
+ <button onclick="window.print()">⎙ Imprimer / PDF</button>
+ <button class="secondary" onclick="sendWhatsApp()">💬 WhatsApp</button>
+ <button class="danger" onclick="if(confirm('Effacer le formulaire ?')) location.reload()">↺ Nouveau</button>
+ <a href="index.html" class="btn-nav-dashboard">⌂ Tableau de bord</a>
+ <button type="button" class="theme-toggle-pill" id="themeToggleBtn" onclick="toggleAppTheme()" title="Basculer entre Mode Sombre et Mode Clair">
+   <span class="theme-icon" id="themeToggleIcon">☀️</span>
+   <span class="theme-label" id="themeToggleText">Mode</span>
+ </button>
+ <input id="importFile" type="file" accept="application/json" hidden onchange="importJSON(event)">
+ <small id="saveStatusIndicator">Formulaire synchronisé SQLite & Local</small>
 </div>
 
-<script src="js/algeria_wilayas.js"></script>
-<script src="js/api.js"></script>
+<main class="sheet" id="form">
+
+<!-- EN-TÊTE OFFICIEL S.A.R.L ELECTRON MEDICAL ALGERIE -->
+<div class="official-company-header">
+  <div class="company-header-top">
+    <div class="company-header-titles">
+      <h1 class="company-legal-name">S.A.R.L ELECTRON MEDICAL ALGERIE</h1>
+      <h2 class="company-activity-desc">Importation - Vente - Service Après-Vente de Matériel Médical</h2>
+    </div>
+    <div class="company-header-logo">
+      <img src="assets/electron-medical-logo.png" alt="Electron Medical Algérie">
+    </div>
+  </div>
+  <div class="company-header-divider"></div>
+  <div class="company-header-details">
+    <p><b>Siège Social :</b> Villa N°21 Coopérative Immobilière El Baraka (Ex Takharbouchet) Section 01 Lot N°435 Commune De Birkhadem ALGER-ALGERIE</p>
+    <p><b>Service Commercial :</b> 028 17 97 97 / 06-61.71.51.51 / 028 17 92 94 | <b>Service Après-Vente :</b> 028 17 94 84</p>
+    <p><b>Email :</b> electron.technologie@gmail.com | <b>Site Web :</b> www.electron-medical-dz.com</p>
+  </div>
+</div>
+
+<header class="brand">
+  <div class="logo">Electron<small>MEDICAL ALGÉRIE</small></div>
+  <h1>VISITE DE CONTRÔLE</h1>
+</header>
+
+<section class="section">
+<div class="section-title">Informations client</div>
+<div class="grid">
+ <div class="field span3"><label>Nom de l’Hôpital / Établissement</label><input name="hospital"></div>
+ <div class="field"><label>OS</label><input name="os"></div>
+ <div class="field"><label>Adresse</label><input name="address"></div>
+ <div class="field"><label>Ville</label><input name="city"></div>
+ <div class="field"><label>CP</label><input name="postal"></div>
+ <div class="field"><label>Pays</label><input name="country" value="Algérie"></div>
+ <div class="field"><label>Service</label><input name="service"></div>
+ <div class="field"><label>Contact</label><input name="contact"></div>
+ <div class="field"><label>Téléphone</label><input name="phone" type="tel"></div>
+ <div class="field"><label>Mail</label><input name="email" type="email"></div>
+ <div class="field"><label>Biomédical — Nom</label><input name="biomedical"></div>
+ <div class="field span2"><label>Cadre de Santé — Nom</label><input name="cadre"></div>
+ <div class="field"><label>Infirmière / AS — Nom</label><input name="nurse"></div>
+</div>
+</section>
+
+<section class="section">
+<div class="grid">
+ <div class="field"><label>Date</label><input name="date" type="date"></div>
+ <div class="field"><label>Heure d'arrivée</label><input name="arrival" type="time"></div>
+ <div class="field"><label>Heure de départ</label><input name="departure" type="time"></div>
+ <div class="field"><label>Temps de trajet (A/R)</label><input name="travel" placeholder="Ex. 1 h 30"></div>
+ <div class="field span2"><label>Technicien</label><input name="technician"></div>
+ <div class="field span2"><label>Zone</label><select name="zone"><option value="">Choisir</option><option>Centre</option><option>Est</option><option>Ouest</option><option>Sud</option></select></div>
+</div>
+</section>
+
+<section class="section">
+<div class="section-title">Équipements client</div><p class="no-print" style="margin:7px 0;color:#52616a;font-size:12px">Utilisez le bouton « Ajouter un autre équipement » pour créer une nouvelle ligne. Toutes les références de la liste sont conservées.</p>
+<div class="table-wrap"><table id="equipmentTable"><thead><tr><th>Produit</th><th>Numéro de série</th><th>Version logicielle</th><th>Emplacement</th><th class="no-print">Action</th></tr></thead><tbody></tbody></table></div>
+<div class="row-actions no-print add-controls"><button type="button" onclick="addEquipment()">＋ Ajouter un autre équipement</button></div>
+</section>
+
+<section class="section">
+<div class="section-title">Périphériques</div><p class="no-print" style="margin:7px 0;color:#52616a;font-size:12px">Utilisez le bouton « Ajouter un autre périphérique » pour créer une nouvelle ligne sans modifier les listes de produits et de modèles.</p>
+<div class="table-wrap"><table id="peripheralTable"><thead><tr><th>Produit</th><th>Modèle</th><th>Numéro de série</th><th>Version logicielle</th><th>Emplacement</th><th class="no-print">Action</th></tr></thead><tbody></tbody></table></div>
+<div class="row-actions no-print add-controls"><button type="button" onclick="addPeripheral()">＋ Ajouter un autre périphérique</button></div>
+</section>
+
+<section class="section">
+<div class="result-head">RÉSULTAT DE LA VISITE</div>
+<div class="grid">
+ <div class="field"><label>Nombre de pages du rapport</label><input name="pages" type="number" min="1" value="1"></div>
+ <div class="field span3"><label>Référence / observations générales</label><input name="general_notes"></div>
+</div>
+<div class="signature-grid">
+ <div class="signature"><b>Signature du technicien</b><canvas id="sigTech"></canvas><button class="secondary no-print" onclick="clearSig('sigTech')">Effacer</button></div>
+ <div class="signature"><b>Signature du client</b><canvas id="sigClient"></canvas><button class="secondary no-print" onclick="clearSig('sigClient')">Effacer</button></div>
+</div>
+</section>
+
+<section class="section">
+<div class="section-title">Contrôle des endoscopes</div>
+<div id="scopeList"></div>
+<div class="row-actions no-print add-controls"><button type="button" onclick="addScope()">＋ Ajouter une autre fiche endoscope</button></div>
+<p class="notice">* Toute manipulation avec un endoscope lors de la visite de contrôle nécessitera obligatoirement un lavage après la visite.</p>
+</section>
+
+<section class="section">
+<div class="section-title">Images / pièces jointes</div>
+<p>Ajouter des photos de l’équipement, des défauts constatés ou des interventions réalisées.</p>
+<input class="no-print" type="file" id="photosInput" accept="image/*" multiple onchange="addPhotos(event)">
+<div class="row-actions no-print"><button type="button" class="secondary" onclick="clearPhotos()">Supprimer toutes les photos</button></div>
+<div class="photos" id="photos"></div>
+</section>
+
+<footer class="footer">ELECTRON MEDICAL ALGÉRIE — Formulaire numérique de visite de contrôle<br>Document à compléter, vérifier et faire signer par les parties concernées.</footer>
+</main>
+
 <script>
-const testGroups = [
-  ['Étanchéité', ['Test Étanchéité', 'Test Valve']],
-  ['Contrôle visuel', ['État général', 'Tête distale', 'État des switches', 'État du tube d’insertion', 'État du tube de liaison', 'État connecteur et guides lumières', 'État connecteur électronique']],
-  ['Test image', ['Qualité image', 'Qualité image (en béquillant)', 'État sonde']],
-  ['Béquillage', ['Béquillage (±5 %)', 'Absence de jeu dans les manettes', 'Freins U/D et L/R']],
-  ['Test switches', ['1/FR', '2/MM', '3/RC', '4/XX', '5/XX']],
-  ['Canaux', ['Canal opérateur', 'Canal aspiration', 'Canal à ballonnet (si écho-endo)']],
-  ['Insufflation', ['Air', 'Eau (stérilisée ou filtrée)', 'Pipette']],
-  ['Jet', ['Canal Jet']],
-  ['Érecteur', ['Test Érecteur']]
+const products=['VP-7000','BL-7000','VP-4450HD','XL-4450','VP-4400HD','XL-4400','VP-3500HD','EPX-2500','EPX-2200','SU-1','SU-8000','EP-6000','EX-1','EP-8000','EPX-201','EPX-201H','EPX-2200','EPX-2500','EPX-4400','EPX-4450','EPX-3500','EP-7000'];
+const peripherals=['Écran','Imprimante','Chariot ITD','Pompe de Lavage','Insufflateur CO2','Enregistreur USB'];
+const peripheralModels=['Radiance 27" ULTRA','Radiance 26" G2 HB LED','Radiance 24" G2 LED','Radiance 19" HD','UP-D25MD','UP-21MD','UP-25MD','UP-X898MD','GW-1','GW-100','JW-2','PB-20','PB-30','USB-200','USB-300','ITD-03-EUS','ITD-03-EUS+','ITD-03-ISO','ITD-03','ITD-03-GAS','ITD-03-SONO','MEDICART'];
+const scopeModels=['EG-720R','EG-740N','EG-760CT','EG-760R','EG-760Z','EC-720RM/RI/RL','EC-740TM/TL','EC-760P','EC-760R-VM/VI/VL','EC-760Z-VM/VL','EC-760ZP-VM/VL','EG-600WR','EG-600ZW','EG-580RD','EG-580NW2','EC-600WM/WI/WL','EC-600ZW/WL','EC-580RD M/L','EG-530NP','EG-530FP','EG-530WR','EG-530CT','EG-530D','EG-530NW','EC-530MP/LP','EC-530DM/DL','ED-580XT','ED-530XT8','EN-580T','EN-580XP','EI-580BT','EB-580S','EB-580T','EB-530H','EB-530S','EB-530T','EB-530P','EB-530XT','EG-580UR','EG-580UT','EB-530US','EG-530UT2'];
+const testGroups=[
+['Étanchéité',['Test Étanchéité','Test Valve']],
+['Contrôle visuel',['État Général','Tête Distale','État Switchs','État Tube d’insertion','État Tube de liaison','État connecteur et guides lumières','État connecteur électronique']],
+['Test image',['Qualité image','Qualité image (en béquillant)','État sonde']],
+['Béquillage',['Béquillage +/-5%','Absence de jeu dans les manettes','Freins U/D et L/R']],
+['Test Switchs',['1/FR','2/MM','3/RC','4/XX','5/XX']],
+['Canaux',['Canal Opérateur','Canal Aspi','Canal à ballonnet (si Echo-endo)']],
+['Insufflation',['Air','Eau (Stérilisée ou Filtrée)','Pipette']],
+['Jet',['Canal Jet']],
+['Érecteur',['Test Érecteur']]
 ];
+let scopeCount=0;
+let _loadedReportId = '';
 
-function key(s) {
-  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]+/g, '_');
+function options(arr){return '<option value="">Choisissez un élément</option>'+arr.map(x=>`<option>${x}</option>`).join('')}
+
+// Chaque liste déroulante possède son propre catalogue. Les ajouts sont
+// mémorisés sur cet appareil et réapparaissent dans toutes les listes identiques.
+const CUSTOM_LISTS_KEY='electron-visite-custom-dropdown-lists-v1';
+function listKeyFor(select){
+ return [...select.options].map(o=>o.value||o.textContent.trim()).filter((v,i)=>i>0||v!=='').join('||');
 }
-
-function addRow(id, headers, values = []) {
-  const tr = document.createElement('tr');
-  headers.forEach((h, i) => {
-    const td = document.createElement('td');
-    const inp = document.createElement('input');
-    inp.placeholder = h;
-    inp.value = values[i] || '';
-    td.appendChild(inp);
-    tr.appendChild(td);
-  });
-  const td = document.createElement('td');
-  const b = document.createElement('button');
-  b.type = 'button';
-  b.className = 'smallbtn';
-  b.textContent = '×';
-  b.onclick = () => tr.remove();
-  td.appendChild(b);
-  tr.appendChild(td);
-  document.getElementById(id).appendChild(tr);
+function readCustomLists(){
+ try{return JSON.parse(localStorage.getItem(CUSTOM_LISTS_KEY)||'{}')}catch(e){return {}}
 }
-
-function buildTests() {
-  const body = document.getElementById('testsBody');
-  body.innerHTML = '';
-  testGroups.forEach(([group, items]) => items.forEach((item, i) => {
-    const tr = document.createElement('tr');
-    if (!i) {
-      const cat = document.createElement('td');
-      cat.className = 'category';
-      cat.rowSpan = items.length;
-      cat.textContent = group;
-      tr.appendChild(cat);
-    }
-    const td = document.createElement('td');
-    td.textContent = item;
-    tr.appendChild(td);
-    const res = document.createElement('td');
-    res.innerHTML = `
-      <div class="status">
-        <label><input type="radio" name="test_${key(item)}" value="OUI"> Conforme</label>
-        <label><input type="radio" name="test_${key(item)}" value="NON"> Anomalie</label>
-        <label><input type="radio" name="test_${key(item)}" value="N/A"> N/A</label>
-      </div>
-    `;
-    tr.appendChild(res);
-    const c = document.createElement('td');
-    c.className = 'comment';
-    const inp = document.createElement('input');
-    inp.type = 'text';
-    inp.name = 'comment_' + key(item);
-    inp.placeholder = 'Observation...';
-    c.appendChild(inp);
-    tr.appendChild(c);
-    body.appendChild(tr);
-  }));
-}
-
-// Gestion des Canvases de signature
-function setupCanvas(id) {
-  const c = document.getElementById(id);
-  const ctx = c.getContext('2d');
-  let drawing = false;
-  function resize() {
-    const rect = c.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
-    c.width = rect.width * dpr;
-    c.height = 120 * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.lineWidth = 2;
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = '#073b45';
+function saveCustomLists(data){localStorage.setItem(CUSTOM_LISTS_KEY,JSON.stringify(data))}
+function enhanceSelect(select){
+ if(!select || select.dataset.addEnhanced==='1')return;
+ const key=listKeyFor(select);
+ if(!key)return;
+ select.dataset.addEnhanced='1';
+ select.dataset.listKey=key;
+ const saved=readCustomLists()[key]||[];
+ saved.forEach(value=>{
+  if(![...select.options].some(o=>o.value===value)){
+   const opt=document.createElement('option');opt.value=value;opt.textContent=value;select.append(opt);
   }
-  resize();
-  function pos(e) {
-    const r = c.getBoundingClientRect();
-    return [e.clientX - r.left, e.clientY - r.top];
-  }
-  c.addEventListener('pointerdown', e => {
-    drawing = true;
-    c.setPointerCapture(e.pointerId);
-    const [x, y] = pos(e);
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-  });
-  c.addEventListener('pointermove', e => {
-    if (!drawing) return;
-    const [x, y] = pos(e);
-    ctx.lineTo(x, y);
-    ctx.stroke();
-  });
-  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ev => c.addEventListener(ev, () => drawing = false));
-  return c;
+ });
+ const wrap=document.createElement('div');
+ wrap.className='select-add-wrap';
+ select.parentNode.insertBefore(wrap,select);
+ wrap.append(select);
+ const btn=document.createElement('button');
+ btn.type='button';btn.className='select-add-btn no-print';
+ btn.textContent='+';
+ btn.title='Ajouter un élément à cette liste';
+ btn.setAttribute('aria-label','Ajouter un élément à cette liste');
+ btn.addEventListener('click',()=>addOptionToList(btn));
+ wrap.append(btn);
+}
+function enhanceSelects(root=document){
+ root.querySelectorAll('select').forEach(enhanceSelect);
+}
+function addOptionToList(button){
+ const select=button.parentElement.querySelector('select');
+ if(!select)return;
+ const key=select.dataset.listKey;
+ const value=prompt('Saisissez le nouvel élément à ajouter à cette liste :');
+ if(value===null)return;
+ const clean=value.trim();
+ if(!clean){alert('Veuillez saisir un élément.');return;}
+ const existing=[...document.querySelectorAll('select[data-list-key]')].some(s=>
+  s.dataset.listKey===key && [...s.options].some(o=>o.value.toLocaleLowerCase()===clean.toLocaleLowerCase())
+ );
+ if(existing){alert('Cet élément existe déjà dans cette liste.');return;}
+ const lists=readCustomLists();
+ lists[key]=lists[key]||[];
+ lists[key].push(clean);
+ saveCustomLists(lists);
+ document.querySelectorAll('select[data-list-key]').forEach(s=>{
+  if(s.dataset.listKey!==key)return;
+  const opt=document.createElement('option');opt.value=clean;opt.textContent=clean;s.append(opt);
+ });
+ select.value=clean;
 }
 
-const canvases = { sigTech: setupCanvas('sigTech'), sigClient: setupCanvas('sigClient') };
-function clearSignature(id) {
-  const c = canvases[id];
-  c.getContext('2d').clearRect(0, 0, c.width, c.height);
+function addEquipment(data={}){
+ let tr=document.createElement('tr');
+ tr.innerHTML=`<td><select>${options(products)}</select></td><td><input placeholder="Numéro de série"></td><td><input placeholder="v1.0"></td><td><input placeholder="Ex. Bloc C"></td><td class="no-print"><button class="danger" onclick="this.closest('tr').remove()">×</button></td>`;
+ tr.querySelectorAll('select,input').forEach((e,i)=>e.value=data[i]||'');
+ document.querySelector('#equipmentTable tbody').append(tr);
+ enhanceSelects(tr);
 }
 
-// Photos en Base64
-let photoData = ['', ''];
-[0, 1].forEach(i => {
-  const inp = document.getElementById(`photoInput${i}`);
-  if (inp) {
-    inp.addEventListener('change', e => {
-      const f = e.target.files[0];
-      if (!f) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        photoData[i] = reader.result;
-        const img = document.getElementById(`photoPreview${i}`);
-        img.src = reader.result;
-        img.style.display = 'block';
-      };
-      reader.readAsDataURL(f);
-    });
-  }
-});
+function addPeripheral(data={}){
+ let tr=document.createElement('tr');
+ tr.innerHTML=`<td><select>${options(peripherals)}</select></td><td><select>${options(peripheralModels)}</select></td><td><input placeholder="Numéro de série"></td><td><input placeholder="v1.0"></td><td><input placeholder="Ex. Salle 2"></td><td class="no-print"><button class="danger" onclick="this.closest('tr').remove()">×</button></td>`;
+ tr.querySelectorAll('select,input').forEach((e,i)=>e.value=data[i]||'');
+ document.querySelector('#peripheralTable tbody').append(tr);
+ enhanceSelects(tr);
+}
 
-function collectFormData() {
-  const f = document.getElementById('reportForm');
-  const d = {
-    id: document.getElementById('reportId').value || '',
-    type: 'visite_controle',
-    ref_number: document.getElementById('reportRefInput').value || '',
-    client_nom: document.getElementById('clientNomInput').value || '',
-    wilaya: document.getElementById('wilayaSelect').value || '',
-    date_intervention: document.getElementById('visitDateInput').value || '',
-    technicien: document.getElementById('technicianInput').value || '',
-    status: 'enregistre',
-    fields: {},
-    equipment: [],
-    peripherals: [],
-    tests: {},
-    photos: [...photoData],
-    signatures: {
-      sigTech: canvases.sigTech.toDataURL('image/png'),
-      sigClient: canvases.sigClient.toDataURL('image/png')
-    }
+function addScope(data={}){
+ scopeCount++;
+ let id='scope'+scopeCount;
+ let card=document.createElement('div');
+ card.className='test-card';
+ card.dataset.scope='1';
+ let rows='';
+ testGroups.forEach(([group,items])=>items.forEach((item,j)=>{
+  let na=['État sonde','4/XX','5/XX','Canal à ballonnet (si Echo-endo)','Air','Eau (Stérilisée ou Filtrée)','Pipette','Canal Jet','Test Érecteur'].includes(item);
+  rows+=`<tr><td>${j===0?group:''}</td><td>${item}</td><td><div class="choice"><label><input type="radio" name="${id}_${item}" value="OUI"> OUI</label><label><input type="radio" name="${id}_${item}" value="NON"> NON</label>${na?`<label><input type="radio" name="${id}_${item}" value="N/A"> N/A</label>`:''}</div></td><td><input class="test-comment" placeholder="Commentaire"></td></tr>`
+ }));
+ card.innerHTML=`<h3>ENDOSCOPE — FICHE ${scopeCount} <button class="danger no-print" style="float:right;padding:4px 8px" onclick="this.closest('.test-card').remove()">Supprimer</button></h3>
+<div class="test-meta"><label>Modèle<select class="scope-model">${options(scopeModels)}</select></label><label>Numéro de série<input class="scope-sn"></label><label>Nombre d’utilisations<input class="scope-uses" type="number" min="0"></label></div>
+<div class="table-wrap"><table class="test-table"><thead><tr><th>Catégorie</th><th>Informations et tests</th><th>Résultat</th><th>Commentaires</th></tr></thead><tbody>${rows}</tbody></table></div>
+<div style="padding:8px"><b>Conclusion :</b><textarea class="conclusion" placeholder="Conclusion et recommandations..."></textarea></div>`;
+ document.querySelector('#scopeList').append(card);
+ enhanceSelects(card);
+ card.querySelector('.scope-model').value=data.model||'';
+ card.querySelector('.scope-sn').value=data.sn||'';
+ card.querySelector('.scope-uses').value=data.uses||'';
+ card.querySelector('.conclusion').value=data.conclusion||'';
+}
+
+function setupSig(id){
+ let c=document.getElementById(id);
+ if(!c) return;
+ let ctx=c.getContext('2d'),drawing=false;
+ function resize(){
+  let r=c.getBoundingClientRect(),d=window.devicePixelRatio||1,old=c.toDataURL();
+  c.width=r.width*d;
+  c.height=145*d;
+  ctx.scale(d,d);
+  ctx.lineWidth=2;
+  ctx.lineCap='round';
+  ctx.strokeStyle='#123';
+  if(old&&old.length>1000){
+   let im=new Image();
+   im.onload=()=>ctx.drawImage(im,0,0,r.width,145);
+   im.src=old;
+  }
+ }
+ resize();
+ window.addEventListener('resize',()=>{});
+ function pos(e){let r=c.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top]}
+ c.addEventListener('pointerdown',e=>{drawing=true;c.setPointerCapture(e.pointerId);let [x,y]=pos(e);ctx.beginPath();ctx.moveTo(x,y)});
+ c.addEventListener('pointermove',e=>{if(!drawing)return;let [x,y]=pos(e);ctx.lineTo(x,y);ctx.stroke()});
+ c.addEventListener('pointerup',()=>drawing=false);
+ c.addEventListener('pointercancel',()=>drawing=false);
+}
+
+function clearSig(id){let c=document.getElementById(id); if(c) c.getContext('2d').clearRect(0,0,c.width,c.height)}
+
+function addPhotos(e){
+ [...e.target.files].forEach(f=>{
+  if(!f.type.startsWith('image/'))return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+   const d=document.createElement('div');d.className='photo';
+   const name=document.createElement('b');name.textContent=f.name;
+   const img=document.createElement('img');img.src=reader.result;img.alt=f.name;
+   const actions=document.createElement('div');actions.className='photo-actions no-print';
+   const remove=document.createElement('button');remove.type='button';remove.className='photo-delete';
+   remove.textContent='Supprimer cette photo';
+   remove.addEventListener('click',()=>{if(confirm('Supprimer cette photo du rapport ?'))d.remove()});
+   actions.append(remove);d.append(name,img,actions);
+   document.getElementById('photos').append(d);
   };
-
-  new FormData(f).forEach((v, k) => {
-    if (k.startsWith('comment_')) d.tests[k] = v;
-    else if (!k.startsWith('test_') && k !== 'id') d.fields[k] = v;
-  });
-
-  document.querySelectorAll('#testsBody input[type=radio]:checked').forEach(x => d.tests[x.name] = x.value);
-
-  [['equipmentRows', 'equipment'], ['peripheralRows', 'peripherals']].forEach(([id, k]) => {
-    document.querySelectorAll('#' + id + ' tr').forEach(tr => {
-      d[k].push([...tr.querySelectorAll('input')].map(x => x.value));
-    });
-  });
-
-  return d;
+  reader.readAsDataURL(f);
+ });
+ e.target.value='';
 }
 
-async function saveCurrentReport(e) {
-  if (e) e.preventDefault();
-  const d = collectFormData();
-  if (!d.client_nom) {
-    alert('Veuillez renseigner le nom de l’Hôpital / Établissement.');
+function clearPhotos(){
+ const photos=document.querySelectorAll('#photos .photo');
+ if(!photos.length){alert('Aucune photo à supprimer.');return;}
+ if(confirm('Supprimer toutes les photos jointes à ce rapport ?'))document.getElementById('photos').innerHTML='';
+}
+
+function collect(){
+ let fields={};
+ document.querySelectorAll('#form [name]').forEach(e=>fields[e.name]=e.value);
+ let rows=id=>[...document.querySelectorAll(`#${id} tbody tr`)].map(tr=>[...tr.querySelectorAll('select,input')].map(e=>e.value));
+ let scopes=[...document.querySelectorAll('.test-card')].map(c=>({
+  model:c.querySelector('.scope-model').value,
+  sn:c.querySelector('.scope-sn').value,
+  uses:c.querySelector('.scope-uses').value,
+  conclusion:c.querySelector('.conclusion').value,
+  tests:[...c.querySelectorAll('.test-table tbody tr')].map(tr=>({
+   result:tr.querySelector('input[type=radio]:checked')?.value||'',
+   comment:tr.querySelector('.test-comment').value
+  }))
+ }));
+ return {
+  fields,
+  equipment:rows('equipmentTable'),
+  peripherals:rows('peripheralTable'),
+  scopes,
+  signatures:{
+   tech:document.getElementById('sigTech')?document.getElementById('sigTech').toDataURL():'',
+   client:document.getElementById('sigClient')?document.getElementById('sigClient').toDataURL():''
+  },
+  photos:[...document.querySelectorAll('#photos img')].map(i=>i.src)
+ };
+}
+
+function apply(data){
+ if(!data)return;
+ const fields = data.fields || {};
+ if (data.client_nom && !fields.hospital) fields.hospital = data.client_nom;
+ if (data.technicien && !fields.technician) fields.technician = data.technicien;
+ if (data.date_intervention && !fields.date) fields.date = data.date_intervention;
+ if (data.wilaya && !fields.city) fields.city = data.wilaya;
+
+ Object.entries(fields).forEach(([k,v])=>{
+  let e=document.querySelector(`[name="${k}"]`);
+  if(e)e.value=v;
+ });
+
+ document.querySelector('#equipmentTable tbody').innerHTML='';
+ if (data.equipment && data.equipment.length) {
+  data.equipment.forEach(addEquipment);
+ } else {
+  for(let i=0;i<12;i++)addEquipment();
+ }
+
+ document.querySelector('#peripheralTable tbody').innerHTML='';
+ if (data.peripherals && data.peripherals.length) {
+  data.peripherals.forEach(addPeripheral);
+ } else {
+  for(let i=0;i<7;i++)addPeripheral();
+ }
+
+ document.getElementById('scopeList').innerHTML='';
+ scopeCount=0;
+ if (data.scopes && data.scopes.length) {
+  data.scopes.forEach(s=>{
+   addScope(s);
+   let c=document.querySelector('#scopeList .test-card:last-child');
+   s.tests?.forEach((t,i)=>{
+    let tr=c.querySelectorAll('.test-table tbody tr')[i];
+    if(!tr)return;
+    if(t.result){
+     let r=tr.querySelector(`input[value="${t.result}"]`);
+     if(r)r.checked=true;
+    }
+    if (tr.querySelector('.test-comment')) {
+     tr.querySelector('.test-comment').value=t.comment||'';
+    }
+   });
+  });
+ } else {
+  addScope();
+ }
+
+ ['tech','client'].forEach((k)=>{
+  let src=data.signatures?.[k];
+  if(src){
+   let c=document.getElementById(k==='tech'?'sigTech':'sigClient');
+   if(c){
+    let im=new Image();
+    im.onload=()=>c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+    im.src=src;
+   }
+  }
+ });
+
+ document.getElementById('photos').innerHTML='';
+ (data.photos||[]).forEach(src=>{
+  let d=document.createElement('div');
+  d.className='photo';
+  d.innerHTML='<img src="'+src+'"><div class="photo-actions no-print"><button type="button" class="photo-delete" onclick="this.closest(\'.photo\').remove()">Supprimer cette photo</button></div>';
+  document.getElementById('photos').append(d);
+ });
+}
+
+function saveLocal(){
+ localStorage.setItem('electron-visite-controle',JSON.stringify(collect()));
+}
+
+async function saveAll(){
+ const localData = collect();
+ saveLocal();
+ 
+ const ind = document.getElementById('saveStatusIndicator');
+ if (ind) ind.textContent = 'Enregistrement en cours…';
+
+ try {
+  if (window.API && window.API.saveRapport) {
+   const urlParams = new URLSearchParams(window.location.search);
+   const currentId = urlParams.get('id') || _loadedReportId || '';
+   
+   const payload = {
+    id: currentId,
+    type: 'visite_controle',
+    client_nom: localData.fields.hospital || 'Établissement',
+    wilaya: localData.fields.city || '',
+    date_intervention: localData.fields.date || new Date().toISOString().slice(0, 10),
+    technicien: localData.fields.technician || '',
+    status: 'enregistre',
+    fields: localData.fields,
+    equipment: localData.equipment,
+    peripherals: localData.peripherals,
+    scopes: localData.scopes,
+    signatures: localData.signatures,
+    photos: localData.photos
+   };
+
+   const res = await window.API.saveRapport(payload);
+   if (res && res.id) {
+    _loadedReportId = res.id;
+    const newUrl = new URL(window.location.href);
+    newUrl.searchParams.set('id', res.id);
+    window.history.replaceState({}, '', newUrl.toString());
+    if (ind) ind.textContent = '✓ Synchronisé SQLite & Local (ID #' + res.id + ')';
+    alert('Rapport de visite de contrôle enregistré avec succès dans SQLite et sur cet appareil !');
     return;
+   }
   }
-  const result = await API.saveRapport(d);
-  if (result && result.id) {
-    document.getElementById('reportId').value = result.id;
-    document.getElementById('refDisplay').textContent = result.ref_number || result.id;
-    document.getElementById('statusDisplay').textContent = 'Enregistré SQLite';
-  }
+  if (ind) ind.textContent = '✓ Enregistré sur cet appareil (hors-ligne)';
+  alert('Saisie enregistrée avec succès sur cet appareil !');
+ } catch(err) {
+  console.warn('Erreur sauvegarde SQLite:', err);
+  if (ind) ind.textContent = '✓ Enregistré localement (erreur réseau serveur)';
+  alert('Saisie enregistrée localement sur cet appareil.');
+ }
 }
 
-async function loadReport(id) {
-  const rep = await API.getRapportById(id);
-  if (!rep) return;
-  const d = rep.data || rep;
-
-  document.getElementById('reportId').value = rep.id || d.id || '';
-  document.getElementById('refDisplay').textContent = rep.ref_number || d.ref_number || rep.id;
-  document.getElementById('statusDisplay').textContent = 'Chargé';
-
-  // Champs de formulaire
-  const fields = d.fields || d;
-  Object.entries(fields).forEach(([k, v]) => {
-    const el = document.querySelector(`#reportForm [name="${CSS.escape(k)}"]`);
-    if (el) el.value = v;
-  });
-
-  if (rep.client_nom) document.getElementById('clientNomInput').value = rep.client_nom;
-  if (rep.wilaya) document.getElementById('wilayaSelect').value = rep.wilaya;
-  if (rep.date_intervention) document.getElementById('visitDateInput').value = rep.date_intervention;
-  if (rep.technicien) document.getElementById('technicianInput').value = rep.technicien;
-  if (rep.ref_number) document.getElementById('reportRefInput').value = rep.ref_number;
-
-  // Tableaux
-  ['equipmentRows', 'peripheralRows'].forEach(id => document.getElementById(id).innerHTML = '');
-  (d.equipment || []).forEach(v => addRow('equipmentRows', ['Produit', 'Numéro de série', 'Version logicielle', 'Emplacement'], v));
-  (d.peripherals || []).forEach(v => addRow('peripheralRows', ['Produit', 'Modèle', 'Numéro de série', 'Version logicielle', 'Emplacement'], v));
-
-  // Tests
-  document.querySelectorAll('#testsBody input[type=radio]').forEach(x => x.checked = false);
-  Object.entries(d.tests || {}).forEach(([k, v]) => {
-    if (k.startsWith('test_')) {
-      const el = document.querySelector(`#testsBody input[name="${CSS.escape(k)}"][value="${CSS.escape(v)}"]`);
-      if (el) el.checked = true;
-    } else {
-      const el = document.querySelector(`#testsBody input[name="${CSS.escape(k)}"]`);
-      if (el) el.value = v;
-    }
-  });
-
-  // Photos
-  photoData = d.photos || ['', ''];
-  photoData.forEach((p, i) => {
-    const im = document.getElementById(`photoPreview${i}`);
-    if (im) {
-      im.src = p || '';
-      im.style.display = p ? 'block' : 'none';
-    }
-  });
-
-  // Signatures
-  Object.entries(d.signatures || {}).forEach(([id, src]) => {
-    if (!canvases[id] || !src) return;
-    const c = canvases[id], ctx = c.getContext('2d'), im = new Image();
-    im.onload = () => ctx.drawImage(im, 0, 0, c.width, c.height);
-    im.src = src;
-  });
+function loadLocal(){
+ let s=localStorage.getItem('electron-visite-controle');
+ if(!s){alert('Aucune sauvegarde locale.');return}
+ apply(JSON.parse(s));
+ alert('Dernière saisie locale chargée avec succès.');
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-  populateWilayaSelect(document.getElementById('wilayaSelect'));
-  buildTests();
-  addRow('equipmentRows', ['Produit', 'Numéro de série', 'Version logicielle', 'Emplacement']);
-  addRow('peripheralRows', ['Produit', 'Modèle', 'Numéro de série', 'Version logicielle', 'Emplacement']);
+function exportJSON(){
+ let b=new Blob([JSON.stringify(collect(),null,2)],{type:'application/json'}),a=document.createElement('a');
+ a.href=URL.createObjectURL(b);
+ a.download='visite-controle-electron.json';
+ a.click();
+ URL.revokeObjectURL(a.href);
+}
 
-  document.getElementById('visitDateInput').value = new Date().toISOString().slice(0, 10);
-  document.getElementById('reportForm').addEventListener('submit', saveCurrentReport);
-  document.getElementById('saveTopBtn').addEventListener('click', saveCurrentReport);
-  document.getElementById('saveBtn').addEventListener('click', saveCurrentReport);
-  document.getElementById('newDocBtn').addEventListener('click', () => {
-    if (confirm('Créer un nouveau rapport vierge ?')) {
-      window.location.href = 'visite_controle.html';
-    }
-  });
+function importJSON(e){
+ let f=e.target.files[0];
+ if(!f)return;
+ let r=new FileReader();
+ r.onload=()=>{
+  try{
+   apply(JSON.parse(r.result));
+   alert('Données importées avec succès.');
+  }catch(err){
+   alert('Fichier JSON invalide.');
+  }
+ };
+ r.readAsText(f);
+}
 
-function sendVisitWhatsApp() {
-  const d = collectFormData();
-  const client = d.client_nom || 'Client';
-  const wil = d.wilaya || '';
-  const ref = d.ref_number || 'VC';
-  const tech = d.technicien || 'Technicien';
-  const phone = d.telephone || '';
-  const scope = (d.fields && d.fields.scopeModel) || 'Endoscope Fujifilm';
-  const sn = (d.fields && d.fields.scopeSN) || '';
-  const conclusion = (d.fields && d.fields.conclusion) || 'Contrôle technique effectué avec succès.';
+function sendWhatsApp() {
+ const d = collect();
+ const hospital = d.fields.hospital || 'Établissement';
+ const city = d.fields.city || '';
+ const tech = d.fields.technician || 'Technicien';
+ const phone = d.fields.phone || '';
+ const date = d.fields.date || new Date().toLocaleDateString('fr-FR');
+ const eqCount = (d.equipment || []).filter(r => r && (r[0] || r[1])).length;
+ const scopeCount = (d.scopes || []).length;
 
-  const msg = `🏥 *ELECTRON MEDICAL ALGÉRIE*
+ const msg = `🏥 *ELECTRON MEDICAL ALGÉRIE*
 Distributeur Officiel FUJIFILM Medical Systems
 Compte-Rendu de Visite de Contrôle Technique
 ---------------------------------------
 Bonjour,
 
-Notre technicien *${tech}* a réalisé ce jour la Visite de Contrôle Technique pour votre matériel :
+Notre technicien *${tech}* a réalisé ce jour (${date}) la Visite de Contrôle Technique :
 
-• *Établissement :* ${client} (${wil})
-• *Réf. Intervention :* ${ref}
-• *Matériel :* ${scope} ${sn ? `(SN: ${sn})` : ''}
-• *Conclusion :* ${conclusion}
+• *Établissement :* ${hospital} ${city ? `(${city})` : ''}
+• *Équipements contrôlés :* ${eqCount} appareil(s)
+• *Fiches endoscopes :* ${scopeCount} endoscope(s)
+• *Observations :* ${d.fields.general_notes || 'Contrôle technique conforme.'}
 
-Le rapport officiel et le procès-verbal sont enregistrés dans la base SQLite centrale.
+Le rapport officiel et les signatures sont enregistrés dans le système.
 Merci pour votre confiance.
 
-Service Après-Vente : 0550 12 34 56`;
+Service Après-Vente : 028 17 94 84
+electron.technologie@gmail.com`;
 
-  API.openWhatsApp(phone, msg);
+ if (window.API && window.API.openWhatsApp) {
+  window.API.openWhatsApp(phone, msg);
+ } else {
+  const cleanPhone = (phone || '').replace(/[^0-9]/g, '');
+  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+ }
 }
 
-  document.querySelectorAll('.navitem').forEach(b => {
-    b.addEventListener('click', () => {
-      document.querySelectorAll('.navitem').forEach(x => x.classList.remove('active'));
-      b.classList.add('active');
-      const target = document.getElementById(b.dataset.target);
-      if (target) target.scrollIntoView({ behavior: 'smooth' });
-    });
-  });
+document.addEventListener('DOMContentLoaded', async function() {
+ enhanceSelects(document);
+ for(let i=0;i<12;i++)addEquipment();
+ for(let i=0;i<7;i++)addPeripheral();
+ addScope();
+ setupSig('sigTech');
+ setupSig('sigClient');
 
-  // Vérifier paramètre URL ?id=... ou ?print=1
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get('id');
-  if (id) {
-    await loadReport(id);
+ // Date du jour automatique si vide
+ const dateField = document.querySelector('[name="date"]');
+ if (dateField && !dateField.value) {
+  dateField.value = new Date().toISOString().slice(0, 10);
+ }
+
+ // Chargement automatique si paramètre URL ?id=...
+ const params = new URLSearchParams(window.location.search);
+ const id = params.get('id');
+ if (id && window.API && window.API.getRapportById) {
+  try {
+   const rep = await window.API.getRapportById(id);
+   if (rep) {
+    _loadedReportId = rep.id;
+    let d = rep.data_json ? (typeof rep.data_json === 'string' ? JSON.parse(rep.data_json) : rep.data_json) : (rep.data || rep);
+    apply(d);
+    const ind = document.getElementById('saveStatusIndicator');
+    if (ind) ind.textContent = '✓ Rapport chargé depuis SQLite (ID #' + rep.id + ')';
+   }
+  } catch(e) {
+   console.warn('Erreur chargement rapport:', e);
   }
-  if (params.get('print') === '1') {
-    setTimeout(() => window.print(), 500);
-  }
+ }
+ if (params.get('print') === '1') {
+  setTimeout(() => window.print(), 500);
+ }
 });
 </script>
 </body>
