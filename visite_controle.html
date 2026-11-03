@@ -139,22 +139,380 @@ button.danger{background:#a63d3d}button.danger:hover{background:#8a2f2f}
   border-color: #335d6d;
 }
 
+
+.print-only { display: none; }
+.test-columns-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 4px;
+}
+.test-col { min-width: 0; }
+.test-card-header {
+  background: var(--green);
+  padding: 8px 12px;
+  font-weight: 800;
+  font-size: 13.5px;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+}
+.test-conclusion-box {
+  padding: 8px;
+  background: #fdfdfd;
+  border-top: 1px solid var(--line);
+}
+.test-conclusion-box label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.test-conclusion-box textarea {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid #aaa;
+  padding: 6px;
+  font: inherit;
+  font-size: 12.5px;
+}
+.photos:empty::before {
+  content: "Aucune photo jointe au rapport";
+  display: block;
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #777;
+  font-style: italic;
+  font-size: 12px;
+  padding: 12px;
+  border: 1px dashed #bbb;
+  border-radius: 4px;
+}
+
 @media(max-width:700px){.sheet{margin:0;padding:18px 12px}.brand h1{font-size:15px}.logo{font-size:21px}.grid{grid-template-columns:repeat(2,1fr)}.span3,.span4{grid-column:span 2}.test-meta{grid-template-columns:1fr}.signature-grid{grid-template-columns:1fr}.signature{border-right:0;border-bottom:1px solid #aaa}.photos{grid-template-columns:1fr}}
 
-@media print{
+@media print {
   @page {
     size: A4 portrait;
     margin: 6mm 8mm 6mm 8mm;
   }
-  .select-add-btn{display:none!important}
-  .select-add-wrap{display:block}
-  body, html, [data-theme="dark"] body{background:white !important; color:#000 !important;}
-  .toolbar,.no-print{display:none!important}
-  .sheet{max-width:none;margin:0;padding:6mm 8mm;box-shadow:none;border:none !important}
-  .section,.test-card{break-inside:avoid;page-break-inside:avoid}
-  .field input,.field select,.field textarea,td input,td select{color:#000}
-  input,select,textarea{print-color-adjust:exact;-webkit-print-color-adjust:exact}
-  .photo{min-height:100px}
+
+  .toolbar, .no-print, .select-add-btn, .photo-actions, .photo-uploader-bar, .btn-del-scope {
+    display: none !important;
+  }
+  .print-only {
+    display: flex !important;
+  }
+
+  body, html, [data-theme="dark"] body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11px !important;
+  }
+
+  .sheet {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* ==========================================================================
+     PAGE 1 : FORMULAIRE PRINCIPAL DE VISITE & SIGNATURES (STRICTEMENT 1 SEULE PAGE)
+     ========================================================================== */
+  .page-1-main {
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    height: 275mm !important;
+    max-height: 275mm !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+  }
+
+  .page-1-main .official-company-header {
+    margin-bottom: 5px !important;
+    padding-bottom: 3px !important;
+    border-bottom: 1.5px solid #000 !important;
+  }
+  .page-1-main .company-legal-name { font-size: 15px !important; }
+  .page-1-main .company-activity-desc { font-size: 9.5px !important; margin-top: 1px !important; }
+  .page-1-main .company-header-logo img { max-height: 38px !important; }
+  .page-1-main .company-header-details { font-size: 7.5px !important; margin-top: 2px !important; line-height: 1.2 !important; }
+
+  .page-1-main .brand {
+    margin-bottom: 5px !important;
+    padding-bottom: 3px !important;
+    border-bottom-width: 2.5px !important;
+  }
+  .page-1-main .brand h1 { font-size: 15px !important; }
+  .page-1-main .logo { font-size: 18px !important; }
+  .page-1-main .logo small { font-size: 7.5px !important; }
+
+  .page-1-main .section {
+    margin: 4px 0 !important;
+    break-inside: avoid !important;
+  }
+  .page-1-main .section-title {
+    padding: 2.5px 5px !important;
+    font-size: 10px !important;
+  }
+
+  .page-1-main .grid { border: 1px solid var(--line) !important; }
+  .page-1-main .field label {
+    font-size: 9px !important;
+    min-height: 16px !important;
+    padding: 2px 3px !important;
+  }
+  .page-1-main .field input, .page-1-main .field select, .page-1-main .field textarea {
+    font-size: 9px !important;
+    min-height: 18px !important;
+    height: 18px !important;
+    padding: 1px 3px !important;
+    color: #000 !important;
+  }
+
+  .page-1-main .table-wrap { overflow: visible !important; }
+  .page-1-main table { font-size: 8.5px !important; }
+  .page-1-main th {
+    padding: 2px 3px !important;
+    font-size: 8.5px !important;
+    background: var(--green) !important;
+    color: #000 !important;
+  }
+  .page-1-main td {
+    padding: 1px 3px !important;
+    font-size: 8.5px !important;
+    line-height: 1.15 !important;
+    color: #000 !important;
+  }
+  .page-1-main td input, .page-1-main td select {
+    padding: 1px 2px !important;
+    font-size: 8.5px !important;
+    height: 16px !important;
+    color: #000 !important;
+  }
+
+  .page-1-main .result-head {
+    padding: 2.5px !important;
+    font-size: 10px !important;
+  }
+  .page-1-main .signature b {
+    padding: 2px !important;
+    font-size: 9px !important;
+    margin: -3px -3px 2px !important;
+  }
+  .page-1-main .signature canvas {
+    height: 75px !important;
+    background: #fff !important;
+    border: 1px dashed #999 !important;
+  }
+
+  /* ==========================================================================
+     PAGE 2 : CONTRÔLE DES ENDOSCOPES & IMAGES / PIÈCES JOINTES ENSEMBLE (1 SEULE PAGE)
+     ========================================================================== */
+  .page-2-scope-images {
+    page-break-before: always !important;
+    break-before: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    height: 275mm !important;
+    max-height: 275mm !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+  }
+
+  .print-page2-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 2px 0 4px 0 !important;
+    margin-bottom: 3px !important;
+    border-bottom: 1.5px solid #000 !important;
+    font-size: 8.5px !important;
+    color: #000 !important;
+  }
+  .p2-h-left { font-weight: 700 !important; }
+  .p2-h-right { font-weight: 600 !important; color: #333 !important; }
+
+  .section-scope {
+    margin: 2px 0 3px 0 !important;
+    break-inside: avoid !important;
+  }
+  .section-scope .section-title {
+    padding: 2.5px 5px !important;
+    font-size: 10px !important;
+  }
+  .test-card {
+    margin: 2px 0 3px 0 !important;
+    border: 1px solid var(--line) !important;
+  }
+  .test-card-header {
+    background: var(--green) !important;
+    padding: 2.5px 5px !important;
+    text-align: center !important;
+    font-size: 9.5px !important;
+    font-weight: 800 !important;
+    border-bottom: 1px solid var(--line) !important;
+  }
+  .test-meta {
+    padding: 2px 4px !important;
+    font-size: 8.5px !important;
+    background: #f7faf6 !important;
+    border-bottom: 1px solid var(--line) !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+  }
+  .test-meta label {
+    font-size: 8.5px !important;
+    padding: 1px !important;
+    font-weight: 700 !important;
+    border: none !important;
+  }
+  .test-meta input, .test-meta select {
+    font-size: 8.5px !important;
+    padding: 1px 3px !important;
+    height: 16px !important;
+    margin-top: 1px !important;
+  }
+
+  /* 2 Colonnes équilibrées pour les tests endoscope */
+  .test-columns-wrap {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 4px !important;
+    margin-top: 2px !important;
+  }
+  .test-col { min-width: 0 !important; }
+  .test-table {
+    width: 100% !important;
+    table-layout: fixed !important;
+    font-size: 7.8px !important;
+  }
+  .test-table th {
+    padding: 1.5px 2px !important;
+    font-size: 7.8px !important;
+    background: var(--green) !important;
+    color: #000 !important;
+  }
+  .test-table th:nth-child(1), .test-table td:nth-child(1) { width: 22% !important; font-weight: 600 !important; }
+  .test-table th:nth-child(2), .test-table td:nth-child(2) { width: 34% !important; }
+  .test-table th:nth-child(3), .test-table td:nth-child(3) { width: 22% !important; white-space: nowrap !important; }
+  .test-table th:nth-child(4), .test-table td:nth-child(4) { width: 22% !important; }
+  .test-table td {
+    padding: 1px 2px !important;
+    font-size: 7.8px !important;
+    line-height: 1.1 !important;
+    color: #000 !important;
+  }
+  .choice {
+    gap: 2px !important;
+  }
+  .choice label {
+    font-size: 7.2px !important;
+    gap: 1px !important;
+  }
+  .choice input {
+    width: 8px !important;
+    height: 8px !important;
+    min-width: 8px !important;
+  }
+  .test-comment {
+    font-size: 7.2px !important;
+    min-height: 14px !important;
+    height: 14px !important;
+    padding: 0 2px !important;
+    border: none !important;
+  }
+  .test-conclusion-box {
+    padding: 2.5px 4px !important;
+    font-size: 8px !important;
+    border-top: 1px solid var(--line) !important;
+    background: #fff !important;
+  }
+  .conclusion {
+    min-height: 26px !important;
+    height: 26px !important;
+    font-size: 8px !important;
+    padding: 2px 3px !important;
+    border: 1px solid #aaa !important;
+  }
+  .notice {
+    font-size: 7.2px !important;
+    margin: 1.5px 0 !important;
+    line-height: 1.1 !important;
+  }
+
+  /* Images / Pièces jointes */
+  .section-photos {
+    margin: 2px 0 1px 0 !important;
+    break-inside: avoid !important;
+  }
+  .section-photos .section-title {
+    padding: 2px 5px !important;
+    font-size: 9.5px !important;
+  }
+  .photos {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 4px !important;
+    margin-top: 2px !important;
+  }
+  .photos:empty::before {
+    content: "Emplacement réservé aux photographies de contrôle / défauts constatés (Aucune photo jointe)";
+    display: block !important;
+    grid-column: 1 / -1 !important;
+    text-align: center !important;
+    color: #777 !important;
+    font-size: 8px !important;
+    padding: 8px 3px !important;
+    border: 1px dashed #aaa !important;
+    background: #fafafa !important;
+  }
+  .photo {
+    border: 1px solid #999 !important;
+    padding: 2px !important;
+    min-height: 65px !important;
+    max-height: 75px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #fafafa !important;
+  }
+  .photo b {
+    font-size: 7px !important;
+    max-width: 100% !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .photo img {
+    max-height: 60px !important;
+    max-width: 100% !important;
+    object-fit: contain !important;
+    margin: 0 auto !important;
+  }
+
+  .footer {
+    margin-top: 2px !important;
+    padding-top: 2px !important;
+    font-size: 7.2px !important;
+    line-height: 1.1 !important;
+    border-top: 1px solid #ccc !important;
+  }
+
+  input, select, textarea {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
 }
 </style>
 </head>
@@ -177,7 +535,8 @@ button.danger{background:#a63d3d}button.danger:hover{background:#8a2f2f}
 </div>
 
 <main class="sheet" id="form">
-
+<!-- PAGE 1 : VISITE DE CONTRÔLE, ÉQUIPEMENTS & SIGNATURES (STRICTEMENT 1 SEULE PAGE) -->
+<div class="page-1-main">
 <!-- EN-TÊTE OFFICIEL S.A.R.L ELECTRON MEDICAL ALGERIE -->
 <div class="official-company-header">
   <div class="company-header-top">
@@ -247,7 +606,7 @@ button.danger{background:#a63d3d}button.danger:hover{background:#8a2f2f}
 <section class="section">
 <div class="result-head">RÉSULTAT DE LA VISITE</div>
 <div class="grid">
- <div class="field"><label>Nombre de pages du rapport</label><input name="pages" type="number" min="1" value="1"></div>
+ <div class="field"><label>Nombre de pages du rapport</label><input name="pages" type="number" min="1" value="2"></div>
  <div class="field span3"><label>Référence / observations générales</label><input name="general_notes"></div>
 </div>
 <div class="signature-grid">
@@ -255,23 +614,38 @@ button.danger{background:#a63d3d}button.danger:hover{background:#8a2f2f}
  <div class="signature"><b>Signature du client</b><canvas id="sigClient"></canvas><button class="secondary no-print" onclick="clearSig('sigClient')">Effacer</button></div>
 </div>
 </section>
+</div><!-- /.page-1-main -->
 
-<section class="section">
+<!-- PAGE 2 : CONTRÔLE DES ENDOSCOPES ET IMAGES / PIÈCES JOINTES (STRICTEMENT 1 SEULE PAGE) -->
+<div class="page-2-scope-images">
+
+ <div class="print-page2-header print-only">
+  <div class="p2-h-left"><strong>S.A.R.L ELECTRON MEDICAL ALGÉRIE</strong> &mdash; <span>Rapport de visite de contrôle (Page 2/2)</span></div>
+  <div class="p2-h-right" id="p2HeaderClientRef">Client : <b id="p2RefClient">Établissement</b> | Date : <b id="p2RefDate"></b></div>
+ </div>
+
+<section class="section section-scope">
 <div class="section-title">Contrôle des endoscopes</div>
 <div id="scopeList"></div>
 <div class="row-actions no-print add-controls"><button type="button" onclick="addScope()">＋ Ajouter une autre fiche endoscope</button></div>
 <p class="notice">* Toute manipulation avec un endoscope lors de la visite de contrôle nécessitera obligatoirement un lavage après la visite.</p>
 </section>
 
-<section class="section">
+<section class="section section-photos">
 <div class="section-title">Images / pièces jointes</div>
-<p>Ajouter des photos de l’équipement, des défauts constatés ou des interventions réalisées.</p>
-<input class="no-print" type="file" id="photosInput" accept="image/*" multiple onchange="addPhotos(event)">
-<div class="row-actions no-print"><button type="button" class="secondary" onclick="clearPhotos()">Supprimer toutes les photos</button></div>
+<div class="photo-uploader-bar no-print">
+ <p style="margin:4px 0 6px;color:#52616a;font-size:12px">Photos de l’équipement, défauts constatés ou pièces remplacées :</p>
+ <div style="display:flex;gap:8px;align-items:center;">
+  <input type="file" id="photosInput" accept="image/*" multiple onchange="addPhotos(event)" style="display:none">
+  <button type="button" onclick="document.getElementById('photosInput').click()">📷 Ajouter des photos</button>
+  <button type="button" class="secondary" onclick="clearPhotos()">🗑 Supprimer toutes les photos</button>
+ </div>
+</div>
 <div class="photos" id="photos"></div>
 </section>
 
 <footer class="footer">ELECTRON MEDICAL ALGÉRIE — Formulaire numérique de visite de contrôle<br>Document à compléter, vérifier et faire signer par les parties concernées.</footer>
+</div><!-- /.page-2-scope-images -->
 </main>
 
 <script>
@@ -371,27 +745,82 @@ function addPeripheral(data={}){
  enhanceSelects(tr);
 }
 
+function renderScopeTestRows(groups, id) {
+ let rows = '';
+ groups.forEach(([group, items]) => {
+  items.forEach((item, j) => {
+   let na = ['État sonde','4/XX','5/XX','Canal à ballonnet (si Echo-endo)','Air','Eau (Stérilisée ou Filtrée)','Pipette','Canal Jet','Test Érecteur'].includes(item);
+   rows += `<tr>
+    <td class="col-cat">${j === 0 ? group : ''}</td>
+    <td class="col-test">${item}</td>
+    <td class="col-res"><div class="choice"><label><input type="radio" name="${id}_${item}" value="OUI"> OUI</label><label><input type="radio" name="${id}_${item}" value="NON"> NON</label>${na ? `<label><input type="radio" name="${id}_${item}" value="N/A"> N/A</label>` : ''}</div></td>
+    <td class="col-com"><input class="test-comment" placeholder="Commentaire"></td>
+   </tr>`;
+  });
+ });
+ return rows;
+}
+
+function updatePage2Headers() {
+ const hosp = document.querySelector('[name="hospital"]')?.value || 'Établissement';
+ const dt = document.querySelector('[name="date"]')?.value || '';
+ const refC = document.getElementById('p2RefClient');
+ const refD = document.getElementById('p2RefDate');
+ if (refC) refC.textContent = hosp;
+ if (refD) refD.textContent = dt;
+}
+
 function addScope(data={}){
  scopeCount++;
- let id='scope'+scopeCount;
- let card=document.createElement('div');
- card.className='test-card';
- card.dataset.scope='1';
- let rows='';
- testGroups.forEach(([group,items])=>items.forEach((item,j)=>{
-  let na=['État sonde','4/XX','5/XX','Canal à ballonnet (si Echo-endo)','Air','Eau (Stérilisée ou Filtrée)','Pipette','Canal Jet','Test Érecteur'].includes(item);
-  rows+=`<tr><td>${j===0?group:''}</td><td>${item}</td><td><div class="choice"><label><input type="radio" name="${id}_${item}" value="OUI"> OUI</label><label><input type="radio" name="${id}_${item}" value="NON"> NON</label>${na?`<label><input type="radio" name="${id}_${item}" value="N/A"> N/A</label>`:''}</div></td><td><input class="test-comment" placeholder="Commentaire"></td></tr>`
- }));
- card.innerHTML=`<h3>ENDOSCOPE — FICHE ${scopeCount} <button class="danger no-print" style="float:right;padding:4px 8px" onclick="this.closest('.test-card').remove()">Supprimer</button></h3>
-<div class="test-meta"><label>Modèle<select class="scope-model">${options(scopeModels)}</select></label><label>Numéro de série<input class="scope-sn"></label><label>Nombre d’utilisations<input class="scope-uses" type="number" min="0"></label></div>
-<div class="table-wrap"><table class="test-table"><thead><tr><th>Catégorie</th><th>Informations et tests</th><th>Résultat</th><th>Commentaires</th></tr></thead><tbody>${rows}</tbody></table></div>
-<div style="padding:8px"><b>Conclusion :</b><textarea class="conclusion" placeholder="Conclusion et recommandations..."></textarea></div>`;
+ let id = 'scope' + scopeCount;
+ let card = document.createElement('div');
+ card.className = 'test-card';
+ card.dataset.scope = '1';
+
+ let leftGroups = testGroups.slice(0, 4);  // 15 items
+ let rightGroups = testGroups.slice(4);    // 13 items
+ let leftRows = renderScopeTestRows(leftGroups, id);
+ let rightRows = renderScopeTestRows(rightGroups, id);
+
+ card.innerHTML = `
+  <div class="test-card-header">
+   <span>FICHE ENDOSCOPE N° ${scopeCount}</span>
+   <button type="button" class="danger no-print btn-del-scope" style="float:right;padding:3px 8px;font-size:11px;" onclick="this.closest('.test-card').remove()">Supprimer</button>
+  </div>
+  <div class="test-meta">
+   <label>Modèle<select class="scope-model">${options(scopeModels)}</select></label>
+   <label>Numéro de série<input class="scope-sn" placeholder="N° de série..."></label>
+   <label>Nombre d’utilisations<input class="scope-uses" type="number" min="0" placeholder="0"></label>
+  </div>
+  <div class="test-columns-wrap">
+   <div class="test-col">
+    <div class="table-wrap">
+     <table class="test-table">
+      <thead><tr><th>Catégorie</th><th>Informations et tests</th><th>Résultat</th><th>Commentaires</th></tr></thead>
+      <tbody>${leftRows}</tbody>
+     </table>
+    </div>
+   </div>
+   <div class="test-col">
+    <div class="table-wrap">
+     <table class="test-table">
+      <thead><tr><th>Catégorie</th><th>Informations et tests</th><th>Résultat</th><th>Commentaires</th></tr></thead>
+      <tbody>${rightRows}</tbody>
+     </table>
+    </div>
+   </div>
+  </div>
+  <div class="test-conclusion-box" style="padding:6px 8px;">
+   <b>Conclusion & recommandations :</b>
+   <textarea class="conclusion" placeholder="Observations techniques, état de l'endoscope, réparations ou précautions à prévoir..."></textarea>
+  </div>`;
+
  document.querySelector('#scopeList').append(card);
  enhanceSelects(card);
- card.querySelector('.scope-model').value=data.model||'';
- card.querySelector('.scope-sn').value=data.sn||'';
- card.querySelector('.scope-uses').value=data.uses||'';
- card.querySelector('.conclusion').value=data.conclusion||'';
+ card.querySelector('.scope-model').value = data.model || '';
+ card.querySelector('.scope-sn').value = data.sn || '';
+ card.querySelector('.scope-uses').value = data.uses || '';
+ card.querySelector('.conclusion').value = data.conclusion || '';
 }
 
 function setupSig(id){
@@ -488,6 +917,7 @@ function apply(data){
   let e=document.querySelector(`[name="${k}"]`);
   if(e)e.value=v;
  });
+ updatePage2Headers();
 
  document.querySelector('#equipmentTable tbody').innerHTML='';
  if (data.equipment && data.equipment.length) {
@@ -672,6 +1102,13 @@ document.addEventListener('DOMContentLoaded', async function() {
  addScope();
  setupSig('sigTech');
  setupSig('sigClient');
+
+ document.addEventListener('input', function(e) {
+  if (e.target && (e.target.name === 'hospital' || e.target.name === 'date')) {
+   updatePage2Headers();
+  }
+ });
+ updatePage2Headers();
 
  // Date du jour automatique si vide
  const dateField = document.querySelector('[name="date"]');
