@@ -312,203 +312,249 @@ button.danger{background:#a63d3d}button.danger:hover{background:#8a2f2f}
   }
 
   /* ==========================================================================
-     PAGE 2 : CONTRÔLE DES ENDOSCOPES & IMAGES / PIÈCES JOINTES ENSEMBLE (1 SEULE PAGE)
+     PAGE 2 : CONTRÔLE DES ENDOSCOPES & IMAGES / PIÈCES JOINTES (PLEINE PAGE A4 ÉQUILIBRÉE)
      ========================================================================== */
   .page-2-scope-images {
     page-break-before: always !important;
     break-before: page !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+    box-sizing: border-box !important;
     height: 275mm !important;
     max-height: 275mm !important;
-    overflow: hidden !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
-    box-sizing: border-box !important;
+    overflow: hidden !important;
   }
 
   .print-page2-header {
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
-    padding: 2px 0 4px 0 !important;
-    margin-bottom: 3px !important;
+    padding: 3px 0 5px 0 !important;
+    margin-bottom: 2px !important;
     border-bottom: 1.5px solid #000 !important;
-    font-size: 8.5px !important;
+    font-size: 10.5px !important;
     color: #000 !important;
+    flex: 0 0 auto !important;
   }
-  .p2-h-left { font-weight: 700 !important; }
-  .p2-h-right { font-weight: 600 !important; color: #333 !important; }
+  .p2-h-left { font-weight: 800 !important; font-size: 11px !important; }
+  .p2-h-right { font-weight: 600 !important; color: #111 !important; font-size: 10px !important; }
 
   .section-scope {
-    margin: 2px 0 3px 0 !important;
+    margin: 0 !important;
     break-inside: avoid !important;
+    flex: 0 0 auto !important;
   }
   .section-scope .section-title {
-    padding: 2.5px 5px !important;
-    font-size: 10px !important;
+    padding: 5px 8px !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.5px !important;
   }
   .test-card {
     margin: 2px 0 3px 0 !important;
-    border: 1px solid var(--line) !important;
+    border: 1.5px solid var(--line) !important;
   }
   .test-card-header {
     background: var(--green) !important;
-    padding: 2.5px 5px !important;
+    padding: 4px 8px !important;
     text-align: center !important;
-    font-size: 9.5px !important;
+    font-size: 11px !important;
     font-weight: 800 !important;
     border-bottom: 1px solid var(--line) !important;
   }
   .test-meta {
-    padding: 2px 4px !important;
-    font-size: 8.5px !important;
+    padding: 4px 8px !important;
+    font-size: 10px !important;
     background: #f7faf6 !important;
     border-bottom: 1px solid var(--line) !important;
     display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 6px !important;
+    grid-template-columns: 1.2fr 1.2fr 1fr !important;
+    gap: 10px !important;
   }
   .test-meta label {
-    font-size: 8.5px !important;
+    font-size: 10px !important;
     padding: 1px !important;
     font-weight: 700 !important;
     border: none !important;
   }
   .test-meta input, .test-meta select {
-    font-size: 8.5px !important;
-    padding: 1px 3px !important;
-    height: 16px !important;
+    font-size: 10px !important;
+    padding: 2px 5px !important;
+    height: 22px !important;
     margin-top: 1px !important;
+    border: 1px solid #888 !important;
   }
 
-  /* 2 Colonnes équilibrées pour les tests endoscope */
+  /* 2 Colonnes pour le contrôle des endoscopes - calibré pour remplir harmonieusement */
   .test-columns-wrap {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
-    gap: 4px !important;
+    gap: 6px !important;
     margin-top: 2px !important;
   }
   .test-col { min-width: 0 !important; }
   .test-table {
     width: 100% !important;
     table-layout: fixed !important;
-    font-size: 7.8px !important;
+    font-size: 9.2px !important;
   }
   .test-table th {
-    padding: 1.5px 2px !important;
-    font-size: 7.8px !important;
+    padding: 3.5px 4px !important;
+    font-size: 9.2px !important;
     background: var(--green) !important;
     color: #000 !important;
+    font-weight: 700 !important;
   }
-  .test-table th:nth-child(1), .test-table td:nth-child(1) { width: 22% !important; font-weight: 600 !important; }
-  .test-table th:nth-child(2), .test-table td:nth-child(2) { width: 34% !important; }
-  .test-table th:nth-child(3), .test-table td:nth-child(3) { width: 22% !important; white-space: nowrap !important; }
+  .test-table th:nth-child(1), .test-table td:nth-child(1) { width: 22% !important; font-weight: 700 !important; }
+  .test-table th:nth-child(2), .test-table td:nth-child(2) { width: 33% !important; }
+  .test-table th:nth-child(3), .test-table td:nth-child(3) { width: 23% !important; white-space: nowrap !important; }
   .test-table th:nth-child(4), .test-table td:nth-child(4) { width: 22% !important; }
   .test-table td {
-    padding: 1px 2px !important;
-    font-size: 7.8px !important;
-    line-height: 1.1 !important;
+    padding: 2.5px 4px !important;
+    font-size: 9.2px !important;
+    line-height: 1.15 !important;
     color: #000 !important;
   }
   .choice {
-    gap: 2px !important;
+    gap: 4px !important;
   }
   .choice label {
-    font-size: 7.2px !important;
-    gap: 1px !important;
+    font-size: 8.5px !important;
+    gap: 1.5px !important;
+    font-weight: 600 !important;
   }
   .choice input {
-    width: 8px !important;
-    height: 8px !important;
-    min-width: 8px !important;
+    width: 11px !important;
+    height: 11px !important;
+    min-width: 11px !important;
   }
   .test-comment {
-    font-size: 7.2px !important;
-    min-height: 14px !important;
-    height: 14px !important;
-    padding: 0 2px !important;
+    font-size: 8.5px !important;
+    min-height: 18px !important;
+    height: 18px !important;
+    padding: 1px 3px !important;
     border: none !important;
   }
   .test-conclusion-box {
-    padding: 2.5px 4px !important;
-    font-size: 8px !important;
+    padding: 4px 6px !important;
+    font-size: 9.5px !important;
     border-top: 1px solid var(--line) !important;
     background: #fff !important;
   }
+  .test-conclusion-box label {
+    font-weight: 700 !important;
+    font-size: 9.5px !important;
+    display: block !important;
+    margin-bottom: 2px !important;
+  }
   .conclusion {
-    min-height: 26px !important;
-    height: 26px !important;
-    font-size: 8px !important;
-    padding: 2px 3px !important;
-    border: 1px solid #aaa !important;
+    min-height: 52px !important;
+    height: 52px !important;
+    font-size: 9.5px !important;
+    padding: 3px 5px !important;
+    border: 1px solid #777 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
   .notice {
-    font-size: 7.2px !important;
-    margin: 1.5px 0 !important;
-    line-height: 1.1 !important;
+    font-size: 8px !important;
+    margin: 2px 0 2px 0 !important;
+    line-height: 1.15 !important;
+    color: #b32626 !important;
+    font-weight: 700 !important;
   }
 
-  /* Images / Pièces jointes */
+  /* Section Images / Pièces Jointes : Remplit la moitié inférieure de la page */
   .section-photos {
-    margin: 2px 0 1px 0 !important;
+    margin: 3px 0 0 0 !important;
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
     break-inside: avoid !important;
+    min-height: 190px !important;
   }
   .section-photos .section-title {
-    padding: 2px 5px !important;
-    font-size: 9.5px !important;
+    padding: 5px 8px !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.5px !important;
+    flex: 0 0 auto !important;
   }
   .photos {
     display: grid !important;
     grid-template-columns: repeat(4, 1fr) !important;
-    gap: 4px !important;
-    margin-top: 2px !important;
+    gap: 8px !important;
+    margin-top: 4px !important;
+    flex: 1 !important;
+    min-height: 160px !important;
+  }
+  .photos:empty {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 8px !important;
+    flex: 1 !important;
+    min-height: 160px !important;
   }
   .photos:empty::before {
-    content: "Emplacement réservé aux photographies de contrôle / défauts constatés (Aucune photo jointe)";
-    display: block !important;
+    content: "📷 EMPLACEMENT RÉSERVÉ AUX CLICHÉS PHOTOGRAPHIQUES TECHNIQUES & PIÈCES DÉFECTUEUSES\A (Photos de l'endoscope, test d'étanchéité, béquillage, connecteurs ou défauts constatés)" !important;
+    white-space: pre-wrap !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     grid-column: 1 / -1 !important;
     text-align: center !important;
-    color: #777 !important;
-    font-size: 8px !important;
-    padding: 8px 3px !important;
-    border: 1px dashed #aaa !important;
-    background: #fafafa !important;
+    color: #444 !important;
+    font-size: 10.5px !important;
+    font-weight: 600 !important;
+    line-height: 1.5 !important;
+    min-height: 160px !important;
+    height: 100% !important;
+    padding: 20px !important;
+    border: 2px dashed #777 !important;
+    background: #fcfdfc !important;
+    border-radius: 4px !important;
+    box-sizing: border-box !important;
   }
   .photo {
-    border: 1px solid #999 !important;
-    padding: 2px !important;
-    min-height: 65px !important;
-    max-height: 75px !important;
+    border: 1px solid #555 !important;
+    padding: 4px !important;
+    min-height: 140px !important;
+    max-height: 175px !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
     background: #fafafa !important;
+    border-radius: 4px !important;
   }
   .photo b {
-    font-size: 7px !important;
+    font-size: 8px !important;
     max-width: 100% !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
+    margin-bottom: 2px !important;
   }
   .photo img {
-    max-height: 60px !important;
+    max-height: 140px !important;
     max-width: 100% !important;
     object-fit: contain !important;
     margin: 0 auto !important;
   }
 
   .footer {
-    margin-top: 2px !important;
-    padding-top: 2px !important;
-    font-size: 7.2px !important;
-    line-height: 1.1 !important;
-    border-top: 1px solid #ccc !important;
+    margin-top: 3px !important;
+    padding-top: 3px !important;
+    font-size: 8px !important;
+    line-height: 1.15 !important;
+    border-top: 1px solid #000 !important;
+    text-align: center !important;
+    flex: 0 0 auto !important;
   }
-
+  
   input, select, textarea {
     print-color-adjust: exact !important;
     -webkit-print-color-adjust: exact !important;
