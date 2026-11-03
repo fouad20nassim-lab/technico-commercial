@@ -30,8 +30,305 @@ button.secondary{background:#52616a}button.danger{background:#a63d3d}.toolbar sm
 .test-comment{width:100%;min-height:32px;border:0;padding:5px}.conclusion{width:100%;min-height:80px;border:1px solid #aaa;padding:8px;font:inherit}
 .notice{color:#b32626;font-weight:700;font-size:12px;margin:12px 0}.photos{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.photo{border:1px solid #aaa;min-height:140px;padding:8px}.photo img{max-width:100%;max-height:230px;display:block;margin:8px auto}.photo-actions{display:flex;justify-content:flex-end;margin-top:6px}.photo-delete{background:#b33b3b!important;color:#fff!important;border:0;border-radius:5px;padding:6px 11px;cursor:pointer}.photo-delete:hover{background:#922d2d!important}.footer{border-top:1px solid #aaa;color:#777;font-size:10px;padding-top:8px;margin-top:30px}
 @media(max-width:700px){.sheet{margin:0;padding:18px 12px}.brand h1{font-size:15px}.logo{font-size:21px}.grid{grid-template-columns:repeat(2,1fr)}.span3,.span4{grid-column:span 2}.test-meta{grid-template-columns:1fr}.signature-grid{grid-template-columns:1fr}.signature{border-right:0;border-bottom:1px solid #aaa}.photos{grid-template-columns:1fr}}
-@media print{.select-add-btn{display:none!important}.select-add-wrap{display:block}body{background:white}.toolbar,.no-print{display:none!important}.sheet{max-width:none;margin:0;padding:12mm 13mm;box-shadow:none}.section,.test-card{break-inside:avoid}.test-card{page-break-inside:avoid}.field input,.field select,.field textarea,td input,td select{color:#000}input,select,textarea{print-color-adjust:exact} .photo{min-height:100px}}
-</style>
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 6mm 8mm 6mm 8mm;
+  }
+
+  .select-add-btn, .toolbar, .no-print, .photo-actions, .photo-delete {
+    display: none !important;
+  }
+  .select-add-wrap {
+    display: block !important;
+  }
+
+  body, html {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 10px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .sheet {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* ==========================================================================
+     PAGE 1 : PAGES 1, 2 ET 3 REUNIES SUR 1 SEULE PAGE A4 STRICTE
+     ========================================================================== */
+  .print-page-1 {
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    height: 275mm !important;
+    max-height: 275mm !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+  }
+
+  .print-page-1 .brand {
+    margin-bottom: 4px !important;
+    padding-bottom: 3px !important;
+    border-bottom: 2px solid #a9c49b !important;
+  }
+  .print-page-1 .logo { font-size: 18px !important; }
+  .print-page-1 .logo small { font-size: 7.5px !important; }
+  .print-page-1 .brand h1 { font-size: 15px !important; }
+
+  .print-page-1 .section {
+    margin: 3px 0 !important;
+    break-inside: avoid !important;
+  }
+  .print-page-1 .section-title {
+    padding: 2px 4px !important;
+    font-size: 9.5px !important;
+    background: var(--green) !important;
+    border: 1px solid var(--line) !important;
+  }
+
+  .print-page-1 .grid {
+    border-left: 1px solid var(--line) !important;
+    border-top: 1px solid var(--line) !important;
+  }
+  .print-page-1 .field label {
+    font-size: 8px !important;
+    min-height: 14px !important;
+    padding: 1px 3px !important;
+    background: var(--green) !important;
+    line-height: 1.1 !important;
+  }
+  .print-page-1 .field input,
+  .print-page-1 .field select,
+  .print-page-1 .field textarea {
+    font-size: 8.5px !important;
+    min-height: 16px !important;
+    height: 16px !important;
+    padding: 1px 3px !important;
+    color: #000 !important;
+  }
+
+  .print-page-1 .table-wrap { overflow: visible !important; }
+  .print-page-1 table {
+    font-size: 8px !important;
+    border-collapse: collapse !important;
+  }
+  .print-page-1 th {
+    padding: 1.5px 3px !important;
+    font-size: 8px !important;
+    background: var(--green) !important;
+    color: #000 !important;
+    border: 1px solid var(--line) !important;
+  }
+  .print-page-1 td {
+    padding: 1px 2px !important;
+    font-size: 8px !important;
+    line-height: 1.1 !important;
+    color: #000 !important;
+    border: 1px solid var(--line) !important;
+  }
+  .print-page-1 td input,
+  .print-page-1 td select {
+    padding: 0 2px !important;
+    font-size: 8px !important;
+    height: 14px !important;
+    color: #000 !important;
+  }
+
+  .print-page-1 .result-head {
+    padding: 2px !important;
+    font-size: 9.5px !important;
+    background: var(--green2) !important;
+    border: 1px solid var(--line) !important;
+  }
+  .print-page-1 .signature-grid {
+    border: 1px solid var(--line) !important;
+  }
+  .print-page-1 .signature {
+    padding: 3px !important;
+  }
+  .print-page-1 .signature b {
+    padding: 2px !important;
+    font-size: 8.5px !important;
+    margin: -3px -3px 2px !important;
+    background: var(--green) !important;
+  }
+  .print-page-1 .signature canvas {
+    height: 65px !important;
+    background: #ffffff !important;
+    border: 1px dashed #aaa !important;
+  }
+
+  /* ==========================================================================
+     PAGE 2 : PAGES 4, 5 ET 6 REUNIES SUR 1 SEULE PAGE A4 STRICTE
+     ========================================================================== */
+  .print-page-2 {
+    page-break-before: always !important;
+    break-before: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    height: 275mm !important;
+    max-height: 275mm !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+  }
+
+  .print-page-2 .section {
+    margin: 2px 0 !important;
+    break-inside: avoid !important;
+  }
+  .print-page-2 .section-title {
+    padding: 2px 4px !important;
+    font-size: 9.5px !important;
+    background: var(--green) !important;
+    border: 1px solid var(--line) !important;
+  }
+
+  .print-page-2 .test-card {
+    margin: 1px 0 !important;
+    border: 1px solid var(--line) !important;
+    break-inside: avoid !important;
+  }
+  .print-page-2 .test-card h3 {
+    margin: 0 !important;
+    padding: 2px 4px !important;
+    font-size: 9.5px !important;
+    background: var(--green) !important;
+  }
+  .print-page-2 .test-meta {
+    background: #f7faf6 !important;
+    border-bottom: 1px solid var(--line) !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+  }
+  .print-page-2 .test-meta label {
+    padding: 2px 4px !important;
+    font-size: 8px !important;
+    font-weight: bold !important;
+    border-right: 1px solid #aaa !important;
+  }
+  .print-page-2 .test-meta input,
+  .print-page-2 .test-meta select {
+    font-size: 8px !important;
+    padding: 1px 2px !important;
+    height: 15px !important;
+    margin-top: 1px !important;
+  }
+
+  .print-page-2 .table-wrap { overflow: visible !important; }
+  .print-page-2 .test-table {
+    width: 100% !important;
+    table-layout: fixed !important;
+    font-size: 7.8px !important;
+    border-collapse: collapse !important;
+  }
+  .print-page-2 .test-table th {
+    padding: 1.5px 2px !important;
+    font-size: 7.8px !important;
+    background: var(--green) !important;
+    color: #000 !important;
+    border: 1px solid var(--line) !important;
+  }
+  .print-page-2 .test-table td {
+    padding: 1px 2px !important;
+    font-size: 7.8px !important;
+    line-height: 1.1 !important;
+    color: #000 !important;
+    border: 1px solid var(--line) !important;
+  }
+  .print-page-2 .test-table td:nth-child(1) { width: 17% !important; font-weight: 600 !important; }
+  .print-page-2 .test-table td:nth-child(2) { width: 28% !important; }
+  .print-page-2 .test-table td:nth-child(3) { width: 24% !important; white-space: nowrap !important; }
+  .print-page-2 .test-table td:nth-child(4) { width: 31% !important; }
+
+  .print-page-2 .choice {
+    display: flex !important;
+    gap: 4px !important;
+    align-items: center !important;
+    white-space: nowrap !important;
+  }
+  .print-page-2 .choice label {
+    font-size: 7.5px !important;
+    gap: 1.5px !important;
+    font-weight: normal !important;
+  }
+  .print-page-2 .choice input {
+    width: 8px !important;
+    height: 8px !important;
+    min-width: 8px !important;
+    margin: 0 !important;
+  }
+  .print-page-2 .test-comment {
+    font-size: 7.5px !important;
+    min-height: 14px !important;
+    height: 14px !important;
+    padding: 0 2px !important;
+    border: none !important;
+  }
+
+  .print-page-2 .conclusion {
+    min-height: 28px !important;
+    height: 28px !important;
+    font-size: 8px !important;
+    padding: 2px 4px !important;
+    border: 1px solid #aaa !important;
+  }
+  .print-page-2 .notice {
+    font-size: 7.5px !important;
+    margin: 1.5px 0 !important;
+    line-height: 1.1 !important;
+    color: #b32626 !important;
+    font-weight: bold !important;
+  }
+
+  /* Photos Section */
+  .print-page-2 .photos {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+  }
+  .print-page-2 .photo {
+    border: 1px solid #aaa !important;
+    min-height: 80px !important;
+    max-height: 95px !important;
+    padding: 3px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .print-page-2 .photo img {
+    max-width: 100% !important;
+    max-height: 88px !important;
+    display: block !important;
+    margin: 0 auto !important;
+    object-fit: contain !important;
+  }
+
+  .print-page-2 .footer {
+    border-top: 1px solid #aaa !important;
+    color: #777 !important;
+    font-size: 7.5px !important;
+    padding-top: 2px !important;
+    margin-top: 2px !important;
+  }
+
+  input, select, textarea {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+}</style>
 </head>
 <body>
 <div class="toolbar no-print">
@@ -45,6 +342,8 @@ button.secondary{background:#52616a}button.danger{background:#a63d3d}.toolbar sm
  <small>Formulaire local — les données restent sur cet appareil</small>
 </div>
 <main class="sheet" id="form">
+<!-- PAGE 1 : PAGES 1, 2 ET 3 REUNIES EN 1 SEULE PAGE A4 -->
+<div class="print-page-1">
 <header class="brand"><div class="logo">Electron<small>MEDICAL ALGÉRIE</small></div><h1>VISITE DE CONTRÔLE</h1></header>
 
 <section class="section">
@@ -100,7 +399,10 @@ button.secondary{background:#52616a}button.danger{background:#a63d3d}.toolbar sm
  <div class="signature"><b>Signature du client</b><canvas id="sigClient"></canvas><button class="secondary no-print" onclick="clearSig('sigClient')">Effacer</button></div>
 </div>
 </section>
+</div><!-- /.print-page-1 -->
 
+<!-- PAGE 2 : PAGES 4, 5 ET 6 REUNIES EN 1 SEULE PAGE A4 -->
+<div class="print-page-2">
 <section class="section">
 <div class="section-title">Contrôle des endoscopes</div>
 <div id="scopeList"></div>
@@ -117,6 +419,7 @@ button.secondary{background:#52616a}button.danger{background:#a63d3d}.toolbar sm
 </section>
 
 <footer class="footer">ELECTRON MEDICAL ALGÉRIE — Formulaire numérique de visite de contrôle<br>Document à compléter, vérifier et faire signer par les parties concernées.</footer>
+</div><!-- /.print-page-2 -->
 </main>
 <script>
 const products=['VP-7000','BL-7000','VP-4450HD','XL-4450','VP-4400HD','XL-4400','VP-3500HD','EPX-2500','EPX-2200','SU-1','SU-8000','EP-6000','EX-1','EP-8000','EPX-201','EPX-201H','EPX-2200','EPX-2500','EPX-4400','EPX-4450','EPX-3500','EP-7000'];
