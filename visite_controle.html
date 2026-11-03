@@ -82,7 +82,7 @@ button.secondary{background:#52616a}button.danger{background:#a63d3d}.toolbar sm
 .test-meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;background:#f7faf6;border-bottom:1px solid var(--line)}.test-meta label{padding:6px;border-right:1px solid #aaa;font-weight:bold}.test-meta input,.test-meta select{display:block;width:100%;padding:7px;border:1px solid #ccc;margin-top:4px}
 .test-table{width:100%;table-layout:fixed}.test-table th:nth-child(1),.test-table td:nth-child(1){width:18%;font-weight:600}.test-table th:nth-child(2),.test-table td:nth-child(2){width:27%}.test-table th:nth-child(3),.test-table td:nth-child(3){width:22%;white-space:nowrap}.test-table th:nth-child(4),.test-table td:nth-child(4){width:33%}.test-table input[type=text]{min-width:0;width:100%}.choice{display:flex;flex-wrap:nowrap;gap:7px;align-items:center;white-space:nowrap;min-width:0}.choice label{display:inline-flex;align-items:center;gap:3px;white-space:nowrap;font-size:13px;font-weight:normal;text-decoration:none;background:none;padding:0;min-height:0}.choice input{width:14px;height:14px;min-width:14px;margin:0;flex:0 0 14px}
 .test-comment{width:100%;min-height:32px;border:0;padding:5px}.conclusion{width:100%;min-height:80px;border:1px solid #aaa;padding:8px;font:inherit}
-.notice{color:#b32626;font-weight:700;font-size:12px;margin:12px 0}.photos{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.photo{border:1px solid #aaa;min-height:140px;padding:8px}.photo img{max-width:100%;max-height:230px;display:block;margin:8px auto}.photo-actions{display:flex;justify-content:flex-end;margin-top:6px}.photo-delete{background:#b33b3b!important;color:#fff!important;border:0;border-radius:5px;padding:6px 11px;cursor:pointer}.photo-delete:hover{background:#922d2d!important}.footer{border-top:1px solid #aaa;color:#777;font-size:10px;padding-top:8px;margin-top:30px}
+.notice{color:#b32626;font-weight:700;font-size:12px;margin:12px 0}.photos{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.photo{border:1px solid #aaa;min-height:140px;padding:8px}.photo img{max-width:100%;max-height:230px;display:block;margin:8px auto}.photo-actions{display:flex;justify-content:flex-end;margin-top:6px}.photo-delete{background:#b33b3b!important;color:#fff!important;border:0;border-radius:5px;padding:6px 11px;cursor:pointer}.photo-delete:hover{background:#922d2d!important}
 @media(max-width:700px){.sheet{margin:0;padding:18px 12px}.brand h1{font-size:15px}.logo{font-size:21px}.grid{grid-template-columns:repeat(2,1fr)}.span3,.span4{grid-column:span 2}.test-meta{grid-template-columns:1fr}.signature-grid{grid-template-columns:1fr}.signature{border-right:0;border-bottom:1px solid #aaa}.photos{grid-template-columns:1fr}}
 @media print {
   @page {
@@ -232,7 +232,7 @@ button.secondary{background:#52616a}button.danger{background:#a63d3d}.toolbar sm
   }
 
   /* ==========================================================================
-     PAGE 2 : PAGES 4, 5 ET 6 REUNIES SUR 1 SEULE PAGE A4 STRICTE
+     PAGE 2 : CONTRÔLE DES ENDOSCOPES (GRANDE TAILLE PLEINE PAGE A4 / LONGUE)
      ========================================================================== */
   .print-page-2 {
     page-break-before: always !important;
@@ -244,8 +244,9 @@ button.secondary{background:#52616a}button.danger{background:#a63d3d}.toolbar sm
     overflow: hidden !important;
     display: flex !important;
     flex-direction: column !important;
-    justify-content: space-between !important;
+    justify-content: flex-start !important;
     box-sizing: border-box !important;
+    gap: 4px !important;
   }
 
   .print-page-2 .section {
@@ -253,110 +254,136 @@ button.secondary{background:#52616a}button.danger{background:#a63d3d}.toolbar sm
     break-inside: avoid !important;
   }
   .print-page-2 .section-title {
-    padding: 2px 4px !important;
-    font-size: 9.5px !important;
+    padding: 4px 6px !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
     background: var(--green) !important;
-    border: 1px solid var(--line) !important;
+    border: 1.5px solid var(--line) !important;
+    text-align: center !important;
+    letter-spacing: 0.5px !important;
   }
 
   .print-page-2 .test-card {
-    margin: 1px 0 !important;
-    border: 1px solid var(--line) !important;
+    margin: 2px 0 !important;
+    border: 1.5px solid var(--line) !important;
     break-inside: avoid !important;
+    background: #fff !important;
   }
   .print-page-2 .test-card h3 {
     margin: 0 !important;
-    padding: 2px 4px !important;
-    font-size: 9.5px !important;
+    padding: 3px 6px !important;
+    font-size: 10.5px !important;
+    font-weight: 800 !important;
     background: var(--green) !important;
+    text-align: center !important;
+    border-bottom: 1px solid var(--line) !important;
   }
   .print-page-2 .test-meta {
     background: #f7faf6 !important;
     border-bottom: 1px solid var(--line) !important;
     display: grid !important;
     grid-template-columns: 1fr 1fr 1fr !important;
+    padding: 3px 6px !important;
+    gap: 8px !important;
   }
   .print-page-2 .test-meta label {
-    padding: 2px 4px !important;
-    font-size: 8px !important;
+    padding: 1px 3px !important;
+    font-size: 9px !important;
     font-weight: bold !important;
-    border-right: 1px solid #aaa !important;
+    border: none !important;
   }
   .print-page-2 .test-meta input,
   .print-page-2 .test-meta select {
-    font-size: 8px !important;
-    padding: 1px 2px !important;
-    height: 15px !important;
-    margin-top: 1px !important;
+    font-size: 9px !important;
+    padding: 2px 4px !important;
+    height: 20px !important;
+    margin-top: 2px !important;
+    border: 1px solid #aaa !important;
   }
 
   .print-page-2 .table-wrap { overflow: visible !important; }
   .print-page-2 .test-table {
     width: 100% !important;
     table-layout: fixed !important;
-    font-size: 7.8px !important;
+    font-size: 9.5px !important;
     border-collapse: collapse !important;
+    border: 1.5px solid var(--line) !important;
   }
   .print-page-2 .test-table th {
-    padding: 1.5px 2px !important;
-    font-size: 7.8px !important;
+    padding: 3px 4px !important;
+    font-size: 9.5px !important;
     background: var(--green) !important;
     color: #000 !important;
     border: 1px solid var(--line) !important;
+    font-weight: 700 !important;
   }
   .print-page-2 .test-table td {
-    padding: 1px 2px !important;
-    font-size: 7.8px !important;
-    line-height: 1.1 !important;
+    padding: 3px 4px !important;
+    font-size: 9.5px !important;
+    line-height: 1.2 !important;
     color: #000 !important;
     border: 1px solid var(--line) !important;
   }
-  .print-page-2 .test-table td:nth-child(1) { width: 17% !important; font-weight: 600 !important; }
+  .print-page-2 .test-table td.cat-cell {
+    background: var(--green) !important;
+    font-weight: 700 !important;
+    font-size: 9.5px !important;
+    vertical-align: middle !important;
+  }
+  .print-page-2 .test-table td:nth-child(1) { width: 18% !important; }
   .print-page-2 .test-table td:nth-child(2) { width: 28% !important; }
-  .print-page-2 .test-table td:nth-child(3) { width: 24% !important; white-space: nowrap !important; }
+  .print-page-2 .test-table td:nth-child(3) { width: 23% !important; white-space: nowrap !important; }
   .print-page-2 .test-table td:nth-child(4) { width: 31% !important; }
 
   .print-page-2 .choice {
     display: flex !important;
-    gap: 4px !important;
+    gap: 6px !important;
     align-items: center !important;
     white-space: nowrap !important;
   }
   .print-page-2 .choice label {
-    font-size: 7.5px !important;
-    gap: 1.5px !important;
-    font-weight: normal !important;
+    font-size: 8.8px !important;
+    gap: 2px !important;
+    font-weight: 600 !important;
   }
   .print-page-2 .choice input {
-    width: 8px !important;
-    height: 8px !important;
-    min-width: 8px !important;
+    width: 11px !important;
+    height: 11px !important;
+    min-width: 11px !important;
     margin: 0 !important;
   }
   .print-page-2 .test-comment {
-    font-size: 7.5px !important;
-    min-height: 14px !important;
-    height: 14px !important;
-    padding: 0 2px !important;
+    font-size: 9px !important;
+    min-height: 20px !important;
+    height: 20px !important;
+    padding: 1px 4px !important;
     border: none !important;
   }
 
   .print-page-2 .conclusion {
-    min-height: 28px !important;
-    height: 28px !important;
-    font-size: 8px !important;
-    padding: 2px 4px !important;
+    min-height: 55px !important;
+    height: 55px !important;
+    font-size: 9.5px !important;
+    padding: 4px 6px !important;
     border: 1px solid #aaa !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
   .print-page-2 .notice {
-    font-size: 7.5px !important;
-    margin: 1.5px 0 !important;
-    line-height: 1.1 !important;
+    font-size: 8.5px !important;
+    margin: 4px 0 2px 0 !important;
+    line-height: 1.2 !important;
     color: #b32626 !important;
     font-weight: bold !important;
   }
 
-  /* Photos Section */
+  /* Section Photos : Si vide, masquée pour laisser la page d'endoscope 100% longue */
+  .no-print-empty-photos {
+    display: none !important;
+  }
+  .section-photos {
+    break-inside: avoid !important;
+  }
   .print-page-2 .photos {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
@@ -364,8 +391,8 @@ button.secondary{background:#52616a}button.danger{background:#a63d3d}.toolbar sm
   }
   .print-page-2 .photo {
     border: 1px solid #aaa !important;
-    min-height: 80px !important;
-    max-height: 95px !important;
+    min-height: 100px !important;
+    max-height: 120px !important;
     padding: 3px !important;
     display: flex !important;
     align-items: center !important;
@@ -373,18 +400,10 @@ button.secondary{background:#52616a}button.danger{background:#a63d3d}.toolbar sm
   }
   .print-page-2 .photo img {
     max-width: 100% !important;
-    max-height: 88px !important;
+    max-height: 114px !important;
     display: block !important;
     margin: 0 auto !important;
     object-fit: contain !important;
-  }
-
-  .print-page-2 .footer {
-    border-top: 1px solid #aaa !important;
-    color: #777 !important;
-    font-size: 7.5px !important;
-    padding-top: 2px !important;
-    margin-top: 2px !important;
   }
 
   input, select, textarea {
@@ -399,7 +418,7 @@ button.secondary{background:#52616a}button.danger{background:#a63d3d}.toolbar sm
  <button class="secondary" onclick="loadLocal()">Charger la dernière saisie</button>
  <button class="secondary" onclick="exportJSON()">Exporter les données</button>
  <button class="secondary" onclick="document.getElementById('importFile').click()">Importer</button>
- <button onclick="window.print()">Imprimer / PDF</button>
+ <button onclick="prepareForPrint(); window.print()">Imprimer / PDF</button>
  <button class="danger" onclick="if(confirm('Effacer le formulaire ?')) location.reload()">Nouveau formulaire</button>
  <input id="importFile" type="file" accept="application/json" hidden onchange="importJSON(event)">
  <small>Formulaire local — les données restent sur cet appareil</small>
@@ -491,7 +510,7 @@ button.secondary{background:#52616a}button.danger{background:#a63d3d}.toolbar sm
 <p class="notice">* Toute manipulation avec un endoscope lors de la visite de contrôle nécessitera obligatoirement un lavage après la visite.</p>
 </section>
 
-<section class="section">
+<section class="section section-photos">
 <div class="section-title">Images / pièces jointes</div>
 <p>Ajouter des photos de l’équipement, des défauts constatés ou des interventions réalisées.</p>
 <input class="no-print" type="file" id="photosInput" accept="image/*" multiple onchange="addPhotos(event)">
@@ -499,7 +518,7 @@ button.secondary{background:#52616a}button.danger{background:#a63d3d}.toolbar sm
 <div class="photos" id="photos"></div>
 </section>
 
-<footer class="footer">ELECTRON MEDICAL ALGÉRIE — Formulaire numérique de visite de contrôle<br>Document à compléter, vérifier et faire signer par les parties concernées.</footer>
+
 </div><!-- /.print-page-2 -->
 </main>
 <script>
@@ -646,6 +665,19 @@ function saveLocal(){localStorage.setItem('electron-visite-controle',JSON.string
 function loadLocal(){let s=localStorage.getItem('electron-visite-controle');if(!s){alert('Aucune sauvegarde locale.');return}apply(JSON.parse(s));alert('Dernière saisie chargée.')}
 function exportJSON(){let b=new Blob([JSON.stringify(collect(),null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='visite-controle-electron.json';a.click();URL.revokeObjectURL(a.href)}
 function importJSON(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{apply(JSON.parse(r.result));alert('Données importées.')}catch{alert('Fichier JSON invalide.')}};r.readAsText(f)}
+function prepareForPrint() {
+  const photos = document.getElementById('photos');
+  const secPhotos = document.querySelector('.section-photos');
+  if (secPhotos) {
+    if (!photos || photos.children.length === 0) {
+      secPhotos.classList.add('no-print-empty-photos');
+    } else {
+      secPhotos.classList.remove('no-print-empty-photos');
+    }
+  }
+}
+window.addEventListener('beforeprint', prepareForPrint);
+
 enhanceSelects(document);for(let i=0;i<12;i++)addEquipment();for(let i=0;i<7;i++)addPeripheral();addScope();setupSig('sigTech');setupSig('sigClient');
 </script>
 </body></html>
