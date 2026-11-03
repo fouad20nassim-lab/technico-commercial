@@ -5,6 +5,60 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Visite de contrôle — Electron Medical Algérie</title>
 <style>
+/* En-tête officiel S.A.R.L ELECTRON MEDICAL ALGÉRIE */
+.official-company-header {
+  display: block;
+  background: #ffffff;
+  color: #000000;
+  padding: 0 0 8px 0;
+  margin-bottom: 12px;
+  border-bottom: 1.5px solid #000000;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  text-align: left;
+}
+.company-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.company-header-titles { flex: 1; }
+.company-legal-name {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  margin: 0;
+  color: #000000;
+}
+.company-activity-desc {
+  font-size: 11px;
+  font-weight: 600;
+  color: #000000;
+  margin: 2px 0 0 0;
+}
+.company-header-logo img {
+  max-height: 44px;
+  width: auto;
+  object-fit: contain;
+}
+.company-header-details {
+  font-size: 8.5px;
+  line-height: 1.35;
+  color: #000000;
+  margin-top: 5px;
+}
+.company-header-details p {
+  margin: 1px 0;
+}
+.cat-cell {
+  background: var(--green) !important;
+  vertical-align: middle !important;
+  font-weight: 700 !important;
+  text-align: left !important;
+  padding: 3px 6px !important;
+  color: #000 !important;
+}
+
 :root{--green:#dfeeda;--green2:#c7dfb8;--line:#222;--teal:#65aaa7;--ink:#202b30}
 *{box-sizing:border-box}body{margin:0;background:#eef1ef;color:var(--ink);font:14px Arial,sans-serif}
 .toolbar{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #ccd4ce;padding:10px 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;box-shadow:0 2px 8px #0001}
@@ -76,6 +130,15 @@ button.secondary{background:#52616a}button.danger{background:#a63d3d}.toolbar sm
     box-sizing: border-box !important;
   }
 
+  .print-page-1 .official-company-header {
+    margin-bottom: 4px !important;
+    padding-bottom: 2px !important;
+    border-bottom: 1.5px solid #000 !important;
+  }
+  .print-page-1 .company-legal-name { font-size: 14px !important; }
+  .print-page-1 .company-activity-desc { font-size: 9px !important; margin-top: 1px !important; }
+  .print-page-1 .company-header-logo img { max-height: 36px !important; }
+  .print-page-1 .company-header-details { font-size: 7px !important; margin-top: 2px !important; line-height: 1.15 !important; }
   .print-page-1 .brand {
     margin-bottom: 4px !important;
     padding-bottom: 3px !important;
@@ -344,6 +407,24 @@ button.secondary{background:#52616a}button.danger{background:#a63d3d}.toolbar sm
 <main class="sheet" id="form">
 <!-- PAGE 1 : PAGES 1, 2 ET 3 REUNIES EN 1 SEULE PAGE A4 -->
 <div class="print-page-1">
+<!-- En-tête officiel S.A.R.L ELECTRON MEDICAL ALGÉRIE -->
+<div class="official-company-header">
+  <div class="company-header-top">
+    <div class="company-header-titles">
+      <h2 class="company-legal-name">S.A.R.L ELECTRON MEDICAL ALGERIE</h2>
+      <p class="company-activity-desc">Importation - Vente - Service Après-Vente de Matériel Médical</p>
+    </div>
+    <div class="company-header-logo">
+      <img src="assets/logo-electron.png" alt="Logo Electron Medical Algérie" onerror="this.style.display='none'">
+    </div>
+  </div>
+  <div class="company-header-details">
+    <p><strong>Siège Social :</strong> Villa N°21 Coopérative Immobilière El Baraka (Ex Takharbouchet) Section 01 Lot N°435 Commune De Birkhadem ALGER-ALGERIE</p>
+    <p><strong>Service Commercial :</strong> 028 17 97 97 / 06-61.71.51.51 / 028 17 92 94 &nbsp;|&nbsp; <strong>Service Après-Vente :</strong> 028 17 94 84</p>
+    <p><strong>Email :</strong> electron.technologie@gmail.com &nbsp;|&nbsp; <strong>Site Web :</strong> www.electron-medical-dz.com</p>
+  </div>
+</div>
+
 <header class="brand"><div class="logo">Electron<small>MEDICAL ALGÉRIE</small></div><h1>VISITE DE CONTRÔLE</h1></header>
 
 <section class="section">
@@ -502,14 +583,35 @@ function addOptionToList(button){
 
 function addEquipment(data={}){let tr=document.createElement('tr');tr.innerHTML=`<td><select>${options(products)}</select></td><td><input></td><td><input></td><td><input></td><td class="no-print"><button class="danger" onclick="this.closest('tr').remove()">×</button></td>`;tr.querySelectorAll('select,input').forEach((e,i)=>e.value=data[i]||'');document.querySelector('#equipmentTable tbody').append(tr);enhanceSelects(tr)}
 function addPeripheral(data={}){let tr=document.createElement('tr');tr.innerHTML=`<td><select>${options(peripherals)}</select></td><td><select>${options(peripheralModels)}</select></td><td><input></td><td><input></td><td><input></td><td class="no-print"><button class="danger" onclick="this.closest('tr').remove()">×</button></td>`;tr.querySelectorAll('select,input').forEach((e,i)=>e.value=data[i]||'');document.querySelector('#peripheralTable tbody').append(tr);enhanceSelects(tr)}
-function addScope(data={}){scopeCount++;let id='scope'+scopeCount;let card=document.createElement('div');card.className='test-card';card.dataset.scope='1';
-let rows='';testGroups.forEach(([group,items])=>items.forEach((item,j)=>{let na=['État sonde','4/XX','5/XX','Canal à ballonnet (si Echo-endo)','Air','Eau (Stérilisée ou Filtrée)','Pipette','Canal Jet','Test Érecteur'].includes(item);rows+=`<tr><td>${j===0?group:''}</td><td>${item}</td><td><div class="choice"><label><input type="radio" name="${id}_${item}" value="OUI"> OUI</label><label><input type="radio" name="${id}_${item}" value="NON"> NON</label>${na?`<label><input type="radio" name="${id}_${item}" value="N/A"> N/A</label>`:''}</div></td><td><input class="test-comment" placeholder="Commentaire"></td></tr>`}));
-card.innerHTML=`<h3>ENDOSCOPE — FICHE ${scopeCount} <button class="danger no-print" style="float:right;padding:4px 8px" onclick="this.closest('.test-card').remove()">Supprimer</button></h3>
+function addScope(data={}){
+ scopeCount++;
+ let id = 'scope' + scopeCount;
+ let card = document.createElement('div');
+ card.className = 'test-card';
+ card.dataset.scope = '1';
+ let rows = '';
+ testGroups.forEach(([group, items]) => {
+  items.forEach((item, j) => {
+   let na = ['État sonde','4/XX','5/XX','Canal à ballonnet (si Echo-endo)','Air','Eau (Stérilisée ou Filtrée)','Pipette','Canal Jet','Test Érecteur'].includes(item);
+   let catTd = j === 0 ? `<td rowspan="${items.length}" class="cat-cell"><b>${group}</b></td>` : '';
+   rows += `<tr>
+    ${catTd}
+    <td>${item}</td>
+    <td><div class="choice"><label><input type="radio" name="${id}_${item}" value="OUI"> OUI</label><label><input type="radio" name="${id}_${item}" value="NON"> NON</label>${na ? `<label><input type="radio" name="${id}_${item}" value="N/A"> N/A</label>` : ''}</div></td>
+    <td><input class="test-comment" placeholder="Commentaire"></td>
+   </tr>`;
+  });
+ });
+ card.innerHTML = `<h3>ENDOSCOPE — FICHE ${scopeCount} <button class="danger no-print" style="float:right;padding:4px 8px" onclick="this.closest('.test-card').remove()">Supprimer</button></h3>
 <div class="test-meta"><label>Modèle<select class="scope-model">${options(scopeModels)}</select></label><label>Numéro de série<input class="scope-sn"></label><label>Nombre d’utilisations<input class="scope-uses" type="number" min="0"></label></div>
-<div class="table-wrap"><table class="test-table"><thead><tr><th>Catégorie</th><th>Informations et tests</th><th>Résultat</th><th>Commentaires</th></tr></thead><tbody>${rows}</tbody></table></div>
+<div class="table-wrap"><table class="test-table"><thead><tr><th style="width:18%;">Catégorie</th><th style="width:28%;">Informations et tests</th><th style="width:23%;">Résultat</th><th style="width:31%;">Commentaires</th></tr></thead><tbody>${rows}</tbody></table></div>
 <div style="padding:8px"><b>Conclusion :</b><textarea class="conclusion" placeholder="Conclusion et recommandations..."></textarea></div>`;
-document.querySelector('#scopeList').append(card);enhanceSelects(card);card.querySelector('.scope-model').value=data.model||'';
-card.querySelector('.scope-sn').value=data.sn||'';card.querySelector('.scope-uses').value=data.uses||'';card.querySelector('.conclusion').value=data.conclusion||'';
+ document.querySelector('#scopeList').append(card);
+ enhanceSelects(card);
+ card.querySelector('.scope-model').value = data.model || '';
+ card.querySelector('.scope-sn').value = data.sn || '';
+ card.querySelector('.scope-uses').value = data.uses || '';
+ card.querySelector('.conclusion').value = data.conclusion || '';
 }
 function setupSig(id){let c=document.getElementById(id),ctx=c.getContext('2d'),drawing=false;function resize(){let r=c.getBoundingClientRect(),d=window.devicePixelRatio||1,old=c.toDataURL();c.width=r.width*d;c.height=145*d;ctx.scale(d,d);ctx.lineWidth=2;ctx.lineCap='round';ctx.strokeStyle='#123';if(old&&old.length>1000){let im=new Image();im.onload=()=>ctx.drawImage(im,0,0,r.width,145);im.src=old}}
 resize();window.addEventListener('resize',()=>{});function pos(e){let r=c.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top]}c.addEventListener('pointerdown',e=>{drawing=true;c.setPointerCapture(e.pointerId);let [x,y]=pos(e);ctx.beginPath();ctx.moveTo(x,y)});c.addEventListener('pointermove',e=>{if(!drawing)return;let [x,y]=pos(e);ctx.lineTo(x,y);ctx.stroke()});c.addEventListener('pointerup',()=>drawing=false);c.addEventListener('pointercancel',()=>drawing=false)}
