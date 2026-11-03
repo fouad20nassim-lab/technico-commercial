@@ -187,6 +187,234 @@ button.danger{background:#a63d3d}button.danger:hover{background:#8a2f2f}
   border-radius: 4px;
 }
 
+
+/* Style officiel conforme Image 2 pour le tableau Endoscope */
+.scope-sheet-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10px;
+  border: 1.5px solid #000;
+  table-layout: fixed;
+  background: #ffffff;
+}
+.scope-sheet-table th, .scope-sheet-table td {
+  border: 1px solid #000;
+  padding: 2.5px 5px;
+  vertical-align: middle;
+}
+.scope-sheet-table th.head-title {
+  background: #dfeeda;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+  padding: 4px 0;
+  border: 1px solid #000;
+  letter-spacing: 0.5px;
+}
+.scope-sheet-table th.col-cat-head {
+  background: #dfeeda;
+  width: 14%;
+  border: 1px solid #000;
+}
+.scope-sheet-table th.head-tests {
+  background: #dfeeda;
+  text-align: center;
+  font-weight: 700;
+  width: 50%;
+  border: 1px solid #000;
+}
+.scope-sheet-table th.head-comments {
+  background: #dfeeda;
+  text-align: center;
+  font-weight: 700;
+  width: 36%;
+  border: 1px solid #000;
+}
+.scope-sheet-table td.cat-cell {
+  background: #dfeeda;
+  font-weight: 700;
+  font-size: 9.5px;
+  vertical-align: middle;
+  text-align: left;
+  padding: 2px 5px;
+  width: 14%;
+  border: 1px solid #000;
+}
+.scope-sheet-table td.col-test-name {
+  width: 25%;
+  font-size: 9.5px;
+  padding: 2px 5px;
+  font-weight: 500;
+  border: 1px solid #000;
+}
+.scope-sheet-table td.col-result {
+  width: 25%;
+  font-size: 9px;
+  padding: 2px 5px;
+  white-space: nowrap;
+  border: 1px solid #000;
+}
+.scope-sheet-table td.col-comment {
+  width: 36%;
+  padding: 1px 4px;
+  border: 1px solid #000;
+}
+.scope-sheet-table .choice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+.scope-sheet-table .choice label {
+  display: inline-flex;
+  align-items: center;
+  gap: 2.5px;
+  font-size: 9px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.scope-sheet-table .choice input {
+  width: 12px;
+  height: 12px;
+  min-width: 12px;
+  margin: 0;
+}
+.scope-sheet-table .test-comment {
+  width: 100%;
+  height: 19px;
+  border: none;
+  background: transparent;
+  font-size: 9px;
+  padding: 0 3px;
+  font-family: inherit;
+  color: #000;
+}
+.scope-sheet-table .scope-model, .scope-sheet-table .scope-sn, .scope-sheet-table .scope-uses {
+  width: 100%;
+  height: 19px;
+  border: none;
+  background: transparent;
+  font-size: 9.5px;
+  padding: 0 3px;
+  font-family: inherit;
+  color: #000;
+}
+.scope-sheet-table textarea.conclusion {
+  width: 100%;
+  height: 34px;
+  min-height: 34px;
+  border: none;
+  background: transparent;
+  font-size: 9.5px;
+  padding: 2px 4px;
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+/* Notice rouge sous le tableau */
+.notice-red {
+  color: #d00;
+  font-size: 8.5px;
+  font-weight: bold;
+  margin: 4px 0 5px 0;
+  text-align: left;
+  font-family: Arial, sans-serif;
+}
+
+/* Section Images / Pièces jointes (2 grandes photos côte à côte) */
+.photos-block {
+  margin-top: 2px;
+}
+.photos-header-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 3px;
+}
+.images-title {
+  font-size: 10.5px;
+  font-weight: 700;
+}
+.btn-sm {
+  padding: 3px 8px !important;
+  font-size: 11px !important;
+  border-radius: 4px !important;
+}
+.image-boxes-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1.5px solid #000;
+  height: 225px;
+  min-height: 225px;
+  margin-bottom: 4px;
+  background: #ffffff;
+}
+.image-box {
+  border-right: 1.5px solid #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 4px;
+  overflow: hidden;
+  background: #ffffff;
+}
+.image-box:last-child {
+  border-right: none;
+}
+.image-box img {
+  max-width: 100%;
+  max-height: 215px;
+  object-fit: contain;
+  display: block;
+}
+.photo-del-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(180, 20, 20, 0.85);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.photo-del-btn:hover {
+  background: #b00;
+}
+
+/* Footer Page 2 */
+.print-page2-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid #777;
+  padding-top: 3px;
+  margin-top: 3px;
+  font-size: 7.5px;
+  line-height: 1.25;
+  color: #222;
+}
+.p2-footer-left strong {
+  font-size: 8.5px;
+  color: #000;
+}
+.p2-footer-right {
+  font-size: 13px;
+  font-weight: 700;
+  color: #000;
+  padding-right: 4px;
+}
+
 @media(max-width:700px){.sheet{margin:0;padding:18px 12px}.brand h1{font-size:15px}.logo{font-size:21px}.grid{grid-template-columns:repeat(2,1fr)}.span3,.span4{grid-column:span 2}.test-meta{grid-template-columns:1fr}.signature-grid{grid-template-columns:1fr}.signature{border-right:0;border-bottom:1px solid #aaa}.photos{grid-template-columns:1fr}}
 
 @media print {
@@ -195,17 +423,14 @@ button.danger{background:#a63d3d}button.danger:hover{background:#8a2f2f}
     margin: 6mm 8mm 6mm 8mm;
   }
 
-  .toolbar, .no-print, .select-add-btn, .photo-actions, .photo-uploader-bar, .btn-del-scope {
+  .toolbar, .no-print, .select-add-btn, .photo-actions, .photo-del-btn, .btn-del-scope, .add-controls, .photo-controls {
     display: none !important;
-  }
-  .print-only {
-    display: flex !important;
   }
 
   body, html, [data-theme="dark"] body {
     background: #ffffff !important;
     color: #000000 !important;
-    font-size: 11px !important;
+    font-size: 10px !important;
   }
 
   .sheet {
@@ -217,7 +442,7 @@ button.danger{background:#a63d3d}button.danger:hover{background:#8a2f2f}
   }
 
   /* ==========================================================================
-     PAGE 1 : FORMULAIRE PRINCIPAL DE VISITE & SIGNATURES (STRICTEMENT 1 SEULE PAGE)
+     PAGE 1 : FORMULAIRE PRINCIPAL & SIGNATURES (STRICTEMENT 1 SEULE PAGE A4)
      ========================================================================== */
   .page-1-main {
     page-break-after: always !important;
@@ -312,7 +537,7 @@ button.danger{background:#a63d3d}button.danger:hover{background:#8a2f2f}
   }
 
   /* ==========================================================================
-     PAGE 2 : CONTRÔLE DES ENDOSCOPES & IMAGES / PIÈCES JOINTES (PLEINE PAGE A4 ÉQUILIBRÉE)
+     PAGE 2 : CONTRÔLE ENDOSCOPES & 2 PHOTOS CONFORME MODÈLE (1 SEULE PAGE A4)
      ========================================================================== */
   .page-2-scope-images {
     page-break-before: always !important;
@@ -328,233 +553,155 @@ button.danger{background:#a63d3d}button.danger:hover{background:#8a2f2f}
     overflow: hidden !important;
   }
 
-  .print-page2-header {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    padding: 3px 0 5px 0 !important;
-    margin-bottom: 2px !important;
-    border-bottom: 1.5px solid #000 !important;
-    font-size: 10.5px !important;
-    color: #000 !important;
-    flex: 0 0 auto !important;
-  }
-  .p2-h-left { font-weight: 800 !important; font-size: 11px !important; }
-  .p2-h-right { font-weight: 600 !important; color: #111 !important; font-size: 10px !important; }
-
-  .section-scope {
-    margin: 0 !important;
-    break-inside: avoid !important;
-    flex: 0 0 auto !important;
-  }
-  .section-scope .section-title {
-    padding: 5px 8px !important;
-    font-size: 12px !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.5px !important;
-  }
   .test-card {
-    margin: 2px 0 3px 0 !important;
-    border: 1.5px solid var(--line) !important;
-  }
-  .test-card-header {
-    background: var(--green) !important;
-    padding: 4px 8px !important;
-    text-align: center !important;
-    font-size: 11px !important;
-    font-weight: 800 !important;
-    border-bottom: 1px solid var(--line) !important;
-  }
-  .test-meta {
-    padding: 4px 8px !important;
-    font-size: 10px !important;
-    background: #f7faf6 !important;
-    border-bottom: 1px solid var(--line) !important;
-    display: grid !important;
-    grid-template-columns: 1.2fr 1.2fr 1fr !important;
-    gap: 10px !important;
-  }
-  .test-meta label {
-    font-size: 10px !important;
-    padding: 1px !important;
-    font-weight: 700 !important;
+    margin: 0 !important;
     border: none !important;
   }
-  .test-meta input, .test-meta select {
-    font-size: 10px !important;
-    padding: 2px 5px !important;
-    height: 22px !important;
-    margin-top: 1px !important;
-    border: 1px solid #888 !important;
+
+  .scope-sheet-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 8.5px !important;
+    border: 1.5px solid #000 !important;
+    table-layout: fixed !important;
+  }
+  .scope-sheet-table th, .scope-sheet-table td {
+    border: 1px solid #000 !important;
+    padding: 1px 3px !important;
+    line-height: 1.15 !important;
+  }
+  .scope-sheet-table th.head-title {
+    background: #dfeeda !important;
+    font-size: 10.5px !important;
+    font-weight: 800 !important;
+    text-align: center !important;
+    padding: 2.5px 0 !important;
+  }
+  .scope-sheet-table th.col-cat-head {
+    background: #dfeeda !important;
+    width: 14% !important;
+  }
+  .scope-sheet-table th.head-tests {
+    background: #dfeeda !important;
+    text-align: center !important;
+    font-weight: 700 !important;
+    font-size: 9px !important;
+    width: 50% !important;
+  }
+  .scope-sheet-table th.head-comments {
+    background: #dfeeda !important;
+    text-align: center !important;
+    font-weight: 700 !important;
+    font-size: 9px !important;
+    width: 36% !important;
+  }
+  .scope-sheet-table td.cat-cell {
+    background: #dfeeda !important;
+    font-weight: 700 !important;
+    font-size: 8.5px !important;
+    width: 14% !important;
+  }
+  .scope-sheet-table td.col-test-name {
+    width: 25% !important;
+    font-size: 8.5px !important;
+  }
+  .scope-sheet-table td.col-result {
+    width: 25% !important;
+    font-size: 8px !important;
+    white-space: nowrap !important;
+  }
+  .scope-sheet-table td.col-comment {
+    width: 36% !important;
+  }
+  .scope-sheet-table .choice {
+    gap: 6px !important;
+  }
+  .scope-sheet-table .choice label {
+    font-size: 8px !important;
+    gap: 1.5px !important;
+  }
+  .scope-sheet-table .choice input {
+    width: 9px !important;
+    height: 9px !important;
+    min-width: 9px !important;
+  }
+  .scope-sheet-table .test-comment,
+  .scope-sheet-table .scope-model,
+  .scope-sheet-table .scope-sn,
+  .scope-sheet-table .scope-uses {
+    font-size: 8px !important;
+    height: 15px !important;
+    padding: 0 2px !important;
+  }
+  .scope-sheet-table textarea.conclusion {
+    font-size: 8.5px !important;
+    height: 28px !important;
+    min-height: 28px !important;
+    padding: 2px !important;
   }
 
-  /* 2 Colonnes pour le contrôle des endoscopes - calibré pour remplir harmonieusement */
-  .test-columns-wrap {
+  .notice-red {
+    color: #d00 !important;
+    font-size: 7.8px !important;
+    font-weight: bold !important;
+    margin: 2px 0 3px 0 !important;
+    text-align: left !important;
+  }
+
+  .photos-block {
+    margin-top: 1px !important;
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 210px !important;
+  }
+  .images-title {
+    font-size: 9.5px !important;
+    font-weight: 700 !important;
+    margin-bottom: 2px !important;
+  }
+  .image-boxes-container {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
-    gap: 6px !important;
-    margin-top: 2px !important;
-  }
-  .test-col { min-width: 0 !important; }
-  .test-table {
-    width: 100% !important;
-    table-layout: fixed !important;
-    font-size: 9.2px !important;
-  }
-  .test-table th {
-    padding: 3.5px 4px !important;
-    font-size: 9.2px !important;
-    background: var(--green) !important;
-    color: #000 !important;
-    font-weight: 700 !important;
-  }
-  .test-table th:nth-child(1), .test-table td:nth-child(1) { width: 22% !important; font-weight: 700 !important; }
-  .test-table th:nth-child(2), .test-table td:nth-child(2) { width: 33% !important; }
-  .test-table th:nth-child(3), .test-table td:nth-child(3) { width: 23% !important; white-space: nowrap !important; }
-  .test-table th:nth-child(4), .test-table td:nth-child(4) { width: 22% !important; }
-  .test-table td {
-    padding: 2.5px 4px !important;
-    font-size: 9.2px !important;
-    line-height: 1.15 !important;
-    color: #000 !important;
-  }
-  .choice {
-    gap: 4px !important;
-  }
-  .choice label {
-    font-size: 8.5px !important;
-    gap: 1.5px !important;
-    font-weight: 600 !important;
-  }
-  .choice input {
-    width: 11px !important;
-    height: 11px !important;
-    min-width: 11px !important;
-  }
-  .test-comment {
-    font-size: 8.5px !important;
-    min-height: 18px !important;
-    height: 18px !important;
-    padding: 1px 3px !important;
-    border: none !important;
-  }
-  .test-conclusion-box {
-    padding: 4px 6px !important;
-    font-size: 9.5px !important;
-    border-top: 1px solid var(--line) !important;
-    background: #fff !important;
-  }
-  .test-conclusion-box label {
-    font-weight: 700 !important;
-    font-size: 9.5px !important;
-    display: block !important;
+    border: 1.5px solid #000 !important;
+    height: 215px !important;
+    min-height: 215px !important;
+    flex: 1 !important;
     margin-bottom: 2px !important;
+    background: #ffffff !important;
   }
-  .conclusion {
-    min-height: 52px !important;
-    height: 52px !important;
-    font-size: 9.5px !important;
-    padding: 3px 5px !important;
-    border: 1px solid #777 !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
+  .image-box {
+    border-right: 1.5px solid #000 !important;
+    background: #ffffff !important;
   }
-  .notice {
-    font-size: 8px !important;
-    margin: 2px 0 2px 0 !important;
-    line-height: 1.15 !important;
-    color: #b32626 !important;
-    font-weight: 700 !important;
+  .image-box:last-child {
+    border-right: none !important;
   }
-
-  /* Section Images / Pièces Jointes : Remplit la moitié inférieure de la page */
-  .section-photos {
-    margin: 3px 0 0 0 !important;
-    flex: 1 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    break-inside: avoid !important;
-    min-height: 190px !important;
-  }
-  .section-photos .section-title {
-    padding: 5px 8px !important;
-    font-size: 12px !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.5px !important;
-    flex: 0 0 auto !important;
-  }
-  .photos {
-    display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 8px !important;
-    margin-top: 4px !important;
-    flex: 1 !important;
-    min-height: 160px !important;
-  }
-  .photos:empty {
-    display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 8px !important;
-    flex: 1 !important;
-    min-height: 160px !important;
-  }
-  .photos:empty::before {
-    content: "📷 EMPLACEMENT RÉSERVÉ AUX CLICHÉS PHOTOGRAPHIQUES TECHNIQUES & PIÈCES DÉFECTUEUSES\A (Photos de l'endoscope, test d'étanchéité, béquillage, connecteurs ou défauts constatés)" !important;
-    white-space: pre-wrap !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    grid-column: 1 / -1 !important;
-    text-align: center !important;
-    color: #444 !important;
-    font-size: 10.5px !important;
-    font-weight: 600 !important;
-    line-height: 1.5 !important;
-    min-height: 160px !important;
-    height: 100% !important;
-    padding: 20px !important;
-    border: 2px dashed #777 !important;
-    background: #fcfdfc !important;
-    border-radius: 4px !important;
-    box-sizing: border-box !important;
-  }
-  .photo {
-    border: 1px solid #555 !important;
-    padding: 4px !important;
-    min-height: 140px !important;
-    max-height: 175px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    background: #fafafa !important;
-    border-radius: 4px !important;
-  }
-  .photo b {
-    font-size: 8px !important;
-    max-width: 100% !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    margin-bottom: 2px !important;
-  }
-  .photo img {
-    max-height: 140px !important;
+  .image-box img {
+    max-height: 210px !important;
     max-width: 100% !important;
     object-fit: contain !important;
-    margin: 0 auto !important;
   }
 
-  .footer {
-    margin-top: 3px !important;
-    padding-top: 3px !important;
-    font-size: 8px !important;
-    line-height: 1.15 !important;
+  .print-page2-footer {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-end !important;
     border-top: 1px solid #000 !important;
-    text-align: center !important;
-    flex: 0 0 auto !important;
+    padding-top: 2px !important;
+    margin-top: 2px !important;
+    font-size: 7px !important;
+    line-height: 1.2 !important;
+    color: #000 !important;
   }
-  
+  .p2-footer-left strong {
+    font-size: 8px !important;
+  }
+  .p2-footer-right {
+    font-size: 12px !important;
+    font-weight: 800 !important;
+  }
+
   input, select, textarea {
     print-color-adjust: exact !important;
     -webkit-print-color-adjust: exact !important;
@@ -663,34 +810,40 @@ button.danger{background:#a63d3d}button.danger:hover{background:#8a2f2f}
 </div><!-- /.page-1-main -->
 
 <!-- PAGE 2 : CONTRÔLE DES ENDOSCOPES ET IMAGES / PIÈCES JOINTES (STRICTEMENT 1 SEULE PAGE) -->
+<!-- PAGE 2 : CONTRÔLE DES ENDOSCOPES & 2 PHOTOS CONFORME MODÈLE OFFICIEL (STRICTEMENT 1 SEULE PAGE) -->
 <div class="page-2-scope-images">
 
- <div class="print-page2-header print-only">
-  <div class="p2-h-left"><strong>S.A.R.L ELECTRON MEDICAL ALGÉRIE</strong> &mdash; <span>Rapport de visite de contrôle (Page 2/2)</span></div>
-  <div class="p2-h-right" id="p2HeaderClientRef">Client : <b id="p2RefClient">Établissement</b> | Date : <b id="p2RefDate"></b></div>
+ <div id="scopeList"></div>
+ <div class="row-actions no-print add-controls" style="margin:4px 0;"><button type="button" onclick="addScope()">＋ Ajouter une autre fiche endoscope</button></div>
+
+ <div class="notice-red">*Toutes manipulations avec un endoscope lors de la visite de controle, necessitera obligatoirement un lavage après la visite.</div>
+
+ <div class="photos-block">
+  <div class="photos-header-bar">
+   <span class="images-title"><u>Image(s):</u></span>
+   <div class="photo-controls no-print" style="margin-left: 14px; display: inline-flex; gap: 6px; align-items: center;">
+    <input type="file" id="photosInput" accept="image/*" multiple onchange="addPhotos(event)" style="display:none">
+    <button type="button" class="btn-sm" onclick="document.getElementById('photosInput').click()">📷 Charger photo(s)</button>
+    <button type="button" class="secondary btn-sm" onclick="clearPhotos()">🗑 Effacer photos</button>
+    <span style="font-size:11px;color:#555;">(Photo 1 à gauche, Photo 2 à droite)</span>
+   </div>
+  </div>
+
+  <div class="image-boxes-container" id="imageBoxesContainer">
+   <div class="image-box" id="imageBox1"></div>
+   <div class="image-box" id="imageBox2"></div>
+  </div>
  </div>
 
-<section class="section section-scope">
-<div class="section-title">Contrôle des endoscopes</div>
-<div id="scopeList"></div>
-<div class="row-actions no-print add-controls"><button type="button" onclick="addScope()">＋ Ajouter une autre fiche endoscope</button></div>
-<p class="notice">* Toute manipulation avec un endoscope lors de la visite de contrôle nécessitera obligatoirement un lavage après la visite.</p>
-</section>
-
-<section class="section section-photos">
-<div class="section-title">Images / pièces jointes</div>
-<div class="photo-uploader-bar no-print">
- <p style="margin:4px 0 6px;color:#52616a;font-size:12px">Photos de l’équipement, défauts constatés ou pièces remplacées :</p>
- <div style="display:flex;gap:8px;align-items:center;">
-  <input type="file" id="photosInput" accept="image/*" multiple onchange="addPhotos(event)" style="display:none">
-  <button type="button" onclick="document.getElementById('photosInput').click()">📷 Ajouter des photos</button>
-  <button type="button" class="secondary" onclick="clearPhotos()">🗑 Supprimer toutes les photos</button>
+ <div class="print-page2-footer">
+  <div class="p2-footer-left">
+   <strong>ELECTRON</strong><br>
+   Siège Social : Villa N°21 Coopérative Immobilière El Baraka Section 01 Lot N°435 Commune De Birkhadem ALGER-ALGERIE<br>
+   Service Commercial : 028 17 97 97 / 06-61.71.51.51 / 028 17 92 94 &mdash; Service Après-Vente : 028 17 94 84
+  </div>
+  <div class="p2-footer-right">2</div>
  </div>
-</div>
-<div class="photos" id="photos"></div>
-</section>
 
-<footer class="footer">ELECTRON MEDICAL ALGÉRIE — Formulaire numérique de visite de contrôle<br>Document à compléter, vérifier et faire signer par les parties concernées.</footer>
 </div><!-- /.page-2-scope-images -->
 </main>
 
@@ -791,75 +944,181 @@ function addPeripheral(data={}){
  enhanceSelects(tr);
 }
 
-function renderScopeTestRows(groups, id) {
- let rows = '';
- groups.forEach(([group, items]) => {
-  items.forEach((item, j) => {
-   let na = ['État sonde','4/XX','5/XX','Canal à ballonnet (si Echo-endo)','Air','Eau (Stérilisée ou Filtrée)','Pipette','Canal Jet','Test Érecteur'].includes(item);
-   rows += `<tr>
-    <td class="col-cat">${j === 0 ? group : ''}</td>
-    <td class="col-test">${item}</td>
-    <td class="col-res"><div class="choice"><label><input type="radio" name="${id}_${item}" value="OUI"> OUI</label><label><input type="radio" name="${id}_${item}" value="NON"> NON</label>${na ? `<label><input type="radio" name="${id}_${item}" value="N/A"> N/A</label>` : ''}</div></td>
-    <td class="col-com"><input class="test-comment" placeholder="Commentaire"></td>
-   </tr>`;
-  });
+let currentPhotos = [];
+
+function renderPhotos() {
+ const b1 = document.getElementById('imageBox1');
+ const b2 = document.getElementById('imageBox2');
+ if (!b1 || !b2) return;
+ b1.innerHTML = '';
+ b2.innerHTML = '';
+
+ if (currentPhotos[0]) {
+  b1.innerHTML = `<img src="${currentPhotos[0]}"><button type="button" class="photo-del-btn no-print" onclick="deletePhotoAt(0)" title="Supprimer la photo 1">×</button>`;
+ }
+ if (currentPhotos[1]) {
+  b2.innerHTML = `<img src="${currentPhotos[1]}"><button type="button" class="photo-del-btn no-print" onclick="deletePhotoAt(1)" title="Supprimer la photo 2">×</button>`;
+ }
+}
+
+function addPhotos(e) {
+ const files = [...e.target.files];
+ if (!files.length) return;
+ let loaded = 0;
+ files.forEach(f => {
+  if (!f.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+   if (currentPhotos.length < 2) {
+    currentPhotos.push(reader.result);
+   } else {
+    currentPhotos[1] = reader.result;
+   }
+   loaded++;
+   renderPhotos();
+  };
+  reader.readAsDataURL(f);
  });
- return rows;
+ e.target.value = '';
 }
 
-function updatePage2Headers() {
- const hosp = document.querySelector('[name="hospital"]')?.value || 'Établissement';
- const dt = document.querySelector('[name="date"]')?.value || '';
- const refC = document.getElementById('p2RefClient');
- const refD = document.getElementById('p2RefDate');
- if (refC) refC.textContent = hosp;
- if (refD) refD.textContent = dt;
+function deletePhotoAt(idx) {
+ if (confirm('Supprimer cette photo ?')) {
+  currentPhotos.splice(idx, 1);
+  renderPhotos();
+ }
 }
 
-function addScope(data={}){
+function clearPhotos() {
+ if (!currentPhotos.length) {
+  alert('Aucune photo à supprimer.');
+  return;
+ }
+ if (confirm('Supprimer les photos jointes à ce rapport ?')) {
+  currentPhotos = [];
+  renderPhotos();
+ }
+}
+
+function addScope(data={}) {
  scopeCount++;
  let id = 'scope' + scopeCount;
  let card = document.createElement('div');
  card.className = 'test-card';
  card.dataset.scope = '1';
 
- let leftGroups = testGroups.slice(0, 4);  // 15 items
- let rightGroups = testGroups.slice(4);    // 13 items
- let leftRows = renderScopeTestRows(leftGroups, id);
- let rightRows = renderScopeTestRows(rightGroups, id);
+ const categories = [
+  ("Étanchéité :", [
+   ("Test Étanchéité", false),
+   ("Test Valve", false)
+  ]),
+  ("Contrôle Visuel :", [
+   ("État Général", false),
+   ("Tête Distale", false),
+   ("État Switchs", false),
+   ("État Tube d’insertion", false),
+   ("État Tube de liaison", false),
+   ("État connecteur et guides lumières", false),
+   ("État connecteur électronique", false)
+  ]),
+  ("Test Image :", [
+   ("Qualité image", false),
+   ("Qualité Image (en béquillant)", false),
+   ("État sonde", true)
+  ]),
+  ("Béquillage :", [
+   ("Béquillage +/-5%", false),
+   ("Absence de jeu dans les manettes", false),
+   ("Freins U/D et L/R", false)
+  ]),
+  ("Test Switchs :", [
+   ("1/FR", false),
+   ("2/MM", false),
+   ("3/RC", false),
+   ("4/XX", true),
+   ("5/XX", true)
+  ]),
+  ("Canaux :", [
+   ("Canal Opérateur", false),
+   ("Canal Aspi", false),
+   ("Canal à ballonnet (Si Echo-endo)", true)
+  ]),
+  ("Insufflation :", [
+   ("Air", true),
+   ("Eau (Stérilisée ou Filtrée)", true),
+   ("Pipette", true)
+  ]),
+  ("Jet :", [
+   ("Canal Jet", true)
+  ]),
+  ("Érecteur :", [
+   ("Test Érecteur", true)
+  ])
+ ];
+
+ let rowsHtml = '';
+ categories.forEach(([catName, items]) => {
+  const rowspan = items.length;
+  items.forEach(([itemName, hasNa], idx) => {
+   const catTd = idx === 0 ? `<td rowspan="${rowspan}" class="cat-cell"><u>${catName}</u></td>` : '';
+   const naMarkup = hasNa ? `<label><input type="radio" name="${id}_${itemName}" value="N/A"> N/A</label>` : '';
+   rowsHtml += `   <tr class="test-row">
+    ${catTd}
+    <td class="col-test-name">${itemName}</td>
+    <td class="col-result">
+     <div class="choice">
+      <label><input type="radio" name="${id}_${itemName}" value="OUI"> OUI</label>
+      <label><input type="radio" name="${id}_${itemName}" value="NON"> NON</label>
+      ${naMarkup}
+     </div>
+    </td>
+    <td class="col-comment"><input class="test-comment"></td>
+   </tr>\n`;
+  });
+ });
 
  card.innerHTML = `
-  <div class="test-card-header">
+  <div class="test-card-header no-print">
    <span>FICHE ENDOSCOPE N° ${scopeCount}</span>
-   <button type="button" class="danger no-print btn-del-scope" style="float:right;padding:3px 8px;font-size:11px;" onclick="this.closest('.test-card').remove()">Supprimer</button>
+   <button type="button" class="danger btn-del-scope" style="float:right;padding:2px 8px;font-size:11px;" onclick="this.closest('.test-card').remove()">Supprimer</button>
   </div>
-  <div class="test-meta">
-   <label>Modèle<select class="scope-model">${options(scopeModels)}</select></label>
-   <label>Numéro de série<input class="scope-sn" placeholder="N° de série..."></label>
-   <label>Nombre d’utilisations<input class="scope-uses" type="number" min="0" placeholder="0"></label>
-  </div>
-  <div class="test-columns-wrap">
-   <div class="test-col">
-    <div class="table-wrap">
-     <table class="test-table">
-      <thead><tr><th>Catégorie</th><th>Informations et tests</th><th>Résultat</th><th>Commentaires</th></tr></thead>
-      <tbody>${leftRows}</tbody>
-     </table>
-    </div>
-   </div>
-   <div class="test-col">
-    <div class="table-wrap">
-     <table class="test-table">
-      <thead><tr><th>Catégorie</th><th>Informations et tests</th><th>Résultat</th><th>Commentaires</th></tr></thead>
-      <tbody>${rightRows}</tbody>
-     </table>
-    </div>
-   </div>
-  </div>
-  <div class="test-conclusion-box" style="padding:6px 8px;">
-   <b>Conclusion & recommandations :</b>
-   <textarea class="conclusion" placeholder="Observations techniques, état de l'endoscope, réparations ou précautions à prévoir..."></textarea>
-  </div>`;
+  <table class="scope-sheet-table">
+   <thead>
+    <tr>
+     <th colspan="4" class="head-title">ENDOSCOPE:</th>
+    </tr>
+    <tr>
+     <th class="col-cat-head"></th>
+     <th colspan="2" class="head-tests"><u>Informations et Tests :</u></th>
+     <th class="head-comments"><u>Commentaires:</u></th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td rowspan="3" class="cat-cell"><u>Informations :</u></td>
+     <td class="col-test-name">Modèle</td>
+     <td class="col-result"><select class="scope-model">${options(scopeModels)}</select></td>
+     <td class="col-comment"><input class="test-comment"></td>
+    </tr>
+    <tr>
+     <td class="col-test-name">SN</td>
+     <td class="col-result"><input class="scope-sn" placeholder="N° de série..."></td>
+     <td class="col-comment"><input class="test-comment"></td>
+    </tr>
+    <tr>
+     <td class="col-test-name">Nombre d'utilisation</td>
+     <td class="col-result"><input class="scope-uses" type="number" min="0" placeholder="0"></td>
+     <td class="col-comment"><input class="test-comment"></td>
+    </tr>
+${rowsHtml}    <tr>
+     <td class="cat-cell"><u>Conclusion :</u></td>
+     <td colspan="3" class="conclusion-cell">
+      <textarea class="conclusion" placeholder="Observations et recommandations..."></textarea>
+     </td>
+    </tr>
+   </tbody>
+  </table>
+ `;
 
  document.querySelector('#scopeList').append(card);
  enhanceSelects(card);
@@ -869,73 +1128,18 @@ function addScope(data={}){
  card.querySelector('.conclusion').value = data.conclusion || '';
 }
 
-function setupSig(id){
- let c=document.getElementById(id);
- if(!c) return;
- let ctx=c.getContext('2d'),drawing=false;
- function resize(){
-  let r=c.getBoundingClientRect(),d=window.devicePixelRatio||1,old=c.toDataURL();
-  c.width=r.width*d;
-  c.height=145*d;
-  ctx.scale(d,d);
-  ctx.lineWidth=2;
-  ctx.lineCap='round';
-  ctx.strokeStyle='#123';
-  if(old&&old.length>1000){
-   let im=new Image();
-   im.onload=()=>ctx.drawImage(im,0,0,r.width,145);
-   im.src=old;
-  }
- }
- resize();
- window.addEventListener('resize',()=>{});
- function pos(e){let r=c.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top]}
- c.addEventListener('pointerdown',e=>{drawing=true;c.setPointerCapture(e.pointerId);let [x,y]=pos(e);ctx.beginPath();ctx.moveTo(x,y)});
- c.addEventListener('pointermove',e=>{if(!drawing)return;let [x,y]=pos(e);ctx.lineTo(x,y);ctx.stroke()});
- c.addEventListener('pointerup',()=>drawing=false);
- c.addEventListener('pointercancel',()=>drawing=false);
-}
-
-function clearSig(id){let c=document.getElementById(id); if(c) c.getContext('2d').clearRect(0,0,c.width,c.height)}
-
-function addPhotos(e){
- [...e.target.files].forEach(f=>{
-  if(!f.type.startsWith('image/'))return;
-  const reader=new FileReader();
-  reader.onload=()=>{
-   const d=document.createElement('div');d.className='photo';
-   const name=document.createElement('b');name.textContent=f.name;
-   const img=document.createElement('img');img.src=reader.result;img.alt=f.name;
-   const actions=document.createElement('div');actions.className='photo-actions no-print';
-   const remove=document.createElement('button');remove.type='button';remove.className='photo-delete';
-   remove.textContent='Supprimer cette photo';
-   remove.addEventListener('click',()=>{if(confirm('Supprimer cette photo du rapport ?'))d.remove()});
-   actions.append(remove);d.append(name,img,actions);
-   document.getElementById('photos').append(d);
-  };
-  reader.readAsDataURL(f);
- });
- e.target.value='';
-}
-
-function clearPhotos(){
- const photos=document.querySelectorAll('#photos .photo');
- if(!photos.length){alert('Aucune photo à supprimer.');return;}
- if(confirm('Supprimer toutes les photos jointes à ce rapport ?'))document.getElementById('photos').innerHTML='';
-}
-
 function collect(){
  let fields={};
  document.querySelectorAll('#form [name]').forEach(e=>fields[e.name]=e.value);
  let rows=id=>[...document.querySelectorAll(`#${id} tbody tr`)].map(tr=>[...tr.querySelectorAll('select,input')].map(e=>e.value));
  let scopes=[...document.querySelectorAll('.test-card')].map(c=>({
-  model:c.querySelector('.scope-model').value,
-  sn:c.querySelector('.scope-sn').value,
-  uses:c.querySelector('.scope-uses').value,
-  conclusion:c.querySelector('.conclusion').value,
-  tests:[...c.querySelectorAll('.test-table tbody tr')].map(tr=>({
+  model:c.querySelector('.scope-model')?c.querySelector('.scope-model').value:'',
+  sn:c.querySelector('.scope-sn')?c.querySelector('.scope-sn').value:'',
+  uses:c.querySelector('.scope-uses')?c.querySelector('.scope-uses').value:'',
+  conclusion:c.querySelector('.conclusion')?c.querySelector('.conclusion').value:'',
+  tests:[...c.querySelectorAll('.test-row')].map(tr=>({
    result:tr.querySelector('input[type=radio]:checked')?.value||'',
-   comment:tr.querySelector('.test-comment').value
+   comment:tr.querySelector('.test-comment')?.value||''
   }))
  }));
  return {
@@ -947,7 +1151,7 @@ function collect(){
    tech:document.getElementById('sigTech')?document.getElementById('sigTech').toDataURL():'',
    client:document.getElementById('sigClient')?document.getElementById('sigClient').toDataURL():''
   },
-  photos:[...document.querySelectorAll('#photos img')].map(i=>i.src)
+  photos:currentPhotos.slice()
  };
 }
 
@@ -986,7 +1190,7 @@ function apply(data){
    addScope(s);
    let c=document.querySelector('#scopeList .test-card:last-child');
    s.tests?.forEach((t,i)=>{
-    let tr=c.querySelectorAll('.test-table tbody tr')[i];
+    let tr=c.querySelectorAll('.test-row')[i];
     if(!tr)return;
     if(t.result){
      let r=tr.querySelector(`input[value="${t.result}"]`);
@@ -1013,13 +1217,8 @@ function apply(data){
   }
  });
 
- document.getElementById('photos').innerHTML='';
- (data.photos||[]).forEach(src=>{
-  let d=document.createElement('div');
-  d.className='photo';
-  d.innerHTML='<img src="'+src+'"><div class="photo-actions no-print"><button type="button" class="photo-delete" onclick="this.closest(\'.photo\').remove()">Supprimer cette photo</button></div>';
-  document.getElementById('photos').append(d);
- });
+ currentPhotos = data.photos && data.photos.length ? [...data.photos] : [];
+ renderPhotos();
 }
 
 function saveLocal(){
@@ -1148,6 +1347,7 @@ document.addEventListener('DOMContentLoaded', async function() {
  addScope();
  setupSig('sigTech');
  setupSig('sigClient');
+ renderPhotos();
 
  document.addEventListener('input', function(e) {
   if (e.target && (e.target.name === 'hospital' || e.target.name === 'date')) {

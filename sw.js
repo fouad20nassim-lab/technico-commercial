@@ -1,5 +1,5 @@
 // Service Worker - Electron Medical Algérie SAV (PWA Offline-First)
-const CACHE_NAME = 'electron-sav-v1.9';
+const CACHE_NAME = 'electron-sav-v2.0';
 
 const PRECACHE_ASSETS = [
   './',
